@@ -275,3 +275,33 @@ window.LR_findProduct = function(slug) {
 window.LR_byCategory = function(catSlug) {
   return (window.LR_PRODUCTS || []).filter(p => p.category === catSlug);
 };
+
+/* ---------------------------------------------------------------
+   Path resolver — image paths are stored relative to site root
+   (e.g. "assets/img/products/elbow-90.jpg"). When this file is
+   loaded from a subfolder like /products/ or /fr/produits/, every
+   relative path needs to step UP before stepping back DOWN.
+   This block runs once at load and rewrites the in-memory data.
+   --------------------------------------------------------------- */
+(function () {
+  const p = window.location.pathname;
+  let prefix = '';
+  if (/\/fr\/produits\//.test(p))      prefix = '../../';
+  else if (/\/fr\//.test(p))           prefix = '../';
+  else if (/\/products\//.test(p))     prefix = '../';
+  if (!prefix) return;
+
+  function fix(s) {
+    if (typeof s !== 'string') return s;
+    if (s.startsWith('http') || s.startsWith('/') || s.startsWith('../')) return s;
+    return prefix + s;
+  }
+  (window.LR_PRODUCTS || []).forEach(pr => {
+    pr.image = fix(pr.image);
+    pr.technical = fix(pr.technical);
+    if (Array.isArray(pr.gallery)) pr.gallery = pr.gallery.map(fix);
+  });
+  (window.LR_CATEGORIES || []).forEach(c => {
+    c.image = fix(c.image);
+  });
+})();
