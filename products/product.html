@@ -88,6 +88,7 @@
             <div class="pd-media">
               <img id="pd-image" src="" alt="" />
             </div>
+            <div class="pd-thumbs" id="pd-thumbs"></div>
             <div class="tag-row mt-6" id="pd-standards"></div>
           </div>
 
@@ -202,7 +203,7 @@
       <div><h4>Products</h4><ul>
         <li><a href="elbows.html">Elbows</a></li><li><a href="tees.html">Tees</a></li>
         <li><a href="reducers.html">Reducers</a></li><li><a href="caps.html">Caps</a></li>
-        <li><a href="./">All products</a></li></ul></div>
+        <li><a href="all.html">Quick quote builder</a></li><li><a href="./">All products</a></li></ul></div>
       <div><h4>Company</h4><ul>
         <li><a href="../about.html">About us</a></li>
         <li><a href="../certifications.html">Quality &amp; certifications</a></li>
@@ -302,8 +303,31 @@
     document.getElementById('pd-categoryLabel').textContent = p.categoryLabel;
     document.getElementById('pd-name').textContent = p.name;
     document.getElementById('pd-short').textContent = p.short;
-    document.getElementById('pd-image').src = p.image;
-    document.getElementById('pd-image').alt = p.name;
+    const pdImg = document.getElementById('pd-image');
+    pdImg.src = p.image;
+    pdImg.alt = p.name;
+
+    // Gallery thumbnails — photo + technical drawing
+    const thumbs = [
+      { src: p.image, label: 'Photo', cls: 'photo' },
+      p.technical ? { src: p.technical, label: 'Technical', cls: 'tech' } : null
+    ].filter(Boolean);
+    if (thumbs.length > 1) {
+      const thumbWrap = document.getElementById('pd-thumbs');
+      thumbWrap.innerHTML = thumbs.map((t, i) => `
+        <button class="pd-thumb ${i === 0 ? 'is-active' : ''} pd-thumb-${t.cls}" data-thumb="${t.src}" aria-label="View ${t.label}">
+          <img src="${t.src}" alt="${t.label}" />
+          <span class="pd-thumb-label">${t.label}</span>
+        </button>`).join('');
+      thumbWrap.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-thumb]');
+        if (!btn) return;
+        pdImg.src = btn.dataset.thumb;
+        thumbWrap.querySelectorAll('.pd-thumb').forEach(b => b.classList.toggle('is-active', b === btn));
+        // change pd-media background tone if showing technical drawing
+        document.querySelector('.pd-media').classList.toggle('is-technical', btn.classList.contains('pd-thumb-tech'));
+      });
+    }
     document.getElementById('pd-description').textContent = p.description;
     document.getElementById('pd-price').textContent = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(p.priceFrom);
     document.getElementById('pd-moq').textContent = p.minOrder;

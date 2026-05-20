@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0E2A47" />
+<title>All Products — Quick Quote Builder | Le Raccordement</title>
+<meta name="description" content="Browse every Le Raccordement pipe fitting on a single page — select multiple products with checkboxes and add them all to your quote at once." />
+<link rel="canonical" href="https://leraccordement.com/products/all.html" />
+<link rel="alternate" hreflang="en" href="https://leraccordement.com/products/all.html" />
+<link rel="alternate" hreflang="fr" href="https://leraccordement.com/fr/produits/tous.html" />
+<link rel="icon" type="image/png" href="../assets/img/logo/logo.png" />
+
+<meta property="og:title" content="All Products — Le Raccordement" />
+<meta property="og:description" content="Select multiple fittings at once and request a single bulk quote." />
+<meta property="og:image" content="../assets/img/products/elbow-90.jpg" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/main.css" />
+<style>
+  /* Bulk-select grid */
+  .bulk-grid {
+    display: grid;
+    gap: var(--s-5);
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  .bulk-card {
+    position: relative;
+    background: #fff;
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+  }
+  .bulk-card:hover { border-color: var(--c-line-strong); box-shadow: var(--shadow); transform: translateY(-2px); }
+  .bulk-card.is-selected {
+    border-color: var(--c-green-500);
+    box-shadow: 0 0 0 3px rgba(124,194,66,0.20);
+  }
+  .bulk-card-media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    border-bottom: 1px solid var(--c-line);
+  }
+  .bulk-card-media img {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+  }
+  .bulk-check {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: #fff;
+    border: 2px solid var(--c-line-strong);
+    display: grid;
+    place-items: center;
+    transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+    cursor: pointer;
+    z-index: 2;
+  }
+  .bulk-check svg { opacity: 0; transition: opacity var(--t-fast) var(--ease); color: #fff; }
+  .bulk-card.is-selected .bulk-check { background: var(--c-green-500); border-color: var(--c-green-500); }
+  .bulk-card.is-selected .bulk-check svg { opacity: 1; }
+  .bulk-card-body {
+    padding: var(--s-4) var(--s-5) var(--s-5);
+  }
+  .bulk-card-cat {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-green-600);
+  }
+  .bulk-card h3 {
+    font-family: var(--ff-display);
+    font-size: var(--fs-16);
+    color: var(--c-ink);
+    margin-top: 4px;
+    letter-spacing: -0.01em;
+  }
+  .bulk-card .price {
+    margin-top: var(--s-3);
+    font-family: var(--ff-display);
+    font-weight: 600;
+    color: var(--c-ink);
+    font-size: var(--fs-15);
+  }
+  .bulk-card .price small {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    color: var(--c-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: 4px;
+  }
+  .bulk-row-qty {
+    margin-top: var(--s-3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+  }
+  .bulk-row-qty .qty { border: 1px solid var(--c-line); }
+  .bulk-row-qty .qty input { width: 44px; }
+  .bulk-row-qty .qty button { width: 32px; height: 36px; }
+  .bulk-row-qty a {
+    font-family: var(--ff-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+    text-decoration: underline;
+  }
+  .bulk-row-qty a:hover { color: var(--c-navy-700); }
+  .bulk-card-link { position: absolute; inset: 0; z-index: 1; }
+  .bulk-card-body, .bulk-check, .qty, .bulk-row-qty a { position: relative; z-index: 3; }
+
+  /* Sticky bottom action bar */
+  .bulk-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 30;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: saturate(180%) blur(14px);
+    border-top: 1px solid var(--c-line);
+    padding: var(--s-4) 0;
+  }
+  .bulk-bar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    flex-wrap: wrap;
+  }
+  .bulk-bar .summary-text {
+    font-family: var(--ff-display);
+    font-weight: 600;
+    color: var(--c-ink);
+    font-size: var(--fs-15);
+  }
+  .bulk-bar .summary-text span { color: var(--c-muted); font-weight: 500; }
+  .bulk-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    margin-bottom: var(--s-6);
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container-wide header-inner">
+    <a href="../" class="brand"><img src="../assets/img/logo/logo.png" alt="Le Raccordement" /></a>
+    <nav class="nav"><a href="../">Home</a><a href="../about.html">About</a><a href="./" class="active">Products</a><a href="../certifications.html">Quality</a><a href="../clients.html">Clients</a><a href="../contact.html">Contact</a></nav>
+    <div class="header-actions">
+      <div class="lang-toggle"><a href="all.html" class="active">EN</a><a href="../fr/produits/tous.html" hreflang="fr">FR</a></div>
+      <button class="cart-btn" data-open-cart aria-label="Open quote list"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="cart-badge">0</span></button>
+      <a href="../contact.html" class="btn btn-primary btn-sm">Request a quote</a>
+      <button class="nav-toggle" data-open-nav aria-label="Open menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav"><div class="mobile-nav-panel"><div class="mobile-nav-head"><img src="../assets/img/logo/logo.png" alt="" height="32"/><button data-close-nav><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><a href="../">Home</a><a href="../about.html">About</a><a href="./">Products</a><a href="../certifications.html">Quality</a><a href="../clients.html">Clients</a><a href="../contact.html">Contact</a><a href="../contact.html" class="btn btn-primary btn-block">Request a quote</a></div></div>
+
+<main>
+
+<section class="page-head">
+  <div class="container-wide">
+    <div class="breadcrumb"><a href="../">Home</a><span class="sep">/</span><a href="./">Products</a><span class="sep">/</span><span>All products — quick select</span></div>
+    <span class="eyebrow">Quick quote builder</span>
+    <h1 class="mt-4">Pick everything you need,<br/>in one go.</h1>
+    <p class="lead mt-6">Tick the boxes on each product you'd like to quote, set quantities, then add them all to your quote list with one click. Use the category buttons to narrow the list.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container-wide">
+
+    <div class="bulk-filter" id="bulk-filter">
+      <button class="btn btn-sm btn-dark" data-filter="all">All</button>
+      <button class="btn btn-sm btn-ghost" data-filter="elbows">Elbows</button>
+      <button class="btn btn-sm btn-ghost" data-filter="tees">Tees</button>
+      <button class="btn btn-sm btn-ghost" data-filter="reducers">Reducers</button>
+      <button class="btn btn-sm btn-ghost" data-filter="caps">Caps</button>
+      <div style="margin-left:auto; display:flex; gap:var(--s-2);">
+        <button class="btn btn-sm btn-ghost" id="select-all">Select all visible</button>
+        <button class="btn btn-sm btn-ghost" id="clear-selection">Clear</button>
+      </div>
+    </div>
+
+    <div class="bulk-grid" id="bulk-grid"></div>
+
+  </div>
+</section>
+
+<!-- Sticky action bar -->
+<div class="bulk-bar">
+  <div class="container-wide bulk-bar-inner">
+    <div class="summary-text">
+      <span id="bulk-count">0</span> products selected
+      <span id="bulk-units" style="margin-left:8px;">· 0 pcs total</span>
+    </div>
+    <div style="display:flex; gap:var(--s-3); align-items:center;">
+      <span id="bulk-subtotal" style="font-family:var(--ff-display); font-weight:600; color:var(--c-ink); font-size:var(--fs-15);">€0.00</span>
+      <button class="btn btn-primary btn-lg" id="bulk-add-btn" disabled style="opacity:.5">Add selection to quote <span class="arrow">→</span></button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container-wide">
+    <div class="footer-grid footer">
+      <div class="footer-brand"><img src="../assets/img/logo/logo.png" alt="Le Raccordement"/><p style="font-size:var(--fs-14); color:rgba(255,255,255,0.65); max-width:36ch">North Africa's first manufacturer of seamless and welded butt-weld pipe fittings.</p></div>
+      <div><h4>Products</h4><ul><li><a href="elbows.html">Elbows</a></li><li><a href="tees.html">Tees</a></li><li><a href="reducers.html">Reducers</a></li><li><a href="caps.html">Caps</a></li><li><a href="./">All products</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="../about.html">About us</a></li><li><a href="../certifications.html">Quality &amp; certifications</a></li><li><a href="../clients.html">Clients</a></li><li><a href="../contact.html">Contact</a></li></ul></div>
+      <div><h4>Contact</h4><div class="footer-contact"><span>Zone Industrielle de Doukhane</span><span>El Hencha — 3043 Sfax, Tunisia</span><a href="mailto:contact@leraccordement.com">contact@leraccordement.com</a><a href="tel:+21674000000">+216 74 000 000</a></div></div>
+    </div>
+    <div class="footer-bottom"><span>© <span data-year>2026</span> Le Raccordement. All rights reserved.</span><span>Made in Sfax, Tunisia.</span></div>
+  </div>
+</footer>
+
+<aside class="cart-drawer" id="cart-drawer"><div class="overlay" data-close-cart></div><div class="panel"><div class="cart-head"><h3>Your quote list</h3><button data-close-cart><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><div class="cart-list" id="cart-drawer-list"></div><div class="cart-foot"><div class="meta"><span>Indicative subtotal</span><strong id="cart-drawer-subtotal">€0.00</strong></div><a href="../cart.html" class="btn btn-primary btn-block">Review &amp; request quote <span class="arrow">→</span></a></div></div></aside>
+
+<script src="../js/products.js"></script>
+<script src="../js/cart.js"></script>
+<script src="../js/main.js"></script>
+<script>
+  (function () {
+    const grid = document.getElementById('bulk-grid');
+    const filterWrap = document.getElementById('bulk-filter');
+    const countEl = document.getElementById('bulk-count');
+    const unitsEl = document.getElementById('bulk-units');
+    const subtotalEl = document.getElementById('bulk-subtotal');
+    const addBtn = document.getElementById('bulk-add-btn');
+    const selectAllBtn = document.getElementById('select-all');
+    const clearBtn = document.getElementById('clear-selection');
+    const fmt = n => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(n);
+
+    // per-product selection state: { [slug]: { selected: bool, qty: int } }
+    const state = {};
+    (window.LR_PRODUCTS || []).forEach(p => { state[p.slug] = { selected: false, qty: 1 }; });
+
+    function render(filter) {
+      const items = (window.LR_PRODUCTS || []).filter(p => filter === 'all' || p.category === filter);
+      grid.innerHTML = items.map(p => {
+        const s = state[p.slug];
+        return `
+          <div class="bulk-card ${s.selected ? 'is-selected' : ''}" data-slug="${p.slug}">
+            <a href="product.html?slug=${p.slug}" class="bulk-card-link" aria-label="View ${p.name}"></a>
+            <div class="bulk-check" data-bulk-toggle="${p.slug}" role="checkbox" aria-checked="${s.selected}" tabindex="0" aria-label="Select ${p.name}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L20 7"/></svg>
+            </div>
+            <div class="bulk-card-media"><img src="${p.image}" alt="${p.name}" loading="lazy"/></div>
+            <div class="bulk-card-body">
+              <span class="bulk-card-cat">${p.categoryLabel}</span>
+              <h3>${p.name}</h3>
+              <div class="price"><small>From</small>${fmt(p.priceFrom)}</div>
+              <div class="bulk-row-qty">
+                <div class="qty">
+                  <button data-bulk-qty="dec" data-slug="${p.slug}" aria-label="Decrease">−</button>
+                  <input type="text" inputmode="numeric" value="${s.qty}" data-bulk-qty-input data-slug="${p.slug}" />
+                  <button data-bulk-qty="inc" data-slug="${p.slug}" aria-label="Increase">+</button>
+                </div>
+                <a href="product.html?slug=${p.slug}">Details →</a>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+      // active filter button
+      filterWrap.querySelectorAll('[data-filter]').forEach(b => {
+        b.classList.toggle('btn-dark', b.dataset.filter === filter);
+        b.classList.toggle('btn-ghost', b.dataset.filter !== filter);
+      });
+      paintBar();
+    }
+
+    function paintBar() {
+      const selected = Object.entries(state).filter(([_, s]) => s.selected);
+      const count = selected.length;
+      const units = selected.reduce((s, [_, v]) => s + v.qty, 0);
+      const subtotal = selected.reduce((s, [slug, v]) => {
+        const p = (window.LR_PRODUCTS || []).find(x => x.slug === slug);
+        return s + (p ? p.priceFrom * v.qty : 0);
+      }, 0);
+      countEl.textContent = count;
+      unitsEl.textContent = `· ${units} pcs total`;
+      subtotalEl.textContent = fmt(subtotal);
+      addBtn.disabled = count === 0;
+      addBtn.style.opacity = count === 0 ? .5 : 1;
+    }
+
+    let activeFilter = 'all';
+    filterWrap.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-filter]');
+      if (!b) return;
+      activeFilter = b.dataset.filter;
+      render(activeFilter);
+    });
+
+    grid.addEventListener('click', (e) => {
+      const toggle = e.target.closest('[data-bulk-toggle]');
+      if (toggle) {
+        e.preventDefault();
+        const slug = toggle.getAttribute('data-bulk-toggle');
+        state[slug].selected = !state[slug].selected;
+        const card = grid.querySelector(`.bulk-card[data-slug="${slug}"]`);
+        if (card) card.classList.toggle('is-selected', state[slug].selected);
+        toggle.setAttribute('aria-checked', state[slug].selected);
+        paintBar();
+        return;
+      }
+      const qBtn = e.target.closest('[data-bulk-qty]');
+      if (qBtn) {
+        e.preventDefault();
+        const slug = qBtn.getAttribute('data-slug');
+        const dir = qBtn.getAttribute('data-bulk-qty');
+        state[slug].qty = Math.max(1, state[slug].qty + (dir === 'inc' ? 1 : -1));
+        const input = grid.querySelector(`[data-bulk-qty-input][data-slug="${slug}"]`);
+        if (input) input.value = state[slug].qty;
+        if (state[slug].selected) paintBar();
+        return;
+      }
+    });
+
+    grid.addEventListener('input', (e) => {
+      const inp = e.target.closest('[data-bulk-qty-input]');
+      if (!inp) return;
+      const slug = inp.getAttribute('data-slug');
+      state[slug].qty = Math.max(1, parseInt(inp.value, 10) || 1);
+      if (state[slug].selected) paintBar();
+    });
+
+    selectAllBtn.addEventListener('click', () => {
+      const visible = (window.LR_PRODUCTS || []).filter(p => activeFilter === 'all' || p.category === activeFilter);
+      visible.forEach(p => { state[p.slug].selected = true; });
+      render(activeFilter);
+    });
+    clearBtn.addEventListener('click', () => {
+      Object.values(state).forEach(s => { s.selected = false; });
+      render(activeFilter);
+    });
+
+    addBtn.addEventListener('click', () => {
+      const selected = Object.entries(state).filter(([_, s]) => s.selected);
+      if (selected.length === 0) return;
+      selected.forEach(([slug, s]) => {
+        window.LR_CART && window.LR_CART.add(slug, s.qty);
+      });
+      // reset selections after adding
+      Object.values(state).forEach(s => { s.selected = false; });
+      render(activeFilter);
+      window.LR_CART && window.LR_CART.openDrawer();
+    });
+
+    render('all');
+  })();
+</script>
+</body>
+</html>
