@@ -906,14 +906,17 @@ h1, h2, h3, h4 {
   border-radius: var(--radius-lg);
   border: 1px solid var(--c-line);
   aspect-ratio: 1 / 1;
+  max-width: 460px;
+  max-height: 460px;
+  margin: 0 auto;
   display: grid;
   place-items: center;
-  padding: var(--s-12);
+  padding: var(--s-8);
   overflow: hidden;
 }
 .pd-media img {
-  max-width: 70%;
-  max-height: 70%;
+  max-width: 78%;
+  max-height: 78%;
   filter: drop-shadow(0 10px 16px rgba(7,24,44,0.10));
   position: relative;
   z-index: 1;
