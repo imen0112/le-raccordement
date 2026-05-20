@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../css/main.css?v=20260520c" />
+<link rel="stylesheet" href="../css/main.css?v=20260520d" />
 <script type="application/ld+json" id="pd-jsonld"></script>
 </head>
 <body>
@@ -29,7 +29,19 @@
     <nav class="nav" aria-label="Primary">
       <a href="../">Home</a>
       <a href="../about.html">About</a>
-      <a href="./" class="active">Products</a>
+      <span class="nav-item-mega"><a href="./" class="nav-item-mega-trigger">Products</a>
+<div class="mega-panel" role="menu">
+  <div class="mega-grid">
+    <a href="elbows.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/elbow-90.jpg" alt=""></div><span class="mega-tile-name">Elbows</span><span class="mega-tile-meta">45° · 90° · 180°</span></a>
+    <a href="tees.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/equal-tee.jpg" alt=""></div><span class="mega-tile-name">Tees</span><span class="mega-tile-meta">Equal · Reducing</span></a>
+    <a href="reducers.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/concentric-reducer.jpg" alt=""></div><span class="mega-tile-name">Reducers</span><span class="mega-tile-meta">Concentric · Eccentric</span></a>
+    <a href="caps.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/cap.jpg" alt=""></div><span class="mega-tile-name">Caps</span><span class="mega-tile-meta">Dished ends</span></a>
+  </div>
+  <div class="mega-foot">
+    <a href="./">View full catalog →</a>
+    <a href="all.html">Quick quote builder →</a>
+  </div>
+</div></span>
       <a href="../certifications.html">Quality</a>
       <a href="../clients.html">Clients</a>
       <a href="../contact.html">Contact</a>
@@ -89,58 +101,79 @@
               <img id="pd-image" src="" alt="" />
             </div>
             <div class="pd-thumbs" id="pd-thumbs"></div>
-            <div class="tag-row mt-6" id="pd-standards"></div>
           </div>
 
           <!-- RIGHT: spec + cart -->
           <div>
+            <!-- Short description -->
             <p id="pd-description" class="pd-desc"></p>
 
-            <div class="pd-block">
-              <h4>Key specifications</h4>
-              <div class="spec-grid" id="pd-keyspec"></div>
+            <!-- Standards quick-pills -->
+            <div class="pd-standards-quick" id="pd-standards-quick" aria-label="Manufacturing standards"></div>
+
+            <!-- Configurator -->
+            <div class="configurator">
+              <div class="configurator-head">
+                <h3>Configure</h3>
+                <span class="kicker">Tell us what you need</span>
+              </div>
+              <div class="configurator-grid" data-pd-options>
+                <div class="config-field">
+                  <label for="opt-size">Nominal size (DN)</label>
+                  <select id="opt-size" data-opt="Size"></select>
+                </div>
+                <div class="config-field">
+                  <label for="opt-thickness">Wall thickness</label>
+                  <select id="opt-thickness" data-opt="Thickness"></select>
+                </div>
+                <div class="config-field">
+                  <label for="opt-material">Material grade</label>
+                  <select id="opt-material" data-opt="Material"></select>
+                </div>
+                <div class="config-field">
+                  <label for="opt-coating">Coating / finish</label>
+                  <select id="opt-coating" data-opt="Coating"></select>
+                </div>
+              </div>
+              <!-- Specifically for elbows: angle/radius variant -->
+              <div class="configurator-grid" id="opt-elbow-extra" style="display:none">
+                <div class="config-field">
+                  <label for="opt-radius">Bend radius</label>
+                  <select id="opt-radius" data-opt="Radius"></select>
+                </div>
+                <div class="config-field">
+                  <label for="opt-end">End finish</label>
+                  <select id="opt-end" data-opt="Ends">
+                    <option value="Bevel end">Bevel end (BE)</option>
+                    <option value="Plain end">Plain end (PE)</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
+            <!-- Price + add-to-cart -->
             <div class="atc">
               <div>
                 <div class="kicker">Indicative price</div>
-                <div style="font-family:var(--ff-display); font-size:var(--fs-32); font-weight:600; color:var(--c-ink); letter-spacing:-0.02em; line-height:1.1;">
+                <div class="atc-price">
                   From <span id="pd-price"></span>
-                  <span style="font-family:var(--ff-mono); font-size:var(--fs-12); color:var(--c-muted); text-transform:uppercase; letter-spacing:.08em; font-weight:400; display:block; margin-top:6px">per piece · ex-works · MOQ <span id="pd-moq"></span></span>
+                  <span class="atc-meta">per piece · ex-works · MOQ <span id="pd-moq"></span></span>
                 </div>
               </div>
-              <div style="display:flex; gap:var(--s-3); align-items:center; flex-wrap:wrap;">
+              <div class="atc-controls">
                 <div class="qty">
                   <button data-qty="dec" aria-label="Decrease">−</button>
-                  <input type="text" inputmode="numeric" value="1" data-pd-qty />
+                  <input type="text" inputmode="numeric" value="1" data-pd-qty aria-label="Quantity" />
                   <button data-qty="inc" aria-label="Increase">+</button>
                 </div>
                 <button class="btn btn-primary btn-lg" data-add-to-cart id="pd-add" data-slug="">
                   Add to quote <span class="arrow">→</span>
                 </button>
               </div>
+              <p class="atc-note">Quote builder — we reply within one business day with final price for your exact spec.</p>
             </div>
 
-            <div class="pd-block">
-              <h4>Materials</h4>
-              <div class="tag-row" id="pd-materials"></div>
-            </div>
-
-            <div class="pd-block">
-              <h4>Wall thickness</h4>
-              <div class="tag-row" id="pd-thickness"></div>
-            </div>
-
-            <div class="pd-block">
-              <h4>Coating &amp; finishing</h4>
-              <div class="tag-row" id="pd-coating"></div>
-            </div>
-
-            <div class="pd-block">
-              <h4>Applications</h4>
-              <div class="tag-row" id="pd-applications"></div>
-            </div>
-
+            <!-- Datasheet & documents -->
             <div class="pd-block">
               <h4>Datasheet &amp; documents</h4>
               <div style="display:flex; flex-direction:column; gap:var(--s-3);">
@@ -156,8 +189,60 @@
       </div>
     </section>
 
+    <!-- In-page section nav -->
+    <nav class="pd-nav" id="pd-nav" aria-label="Section navigation">
+      <div class="container-wide">
+        <ul>
+          <li><a href="#specifications" class="is-active">Specifications</a></li>
+          <li><a href="#dimensions">Dimensions</a></li>
+          <li><a href="#applications">Applications</a></li>
+          <li><a href="#standards">Standards</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Full specifications -->
+    <section class="section section-soft" id="specifications">
+      <div class="container-wide">
+        <div class="grid grid-2" style="gap:var(--s-12); align-items:start;">
+          <div>
+            <span class="eyebrow">Full specifications</span>
+            <h2 class="h-1 mt-4">Every fitting, fully documented.</h2>
+            <p class="lead mt-6">Manufactured to international standards from qualified raw material with full traceability. Below is the complete spec sheet for this product family.</p>
+          </div>
+          <div class="card">
+            <div class="spec-grid" id="pd-keyspec"></div>
+          </div>
+        </div>
+
+        <div class="grid grid-2 mt-12" style="gap:var(--s-8);">
+          <div class="card">
+            <h3 class="h-4" style="margin-bottom:var(--s-4)">Materials available</h3>
+            <div class="tag-row" id="pd-materials"></div>
+          </div>
+          <div class="card">
+            <h3 class="h-4" style="margin-bottom:var(--s-4)">Wall thickness range</h3>
+            <div class="tag-row" id="pd-thickness"></div>
+          </div>
+          <div class="card">
+            <h3 class="h-4" style="margin-bottom:var(--s-4)">Coating &amp; finishing</h3>
+            <div class="tag-row" id="pd-coating"></div>
+          </div>
+          <div class="card">
+            <h3 class="h-4" style="margin-bottom:var(--s-4)">Manufacturing</h3>
+            <ul style="display:flex; flex-direction:column; gap:var(--s-2); font-size:var(--fs-14); color:var(--c-text);">
+              <li>Cold-formed under hydraulic press</li>
+              <li>Normalised (heat-treated) per spec</li>
+              <li>Stamped by micro-percussion with batch &amp; heat number</li>
+              <li>Pallet or carton packaging — export-ready</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Standard dimension table block (HTML for SEO) -->
-    <section class="section section-soft" id="pd-table-section">
+    <section class="section" id="dimensions">
       <div class="container-wide">
         <span class="eyebrow">Standard dimensions</span>
         <h2 class="h-1 mt-4">Dimension &amp; tolerance reference.</h2>
@@ -180,8 +265,31 @@
       </div>
     </section>
 
+    <!-- Applications -->
+    <section class="section section-soft" id="applications">
+      <div class="container-wide">
+        <div class="section-head">
+          <span class="eyebrow">Where it's used</span>
+          <h2 class="h-1 mt-4">Industries &amp; applications.</h2>
+        </div>
+        <div class="grid grid-4" id="pd-app-cards"></div>
+      </div>
+    </section>
+
+    <!-- Standards detail -->
+    <section class="section" id="standards">
+      <div class="container-wide">
+        <div class="section-head">
+          <span class="eyebrow">Manufacturing standards</span>
+          <h2 class="h-1 mt-4">Built to specification.</h2>
+          <p class="lead mt-4">This product family is manufactured in compliance with the following dimensional and material standards. Mill Test Certificate issued per EN 10204.</p>
+        </div>
+        <div class="grid grid-3" id="pd-standard-cards"></div>
+      </div>
+    </section>
+
     <!-- Related products -->
-    <section class="section">
+    <section class="section section-soft">
       <div class="container-wide">
         <div class="section-head">
           <span class="eyebrow">Related fittings</span>
@@ -237,9 +345,9 @@
   </div>
 </aside>
 
-<script src="../js/products.js?v=20260520c"></script>
-<script src="../js/cart.js?v=20260520c"></script>
-<script src="../js/main.js?v=20260520c"></script>
+<script src="../js/products.js?v=20260520d"></script>
+<script src="../js/cart.js?v=20260520d"></script>
+<script src="../js/main.js?v=20260520d"></script>
 <script>
   /* Standard pipe sizing table (ASME B16.9 / EN 10253 reference)
      Sizes are reference values used industry-wide. */
@@ -358,11 +466,61 @@
 
     // Tag rows
     const tagRow = (id, arr) => document.getElementById(id).innerHTML = (arr || []).map(t => `<span class="tag">${t}</span>`).join('');
-    tagRow('pd-standards', p.standards);
     tagRow('pd-materials', p.materials);
     tagRow('pd-thickness', p.thickness);
     tagRow('pd-coating', p.coating);
-    tagRow('pd-applications', p.applications);
+
+    // Standards quick-pills (top of right column)
+    document.getElementById('pd-standards-quick').innerHTML = (p.standards || []).map(s => `<span class="tag">${s}</span>`).join('');
+
+    // Configurator — populate selects
+    const sizes = (function () {
+      // Parse "DN15 – DN300 / ½″ – 12″"  →  sizes between min and max
+      const m = p.sizeRange.match(/DN(\d+)\s*[–-]\s*DN(\d+)/);
+      if (!m) return [];
+      const min = parseInt(m[1], 10), max = parseInt(m[2], 10);
+      return STD_TABLE.filter(r => r.dn >= min && r.dn <= max).map(r => `DN ${r.dn} (${r.in}″)`);
+    })();
+    function fillSelect(id, opts, placeholder) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = (placeholder ? `<option value="">${placeholder}</option>` : '') +
+        opts.map(o => `<option value="${o}">${o}</option>`).join('');
+    }
+    fillSelect('opt-size', sizes, 'Select size…');
+    fillSelect('opt-thickness', p.thickness || []);
+    fillSelect('opt-material', p.materials || []);
+    fillSelect('opt-coating', p.coating || []);
+
+    // Elbow-specific extras
+    if (p.category === 'elbows' && p.angle === '90°') {
+      document.getElementById('opt-elbow-extra').style.display = '';
+      fillSelect('opt-radius', ['1.5D', '3D']);
+    } else if (p.category === 'elbows') {
+      document.getElementById('opt-elbow-extra').style.display = '';
+      fillSelect('opt-radius', p.radius ? [p.radius] : ['1.5D']);
+    }
+
+    // Applications — render as 4-card grid
+    document.getElementById('pd-app-cards').innerHTML = (p.applications || []).map(app => `
+      <div class="card"><h3 class="h-4">${app}</h3></div>`).join('');
+
+    // Standards — render as detailed cards with descriptions
+    const STD_DESC = {
+      'ASME B16.9': 'Factory-made wrought butt-welding fittings. North-American reference for dimensions and tolerances.',
+      'EN 10253-1': 'European standard for butt-welding pipe fittings, Part 1 — carbon steel without specific inspection requirements.',
+      'EN 10253-2': 'European standard for butt-welding pipe fittings, Part 2 — with specific inspection requirements.',
+      'DIN 2605': 'German dimensional standard for steel pipe elbows.',
+      'DIN 2615': 'German dimensional standard for steel pipe tees.',
+      'DIN 2616': 'German dimensional standard for steel pipe reducers.',
+      'DIN 2617': 'German dimensional standard for steel pipe caps.'
+    };
+    document.getElementById('pd-standard-cards').innerHTML = (p.standards || []).map(s => `
+      <div class="cert-card">
+        <span class="num">Standard</span>
+        <h3>${s}</h3>
+        <p class="text-muted" style="font-size:var(--fs-14);">${STD_DESC[s] || 'International manufacturing standard.'}</p>
+      </div>`).join('');
 
     // Dimension table — filter to sizes this product supports
     const minDn = parseInt((p.sizeRange.match(/DN(\d+)/) || [])[1] || 15, 10);

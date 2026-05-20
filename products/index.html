@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../css/main.css?v=20260520c" />
+<link rel="stylesheet" href="../css/main.css?v=20260520d" />
 
 <script type="application/ld+json">
 {
@@ -43,7 +43,19 @@
     <nav class="nav" aria-label="Primary">
       <a href="../">Home</a>
       <a href="../about.html">About</a>
-      <a href="./" class="active">Products</a>
+      <span class="nav-item-mega"><a href="./" class="nav-item-mega-trigger">Products</a>
+<div class="mega-panel" role="menu">
+  <div class="mega-grid">
+    <a href="elbows.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/elbow-90.jpg" alt=""></div><span class="mega-tile-name">Elbows</span><span class="mega-tile-meta">45° · 90° · 180°</span></a>
+    <a href="tees.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/equal-tee.jpg" alt=""></div><span class="mega-tile-name">Tees</span><span class="mega-tile-meta">Equal · Reducing</span></a>
+    <a href="reducers.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/concentric-reducer.jpg" alt=""></div><span class="mega-tile-name">Reducers</span><span class="mega-tile-meta">Concentric · Eccentric</span></a>
+    <a href="caps.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/cap.jpg" alt=""></div><span class="mega-tile-name">Caps</span><span class="mega-tile-meta">Dished ends</span></a>
+  </div>
+  <div class="mega-foot">
+    <a href="./">View full catalog →</a>
+    <a href="all.html">Quick quote builder →</a>
+  </div>
+</div></span>
       <a href="../certifications.html">Quality</a>
       <a href="../clients.html">Clients</a>
       <a href="../contact.html">Contact</a>
@@ -99,15 +111,35 @@
   </div>
 </section>
 
-<!-- Category filter strip -->
-<section class="section-tight" style="border-bottom:1px solid var(--c-line);">
+<!-- Filter toolbar -->
+<section class="section-tight" style="border-bottom:1px solid var(--c-line); position:sticky; top:92px; z-index:20; background:rgba(255,255,255,0.94); backdrop-filter:saturate(180%) blur(14px);">
   <div class="container-wide">
-    <div id="cat-filter" style="display:flex; flex-wrap:wrap; gap:var(--s-2); align-items:center;">
-      <button class="btn btn-sm btn-dark" data-filter="all">All products <span style="opacity:.6">·</span> <span id="cat-count-all">10</span></button>
-      <button class="btn btn-sm btn-ghost" data-filter="elbows">Elbows</button>
-      <button class="btn btn-sm btn-ghost" data-filter="tees">Tees</button>
-      <button class="btn btn-sm btn-ghost" data-filter="reducers">Reducers</button>
-      <button class="btn btn-sm btn-ghost" data-filter="caps">Caps</button>
+    <div class="filter-toolbar">
+      <div id="cat-filter" class="filter-chips">
+        <button class="btn btn-sm btn-dark" data-filter="all">All <span style="opacity:.6; margin-left:4px">·</span> <span id="cat-count-all">10</span></button>
+        <button class="btn btn-sm btn-ghost" data-filter="elbows">Elbows</button>
+        <button class="btn btn-sm btn-ghost" data-filter="tees">Tees</button>
+        <button class="btn btn-sm btn-ghost" data-filter="reducers">Reducers</button>
+        <button class="btn btn-sm btn-ghost" data-filter="caps">Caps</button>
+      </div>
+      <div class="filter-tools">
+        <label class="filter-search" aria-label="Search products">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="search" id="cat-search" placeholder="Search size, material, standard…" />
+        </label>
+        <label class="filter-sort">
+          <span class="kicker">Sort</span>
+          <select id="cat-sort">
+            <option value="default">Category</option>
+            <option value="price-asc">Price · low → high</option>
+            <option value="price-desc">Price · high → low</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <div class="filter-status">
+      <span id="cat-count-display"></span>
     </div>
   </div>
 </section>
@@ -189,62 +221,107 @@
   </div>
 </aside>
 
-<script src="../js/products.js?v=20260520c"></script>
-<script src="../js/cart.js?v=20260520c"></script>
-<script src="../js/main.js?v=20260520c"></script>
+<script src="../js/products.js?v=20260520d"></script>
+<script src="../js/cart.js?v=20260520d"></script>
+<script src="../js/main.js?v=20260520d"></script>
 <script>
-  /* Render product grid + handle category filter */
+  /* Render product grid + handle category filter + search + sort */
   (function () {
-    const grid = document.getElementById('products-grid');
+    const grid       = document.getElementById('products-grid');
     const filterWrap = document.getElementById('cat-filter');
+    const searchInp  = document.getElementById('cat-search');
+    const sortSel    = document.getElementById('cat-sort');
+    const countDisp  = document.getElementById('cat-count-display');
     const fmt = n => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(n);
 
-    function paint(filter) {
-      const items = (window.LR_PRODUCTS || []).filter(p => filter === 'all' || p.category === filter);
-      grid.innerHTML = items.map(p => `
-        <a href="product.html?slug=${p.slug}" class="product-card reveal">
-          <div class="product-card-media">
-            <img src="${p.image}" alt="${p.name}" loading="lazy" />
-          </div>
-          <div class="product-card-body">
-            <span class="product-card-cat">${p.categoryLabel}</span>
-            <h3>${p.name}</h3>
-            <div class="product-card-specs">
-              ${(p.standards || []).slice(0,2).map(s => `<span class="spec-pill">${s}</span>`).join('')}
-              <span class="spec-pill">${(p.sizeRange || '').split(' / ')[0]}</span>
+    const state = { filter: 'all', query: '', sort: 'default' };
+
+    function match(p, q) {
+      if (!q) return true;
+      const hay = [p.name, p.categoryLabel, p.sizeRange, ...(p.materials || []), ...(p.standards || []), ...(p.thickness || [])]
+        .join(' ').toLowerCase();
+      return q.toLowerCase().split(/\s+/).every(t => hay.includes(t));
+    }
+    function sortFn(arr) {
+      if (state.sort === 'price-asc')  return arr.sort((a,b) => a.priceFrom - b.priceFrom);
+      if (state.sort === 'price-desc') return arr.sort((a,b) => b.priceFrom - a.priceFrom);
+      if (state.sort === 'name')       return arr.sort((a,b) => a.name.localeCompare(b.name));
+      return arr;
+    }
+
+    function paint() {
+      let items = (window.LR_PRODUCTS || [])
+        .filter(p => state.filter === 'all' || p.category === state.filter)
+        .filter(p => match(p, state.query));
+      items = sortFn(items.slice());
+
+      if (items.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1; padding:var(--s-12); text-align:center; color:var(--c-muted);">
+          <p style="font-family:var(--ff-display); color:var(--c-ink); font-weight:600; font-size:var(--fs-18);">No matches.</p>
+          <p style="margin-top:var(--s-2);">Try a different search term or pick another category.</p>
+        </div>`;
+      } else {
+        grid.innerHTML = items.map(p => `
+          <a href="product.html?slug=${p.slug}" class="product-card reveal">
+            <div class="product-card-media">
+              <img src="${p.image}" alt="${p.name}" loading="lazy" />
             </div>
-          </div>
-          <div class="product-card-foot">
-            <div class="price"><small>From</small>${fmt(p.priceFrom)}</div>
-            <button class="btn btn-primary btn-sm" data-add-to-cart data-slug="${p.slug}" onclick="event.preventDefault(); event.stopPropagation();">Add</button>
-          </div>
-        </a>`).join('');
-      // Reveal animation
-      requestAnimationFrame(() => {
-        document.querySelectorAll('.product-card.reveal').forEach((el, i) => {
-          setTimeout(() => el.classList.add('is-visible'), 40 * i);
+            <div class="product-card-body">
+              <span class="product-card-cat">${p.categoryLabel}</span>
+              <h3>${p.name}</h3>
+              <div class="product-card-specs">
+                ${(p.standards || []).slice(0,2).map(s => `<span class="spec-pill">${s}</span>`).join('')}
+                <span class="spec-pill">${(p.sizeRange || '').split(' / ')[0]}</span>
+              </div>
+            </div>
+            <div class="product-card-foot">
+              <div class="price"><small>From</small>${fmt(p.priceFrom)}</div>
+              <button class="btn btn-primary btn-sm" data-add-to-cart data-slug="${p.slug}" onclick="event.preventDefault(); event.stopPropagation();">Add</button>
+            </div>
+          </a>`).join('');
+        requestAnimationFrame(() => {
+          document.querySelectorAll('.product-card.reveal').forEach((el, i) => {
+            setTimeout(() => el.classList.add('is-visible'), 40 * i);
+          });
         });
-      });
+      }
+
       // Active filter button
       filterWrap.querySelectorAll('button').forEach(b => {
-        b.classList.toggle('btn-dark', b.dataset.filter === filter);
-        b.classList.toggle('btn-ghost', b.dataset.filter !== filter);
+        b.classList.toggle('btn-dark', b.dataset.filter === state.filter);
+        b.classList.toggle('btn-ghost', b.dataset.filter !== state.filter);
       });
-      // Count
-      document.getElementById('cat-count-all').textContent = (window.LR_PRODUCTS || []).length;
+      // Counts
+      const total = (window.LR_PRODUCTS || []).length;
+      document.getElementById('cat-count-all').textContent = total;
+      const catLabel = state.filter === 'all' ? 'products' : state.filter;
+      countDisp.innerHTML = `<strong>${items.length}</strong> of ${total} ${catLabel}${state.query ? ` matching "<em>${state.query}</em>"` : ''}`;
     }
 
     filterWrap.addEventListener('click', e => {
       const b = e.target.closest('[data-filter]');
       if (!b) return;
+      state.filter = b.dataset.filter;
       const url = new URL(window.location.href);
-      url.searchParams.set('cat', b.dataset.filter);
-      window.history.replaceState({}, '', url.toString().replace(/cat=all&?/, ''));
-      paint(b.dataset.filter);
+      if (state.filter === 'all') url.searchParams.delete('cat');
+      else url.searchParams.set('cat', state.filter);
+      window.history.replaceState({}, '', url);
+      paint();
     });
 
-    const initial = new URLSearchParams(window.location.search).get('cat') || 'all';
-    paint(initial);
+    let debounce;
+    searchInp.addEventListener('input', e => {
+      state.query = e.target.value.trim();
+      clearTimeout(debounce);
+      debounce = setTimeout(paint, 120);
+    });
+    sortSel.addEventListener('change', e => {
+      state.sort = e.target.value;
+      paint();
+    });
+
+    state.filter = new URLSearchParams(window.location.search).get('cat') || 'all';
+    paint();
   })();
 </script>
 </body>

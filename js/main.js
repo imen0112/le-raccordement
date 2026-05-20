@@ -34,6 +34,36 @@
   // Year
   document.querySelectorAll('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
 
+  // In-page nav scroll spy (used on product detail page)
+  const pdNav = document.getElementById('pd-nav');
+  if (pdNav) {
+    const links = pdNav.querySelectorAll('a[href^="#"]');
+    const sections = Array.from(links).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    if (sections.length && 'IntersectionObserver' in window) {
+      const spyIo = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+          if (en.isIntersecting) {
+            const id = '#' + en.target.id;
+            links.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === id));
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      sections.forEach(s => spyIo.observe(s));
+    }
+    // Smooth scroll on click
+    links.forEach(a => {
+      a.addEventListener('click', (e) => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (!target) return;
+        e.preventDefault();
+        const offset = 160;
+        const y = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+        history.replaceState(null, '', a.getAttribute('href'));
+      });
+    });
+  }
+
   // Contact / quote form (mailto fallback — replace with real handler later)
   document.addEventListener('submit', function (e) {
     const form = e.target.closest('[data-quote-form]');
