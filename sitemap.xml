@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Home -->
+  <url>
+    <loc>https://leraccordement.com/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://leraccordement.com/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://leraccordement.com/fr/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://leraccordement.com/"/>
+  </url>
+
+  <!-- Core pages -->
+  <url><loc>https://leraccordement.com/about.html</loc><changefreq>monthly</changefreq><priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://leraccordement.com/about.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://leraccordement.com/fr/a-propos.html"/></url>
+  <url><loc>https://leraccordement.com/certifications.html</loc><changefreq>monthly</changefreq><priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://leraccordement.com/certifications.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://leraccordement.com/fr/qualite.html"/></url>
+  <url><loc>https://leraccordement.com/clients.html</loc><changefreq>monthly</changefreq><priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://leraccordement.com/clients.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://leraccordement.com/fr/clients.html"/></url>
+  <url><loc>https://leraccordement.com/contact.html</loc><changefreq>monthly</changefreq><priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://leraccordement.com/contact.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://leraccordement.com/fr/contact.html"/></url>
+
+  <!-- Product catalog -->
+  <url><loc>https://leraccordement.com/products/</loc><changefreq>weekly</changefreq><priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://leraccordement.com/products/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://leraccordement.com/fr/produits/"/></url>
+  <url><loc>https://leraccordement.com/products/elbows.html</loc><changefreq>monthly</changefreq><priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://leraccordement.com/products/elbows.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://leraccordement.com/fr/produits/coudes.html"/></url>
+  <url><loc>https://leraccordement.com/products/tees.html</loc><changefreq>monthly</changefreq><priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://leraccordement.com/products/tees.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://leraccordement.com/fr/produits/tes.html"/></url>
+  <url><loc>https://leraccordement.com/products/reducers.html</loc><changefreq>monthly</changefreq><priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://leraccordement.com/products/reducers.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://leraccordement.com/fr/produits/reductions.html"/></url>
+  <url><loc>https://leraccordement.com/products/caps.html</loc><changefreq>monthly</changefreq><priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://leraccordement.com/products/caps.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://leraccordement.com/fr/produits/bouchons.html"/></url>
+
+  <!-- Individual products -->
+  <url><loc>https://leraccordement.com/products/product.html?slug=elbow-90-1-5d</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://leraccordement.com/products/product.html?slug=elbow-90-3d</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://leraccordement.com/products/product.html?slug=elbow-45</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://leraccordement.com/products/product.html?slug=elbow-180</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://leraccordement.com/products/product.html?slug=equal-tee</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://leraccordement.com/products/product.html?slug=reducing-tee</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://leraccordement.com/products/product.html?slug=concentric-reducer</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://leraccordement.com/products/product.html?slug=eccentric-reducer</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://leraccordement.com/products/product.html?slug=cap</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+</urlset>

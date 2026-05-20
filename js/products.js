@@ -1,0 +1,261 @@
+/* Single source of truth for all products.
+   priceFrom is set to null where pricing should be quote-only.
+   Replace with real numbers when client provides them. */
+
+window.LR_PRODUCTS = [
+  /* ----- ELBOWS ----- */
+  {
+    slug: 'elbow-90-1-5d',
+    name: 'Elbow 90° LR — 1.5D',
+    category: 'elbows',
+    categoryLabel: 'Elbows',
+    image: 'assets/img/products/elbow-90.png',
+    short: 'Long-radius 90° elbow in seamless or welded carbon steel — bend radius 1.5 × DN.',
+    description: 'Long-radius (LR) 1.5D 90° elbow for butt-welded piping systems. Produced from seamless or welded carbon and stainless steel pipes by cold forming and full heat treatment. Engineered for pressure piping in oil & gas, water, chemical and power applications.',
+    angle: '90°',
+    radius: '1.5D',
+    sizeRange: 'DN15 – DN300 / ½″ – 12″',
+    standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2605'],
+    materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 – S8'],
+    coating: ['Shot-blasted', 'Painted', 'Galvanized'],
+    rawMaterial: 'Seamless & welded pipes',
+    marking: 'Stamped (micro-percussion)',
+    packaging: 'Pallets, cartons',
+    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
+    priceFrom: 14.50,
+    leadTime: '3 – 6 weeks',
+    minOrder: '50 pcs'
+  },
+  {
+    slug: 'elbow-90-3d',
+    name: 'Elbow 90° LR — 3D',
+    category: 'elbows',
+    categoryLabel: 'Elbows',
+    image: 'assets/img/products/elbow-90.png',
+    short: 'Extra-long-radius 90° elbow (3 × DN) — smoother flow, lower pressure drop for high-velocity lines.',
+    description: 'Extra-long-radius 3D 90° elbow for pipelines requiring reduced turbulence and pressure loss. Cold-formed from seamless or welded pipes. Frequently specified in long-distance transport, slurry, and high-velocity fluid services.',
+    angle: '90°',
+    radius: '3D',
+    sizeRange: 'DN15 – DN300 / ½″ – 12″',
+    standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2605'],
+    materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 – S8'],
+    coating: ['Shot-blasted', 'Painted', 'Galvanized'],
+    rawMaterial: 'Seamless & welded pipes',
+    marking: 'Stamped (micro-percussion)',
+    packaging: 'Pallets, cartons',
+    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
+    priceFrom: 18.20,
+    leadTime: '3 – 6 weeks',
+    minOrder: '50 pcs'
+  },
+  {
+    slug: 'elbow-45',
+    name: 'Elbow 45° LR',
+    category: 'elbows',
+    categoryLabel: 'Elbows',
+    image: 'assets/img/products/elbow-45.png',
+    short: 'Long-radius 45° elbow — for moderate flow changes in pressure piping.',
+    description: 'Long-radius 45° butt-welding elbow used to gently redirect flow in process and transport piping. Cold-formed from seamless or welded pipes, normalized and dimensionally inspected to ASME B16.9 and EN 10253.',
+    angle: '45°',
+    radius: '1.5D',
+    sizeRange: 'DN15 – DN300 / ½″ – 12″',
+    standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2605'],
+    materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 – S8'],
+    coating: ['Shot-blasted', 'Painted', 'Galvanized'],
+    rawMaterial: 'Seamless & welded pipes',
+    marking: 'Stamped (micro-percussion)',
+    packaging: 'Pallets, cartons',
+    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
+    priceFrom: 12.80,
+    leadTime: '3 – 6 weeks',
+    minOrder: '50 pcs'
+  },
+  {
+    slug: 'elbow-180',
+    name: 'Elbow 180° (Return Bend)',
+    category: 'elbows',
+    categoryLabel: 'Elbows',
+    image: 'assets/img/products/elbow-180.png',
+    short: '180° return bend — for hairpin returns in heat exchangers and process loops.',
+    description: '180° return bend (U-bend) used to reverse flow direction in heaters, exchangers, and serpentine process lines. Manufactured from seamless or welded pipes to ASME B16.9 and EN 10253 dimensional standards.',
+    angle: '180°',
+    radius: '1.5D / 3D',
+    sizeRange: 'DN15 – DN200 / ½″ – 8″',
+    standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2605'],
+    materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S'],
+    coating: ['Shot-blasted', 'Painted', 'Galvanized'],
+    rawMaterial: 'Seamless & welded pipes',
+    marking: 'Stamped (micro-percussion)',
+    packaging: 'Pallets, cartons',
+    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    applications: ['Power Generation', 'Heat Exchangers', 'Chemical Engineering', 'Petroleum & Oil', 'Shipbuilding'],
+    priceFrom: 24.00,
+    leadTime: '4 – 7 weeks',
+    minOrder: '25 pcs'
+  },
+
+  /* ----- TEES ----- */
+  {
+    slug: 'equal-tee',
+    name: 'Equal Tee',
+    category: 'tees',
+    categoryLabel: 'Tees',
+    image: 'assets/img/products/equal-tee.png',
+    short: 'Equal butt-weld tee for branched pipework — symmetric flow distribution in DN50 – DN200.',
+    description: 'Equal butt-welding tee with three identical bore diameters, designed to split or merge flow with minimum pressure drop. Cold-formed from seamless or welded pipe, normalized and tested to ASME and EN standards.',
+    type: 'Equal',
+    sizeRange: 'DN50 – DN200 / 2″ – 8″',
+    standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2615'],
+    materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 – S8'],
+    coating: ['Shot-blasted', 'Painted', 'Galvanized'],
+    rawMaterial: 'Seamless & welded pipes',
+    marking: 'Stamped (micro-percussion)',
+    packaging: 'Pallets, cartons',
+    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
+    priceFrom: 22.00,
+    leadTime: '3 – 6 weeks',
+    minOrder: '25 pcs'
+  },
+  {
+    slug: 'reducing-tee',
+    name: 'Reducing Tee',
+    category: 'tees',
+    categoryLabel: 'Tees',
+    image: 'assets/img/products/reducing-tee.png',
+    short: 'Reducing tee with smaller branch outlet — for asymmetric flow distribution.',
+    description: 'Butt-welding reducing tee with a smaller branch diameter than the run, used where the off-take line carries less flow. Manufactured from seamless or welded pipe to ASME B16.9 and EN 10253.',
+    type: 'Reducing',
+    sizeRange: 'DN50×DN25 – DN200×DN100',
+    standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2615'],
+    materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S'],
+    coating: ['Shot-blasted', 'Painted', 'Galvanized'],
+    rawMaterial: 'Seamless & welded pipes',
+    marking: 'Stamped (micro-percussion)',
+    packaging: 'Pallets, cartons',
+    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Water Distribution'],
+    priceFrom: 26.50,
+    leadTime: '4 – 7 weeks',
+    minOrder: '25 pcs'
+  },
+
+  /* ----- REDUCERS ----- */
+  {
+    slug: 'concentric-reducer',
+    name: 'Concentric Reducer',
+    category: 'reducers',
+    categoryLabel: 'Reducers',
+    image: 'assets/img/products/concentric-reducer.png',
+    short: 'Concentric reducer (Form 1 & Form 2) — coaxial transition between two pipe diameters.',
+    description: 'Concentric butt-welding reducer connecting two pipes of different diameters along a common axis. Form 1 covers larger steps (DN25×DN20 – DN100×DN50), Form 2 covers the smaller-step / wider range (DN20×DN15 – DN200×DN100).',
+    type: 'Concentric — Form 1 & Form 2',
+    sizeRange: 'Form 1: DN25×DN20 – DN100×DN50 · Form 2: DN20×DN15 – DN200×DN100',
+    standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2616'],
+    materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 – S8'],
+    coating: ['Shot-blasted', 'Painted', 'Galvanized'],
+    rawMaterial: 'Seamless & welded pipes',
+    marking: 'Stamped (micro-percussion)',
+    packaging: 'Pallets, cartons',
+    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
+    priceFrom: 9.80,
+    leadTime: '3 – 6 weeks',
+    minOrder: '50 pcs'
+  },
+  {
+    slug: 'eccentric-reducer',
+    name: 'Eccentric Reducer',
+    category: 'reducers',
+    categoryLabel: 'Reducers',
+    image: 'assets/img/products/eccentric-reducer.png',
+    short: 'Eccentric reducer — offset transition that maintains a flat side, ideal for horizontal pump suction lines.',
+    description: 'Eccentric butt-welding reducer with offset centerlines, keeping one outer surface flush. Specified for horizontal piping where air pockets must be eliminated — typically on pump suction lines and process headers.',
+    type: 'Eccentric',
+    sizeRange: 'DN20×DN15 – DN200×DN100 / ¾″×½″ – 8″×4″',
+    standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2616'],
+    materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 – S8'],
+    coating: ['Shot-blasted', 'Painted', 'Galvanized'],
+    rawMaterial: 'Seamless & welded pipes',
+    marking: 'Stamped (micro-percussion)',
+    packaging: 'Pallets, cartons',
+    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
+    priceFrom: 11.20,
+    leadTime: '3 – 6 weeks',
+    minOrder: '50 pcs'
+  },
+
+  /* ----- CAPS ----- */
+  {
+    slug: 'cap',
+    name: 'Cap & Dished End',
+    category: 'caps',
+    categoryLabel: 'Caps',
+    image: 'assets/img/products/cap.png',
+    short: 'Pressure cap / dished end for pipe terminations — DN15 – DN200 in seamless and welded steel.',
+    description: 'Butt-welding cap (dished end) used to close the end of a pipe run. Manufactured by cold forming from seamless or welded pipe in carbon and stainless grades, fully heat-treated and pressure-tested on request.',
+    sizeRange: 'DN15 – DN200 / ½″ – 8″',
+    standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2617'],
+    materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 – S8'],
+    coating: ['Shot-blasted', 'Painted', 'Galvanized'],
+    rawMaterial: 'Seamless & welded pipes',
+    marking: 'Stamped (micro-percussion)',
+    packaging: 'Pallets, cartons',
+    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
+    priceFrom: 7.50,
+    leadTime: '3 – 6 weeks',
+    minOrder: '50 pcs'
+  }
+];
+
+window.LR_CATEGORIES = [
+  {
+    slug: 'elbows',
+    name: 'Elbows',
+    tagline: 'Long-radius bends, 45° · 90° · 180°',
+    description: '1.5D & 3D long-radius elbows in DN15 – DN300, formed from seamless or welded pipe to ASME B16.9 and EN 10253.',
+    image: 'assets/img/products/elbow-90.png'
+  },
+  {
+    slug: 'tees',
+    name: 'Tees',
+    tagline: 'Equal & reducing branched fittings',
+    description: 'Equal butt-welding tees from DN50 to DN200, cold-formed, normalized and tested for pressure pipework.',
+    image: 'assets/img/products/equal-tee.png'
+  },
+  {
+    slug: 'reducers',
+    name: 'Reducers',
+    tagline: 'Concentric & eccentric',
+    description: 'Coaxial and offset reducers up to DN200×DN100 — Form 1, Form 2 and eccentric geometries available.',
+    image: 'assets/img/products/concentric-reducer.png'
+  },
+  {
+    slug: 'caps',
+    name: 'Caps',
+    tagline: 'Pipe terminations',
+    description: 'Dished-end caps from ½″ to 8″ in carbon and stainless grades, pressure-tested on request.',
+    image: 'assets/img/products/cap.png'
+  }
+];
+
+window.LR_findProduct = function(slug) {
+  return (window.LR_PRODUCTS || []).find(p => p.slug === slug);
+};
+window.LR_byCategory = function(catSlug) {
+  return (window.LR_PRODUCTS || []).filter(p => p.category === catSlug);
+};

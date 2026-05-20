@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Don't waste crawl budget on the cart
+Disallow: /cart.html
+Disallow: /fr/panier.html
+
+Sitemap: https://leraccordement.com/sitemap.xml

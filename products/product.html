@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0E2A47" />
+<title id="pd-title">Product · Le Raccordement</title>
+<meta name="description" id="pd-desc" content="Seamless pipe fitting by Le Raccordement — ASME B16.9, EN 10253." />
+<link rel="canonical" id="pd-canonical" href="https://leraccordement.com/products/product.html" />
+<link rel="icon" type="image/png" href="../assets/img/logo/logo.png" />
+
+<meta property="og:type" content="product" />
+<meta property="og:site_name" content="Le Raccordement" />
+<meta property="og:image" id="pd-og-image" content="" />
+<meta property="og:title" id="pd-og-title" content="" />
+<meta property="og:description" id="pd-og-desc" content="" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../css/main.css" />
+<script type="application/ld+json" id="pd-jsonld"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container-wide header-inner">
+    <a href="../" class="brand" aria-label="Le Raccordement — home"><img src="../assets/img/logo/logo.png" alt="Le Raccordement" /></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="../">Home</a>
+      <a href="../about.html">About</a>
+      <a href="./" class="active">Products</a>
+      <a href="../certifications.html">Quality</a>
+      <a href="../clients.html">Clients</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <a href="#" class="active" aria-current="page">EN</a>
+        <a href="#" hreflang="fr" id="lang-fr">FR</a>
+      </div>
+      <button class="cart-btn" data-open-cart aria-label="Open quote list">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-badge" aria-live="polite">0</span>
+      </button>
+      <a href="../contact.html" class="btn btn-primary btn-sm">Request a quote</a>
+      <button class="nav-toggle" data-open-nav aria-label="Open menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobile-nav" aria-hidden="true">
+  <div class="mobile-nav-panel">
+    <div class="mobile-nav-head"><img src="../assets/img/logo/logo.png" alt="" height="32" /><button data-close-nav aria-label="Close menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+    <a href="../">Home</a><a href="../about.html">About</a><a href="./">Products</a><a href="../certifications.html">Quality</a><a href="../clients.html">Clients</a><a href="../contact.html">Contact</a>
+    <a href="../contact.html" class="btn btn-primary btn-block">Request a quote</a>
+  </div>
+</div>
+
+<main id="pd-main">
+  <div id="pd-not-found" style="display:none">
+    <section class="section">
+      <div class="container">
+        <h1 class="h-display">Product not found.</h1>
+        <p class="lead mt-4">Browse the full catalog or contact us with your specification.</p>
+        <a href="./" class="btn btn-primary mt-8">Back to catalog <span class="arrow">→</span></a>
+      </div>
+    </section>
+  </div>
+
+  <div id="pd-content" style="display:none">
+    <section class="page-head">
+      <div class="container-wide">
+        <div class="breadcrumb" id="pd-crumb"></div>
+        <span class="pd-cat" id="pd-categoryLabel"></span>
+        <h1 class="pd-title" id="pd-name"></h1>
+        <p class="lead mt-4" id="pd-short"></p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container-wide">
+        <div class="pd-layout">
+          <!-- LEFT: media -->
+          <div>
+            <div class="pd-media">
+              <img id="pd-image" src="" alt="" />
+            </div>
+            <div class="tag-row mt-6" id="pd-standards"></div>
+          </div>
+
+          <!-- RIGHT: spec + cart -->
+          <div>
+            <p id="pd-description" class="pd-desc"></p>
+
+            <div class="pd-block">
+              <h4>Key specifications</h4>
+              <div class="spec-grid" id="pd-keyspec"></div>
+            </div>
+
+            <div class="atc">
+              <div>
+                <div class="kicker">Indicative price</div>
+                <div style="font-family:var(--ff-display); font-size:var(--fs-32); font-weight:600; color:var(--c-ink); letter-spacing:-0.02em; line-height:1.1;">
+                  From <span id="pd-price"></span>
+                  <span style="font-family:var(--ff-mono); font-size:var(--fs-12); color:var(--c-muted); text-transform:uppercase; letter-spacing:.08em; font-weight:400; display:block; margin-top:6px">per piece · ex-works · MOQ <span id="pd-moq"></span></span>
+                </div>
+              </div>
+              <div style="display:flex; gap:var(--s-3); align-items:center; flex-wrap:wrap;">
+                <div class="qty">
+                  <button data-qty="dec" aria-label="Decrease">−</button>
+                  <input type="text" inputmode="numeric" value="1" data-pd-qty />
+                  <button data-qty="inc" aria-label="Increase">+</button>
+                </div>
+                <button class="btn btn-primary btn-lg" data-add-to-cart id="pd-add" data-slug="">
+                  Add to quote <span class="arrow">→</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="pd-block">
+              <h4>Materials</h4>
+              <div class="tag-row" id="pd-materials"></div>
+            </div>
+
+            <div class="pd-block">
+              <h4>Wall thickness</h4>
+              <div class="tag-row" id="pd-thickness"></div>
+            </div>
+
+            <div class="pd-block">
+              <h4>Coating &amp; finishing</h4>
+              <div class="tag-row" id="pd-coating"></div>
+            </div>
+
+            <div class="pd-block">
+              <h4>Applications</h4>
+              <div class="tag-row" id="pd-applications"></div>
+            </div>
+
+            <div class="pd-block">
+              <h4>Datasheet &amp; documents</h4>
+              <div style="display:flex; flex-direction:column; gap:var(--s-3);">
+                <a href="#" class="btn btn-ghost" id="pd-datasheet" aria-disabled="true" style="opacity:.6; pointer-events:none; justify-content:flex-start;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                  Technical datasheet (PDF) <span style="margin-left:auto; font-family:var(--ff-mono); font-size:11px; color:var(--c-muted)">soon</span>
+                </a>
+                <p style="font-size:var(--fs-13); color:var(--c-muted)">Mill Test Certificate EN 10204 3.1 issued with every shipment. NDT, hardness and hydrostatic reports available on request.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Standard dimension table block (HTML for SEO) -->
+    <section class="section section-soft" id="pd-table-section">
+      <div class="container-wide">
+        <span class="eyebrow">Standard dimensions</span>
+        <h2 class="h-1 mt-4">Dimension &amp; tolerance reference.</h2>
+        <p class="lead mt-4" style="max-width:60ch">Standard nominal sizes and centre-to-end dimensions for this fitting family. Values are reference ranges per ASME B16.9 / EN 10253 — final dimensions supplied on the Mill Test Certificate.</p>
+        <div style="margin-top:var(--s-8); overflow-x:auto;">
+          <table id="pd-table" style="width:100%; min-width:560px; border-collapse:collapse; font-size:var(--fs-14);">
+            <thead>
+              <tr style="background:#fff; border:1px solid var(--c-line);">
+                <th style="text-align:left; padding:var(--s-3) var(--s-4); font-family:var(--ff-display); color:var(--c-ink); font-size:var(--fs-13); text-transform:uppercase; letter-spacing:.06em;">DN</th>
+                <th style="text-align:left; padding:var(--s-3) var(--s-4); font-family:var(--ff-display); color:var(--c-ink); font-size:var(--fs-13); text-transform:uppercase; letter-spacing:.06em;">Inch</th>
+                <th style="text-align:left; padding:var(--s-3) var(--s-4); font-family:var(--ff-display); color:var(--c-ink); font-size:var(--fs-13); text-transform:uppercase; letter-spacing:.06em;">Outer Ø (mm)</th>
+                <th style="text-align:left; padding:var(--s-3) var(--s-4); font-family:var(--ff-display); color:var(--c-ink); font-size:var(--fs-13); text-transform:uppercase; letter-spacing:.06em;">Wall (mm)</th>
+                <th style="text-align:left; padding:var(--s-3) var(--s-4); font-family:var(--ff-display); color:var(--c-ink); font-size:var(--fs-13); text-transform:uppercase; letter-spacing:.06em;">Centre-to-end</th>
+              </tr>
+            </thead>
+            <tbody id="pd-table-body"></tbody>
+          </table>
+        </div>
+        <p class="kicker mt-6">Need a non-standard size or schedule? <a href="../contact.html" style="color:var(--c-navy-700); text-decoration:underline;">Send us your drawing →</a></p>
+      </div>
+    </section>
+
+    <!-- Related products -->
+    <section class="section">
+      <div class="container-wide">
+        <div class="section-head">
+          <span class="eyebrow">Related fittings</span>
+          <h2 class="h-1 mt-4">Same family.</h2>
+        </div>
+        <div class="product-grid" id="pd-related"></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container-wide">
+    <div class="footer-grid footer">
+      <div class="footer-brand">
+        <img src="../assets/img/logo/logo.png" alt="Le Raccordement" />
+        <p style="font-size:var(--fs-14); color:rgba(255,255,255,0.65); max-width:36ch">North Africa's first manufacturer of seamless and welded butt-weld pipe fittings.</p>
+      </div>
+      <div><h4>Products</h4><ul>
+        <li><a href="elbows.html">Elbows</a></li><li><a href="tees.html">Tees</a></li>
+        <li><a href="reducers.html">Reducers</a></li><li><a href="caps.html">Caps</a></li>
+        <li><a href="./">All products</a></li></ul></div>
+      <div><h4>Company</h4><ul>
+        <li><a href="../about.html">About us</a></li>
+        <li><a href="../certifications.html">Quality &amp; certifications</a></li>
+        <li><a href="../clients.html">Clients</a></li>
+        <li><a href="../contact.html">Contact</a></li></ul></div>
+      <div><h4>Contact</h4>
+        <div class="footer-contact">
+          <span>Zone Industrielle de Doukhane</span>
+          <span>El Hencha — 3043 Sfax, Tunisia</span>
+          <a href="mailto:contact@leraccordement.com">contact@leraccordement.com</a>
+          <a href="tel:+21674000000">+216 74 000 000</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>© <span data-year>2026</span> Le Raccordement. All rights reserved.</span><span>Made in Sfax, Tunisia.</span></div>
+  </div>
+</footer>
+
+<aside class="cart-drawer" id="cart-drawer" aria-hidden="true">
+  <div class="overlay" data-close-cart></div>
+  <div class="panel">
+    <div class="cart-head">
+      <h3>Your quote list</h3>
+      <button data-close-cart aria-label="Close"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="cart-list" id="cart-drawer-list"></div>
+    <div class="cart-foot">
+      <div class="meta"><span>Indicative subtotal</span><strong id="cart-drawer-subtotal">€0.00</strong></div>
+      <a href="../cart.html" class="btn btn-primary btn-block">Review &amp; request quote <span class="arrow">→</span></a>
+    </div>
+  </div>
+</aside>
+
+<script src="../js/products.js"></script>
+<script src="../js/cart.js"></script>
+<script src="../js/main.js"></script>
+<script>
+  /* Standard pipe sizing table (ASME B16.9 / EN 10253 reference)
+     Sizes are reference values used industry-wide. */
+  const STD_TABLE = [
+    { dn: 15,  in: '½',     od: 21.3,   wall: '2.77 – 7.47',  ce: '38 – 95' },
+    { dn: 20,  in: '¾',     od: 26.7,   wall: '2.87 – 7.82',  ce: '38 – 95' },
+    { dn: 25,  in: '1',     od: 33.4,   wall: '3.38 – 9.09',  ce: '38 – 102' },
+    { dn: 32,  in: '1¼',    od: 42.2,   wall: '3.56 – 9.70',  ce: '48 – 114' },
+    { dn: 40,  in: '1½',    od: 48.3,   wall: '3.68 – 10.16', ce: '57 – 121' },
+    { dn: 50,  in: '2',     od: 60.3,   wall: '3.91 – 11.07', ce: '76 – 152' },
+    { dn: 65,  in: '2½',    od: 73.0,   wall: '5.16 – 14.02', ce: '95 – 178' },
+    { dn: 80,  in: '3',     od: 88.9,   wall: '5.49 – 15.24', ce: '114 – 216' },
+    { dn: 100, in: '4',     od: 114.3,  wall: '6.02 – 17.12', ce: '152 – 305' },
+    { dn: 125, in: '5',     od: 141.3,  wall: '6.55 – 19.05', ce: '190 – 381' },
+    { dn: 150, in: '6',     od: 168.3,  wall: '7.11 – 21.95', ce: '229 – 457' },
+    { dn: 200, in: '8',     od: 219.1,  wall: '8.18 – 23.01', ce: '305 – 610' },
+    { dn: 250, in: '10',    od: 273.0,  wall: '9.27 – 25.40', ce: '381 – 762' },
+    { dn: 300, in: '12',    od: 323.8,  wall: '10.31 – 25.40', ce: '457 – 914' }
+  ];
+
+  (function () {
+    const slug = new URLSearchParams(window.location.search).get('slug');
+    const p = (window.LR_PRODUCTS || []).find(x => x.slug === slug);
+    const notFound = document.getElementById('pd-not-found');
+    const content = document.getElementById('pd-content');
+
+    if (!p) { notFound.style.display = ''; document.getElementById('pd-title').textContent = 'Product not found · Le Raccordement'; return; }
+    content.style.display = '';
+
+    // Meta
+    document.title = `${p.name} — ${p.categoryLabel} · Le Raccordement`;
+    document.getElementById('pd-desc').setAttribute('content', p.short);
+    document.getElementById('pd-canonical').href = `https://leraccordement.com/products/product.html?slug=${p.slug}`;
+    document.getElementById('pd-og-title').setAttribute('content', `${p.name} — Le Raccordement`);
+    document.getElementById('pd-og-desc').setAttribute('content', p.short);
+    document.getElementById('pd-og-image').setAttribute('content', `https://leraccordement.com/${p.image}`);
+
+    // JSON-LD Product
+    const jsonld = {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": p.name,
+      "image": [`https://leraccordement.com/${p.image}`],
+      "description": p.description,
+      "sku": p.slug,
+      "category": p.categoryLabel,
+      "brand": { "@type": "Brand", "name": "Le Raccordement" },
+      "manufacturer": { "@type": "Organization", "name": "Le Raccordement", "address": "Sfax, Tunisia" },
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "EUR",
+        "price": p.priceFrom,
+        "availability": "https://schema.org/InStock",
+        "priceValidUntil": new Date(Date.now() + 86400000 * 90).toISOString().slice(0, 10),
+        "url": `https://leraccordement.com/products/product.html?slug=${p.slug}`
+      }
+    };
+    document.getElementById('pd-jsonld').textContent = JSON.stringify(jsonld);
+
+    // Hero
+    document.getElementById('pd-categoryLabel').textContent = p.categoryLabel;
+    document.getElementById('pd-name').textContent = p.name;
+    document.getElementById('pd-short').textContent = p.short;
+    document.getElementById('pd-image').src = p.image;
+    document.getElementById('pd-image').alt = p.name;
+    document.getElementById('pd-description').textContent = p.description;
+    document.getElementById('pd-price').textContent = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(p.priceFrom);
+    document.getElementById('pd-moq').textContent = p.minOrder;
+    document.getElementById('pd-add').setAttribute('data-slug', p.slug);
+
+    // Breadcrumb
+    document.getElementById('pd-crumb').innerHTML = `<a href="../">Home</a><span class="sep">/</span><a href="./">Products</a><span class="sep">/</span><a href="${p.category}.html">${p.categoryLabel}</a><span class="sep">/</span><span>${p.name}</span>`;
+
+    // Key spec grid
+    const keys = [
+      ['Category', p.categoryLabel],
+      p.angle ? ['Angle', p.angle] : null,
+      p.radius ? ['Radius', p.radius] : null,
+      p.type ? ['Type', p.type] : null,
+      ['Size range', p.sizeRange],
+      ['Raw material', p.rawMaterial],
+      ['Marking', p.marking],
+      ['Packaging', p.packaging],
+      ['Certificate', p.certificate],
+      ['Lead time', p.leadTime],
+      ['Min. order', p.minOrder]
+    ].filter(Boolean);
+    document.getElementById('pd-keyspec').innerHTML = keys.map(([k, v]) => `<div class="k">${k}</div><div class="v">${v}</div>`).join('');
+
+    // Tag rows
+    const tagRow = (id, arr) => document.getElementById(id).innerHTML = (arr || []).map(t => `<span class="tag">${t}</span>`).join('');
+    tagRow('pd-standards', p.standards);
+    tagRow('pd-materials', p.materials);
+    tagRow('pd-thickness', p.thickness);
+    tagRow('pd-coating', p.coating);
+    tagRow('pd-applications', p.applications);
+
+    // Dimension table — filter to sizes this product supports
+    const minDn = parseInt((p.sizeRange.match(/DN(\d+)/) || [])[1] || 15, 10);
+    const maxDnMatch = p.sizeRange.match(/DN\d+\s*[–-]\s*DN(\d+)/);
+    const maxDn = maxDnMatch ? parseInt(maxDnMatch[1], 10) : 300;
+    const rows = STD_TABLE.filter(r => r.dn >= minDn && r.dn <= maxDn);
+    document.getElementById('pd-table-body').innerHTML = rows.map(r => `
+      <tr style="border:1px solid var(--c-line); background:#fff;">
+        <td style="padding:var(--s-3) var(--s-4); font-family:var(--ff-mono); color:var(--c-ink); font-weight:500;">DN ${r.dn}</td>
+        <td style="padding:var(--s-3) var(--s-4); font-family:var(--ff-mono); color:var(--c-muted);">${r.in}″</td>
+        <td style="padding:var(--s-3) var(--s-4); font-family:var(--ff-mono); color:var(--c-text);">${r.od}</td>
+        <td style="padding:var(--s-3) var(--s-4); font-family:var(--ff-mono); color:var(--c-text);">${r.wall}</td>
+        <td style="padding:var(--s-3) var(--s-4); font-family:var(--ff-mono); color:var(--c-text);">${r.ce} mm</td>
+      </tr>`).join('');
+
+    // Related (same category, exclude self)
+    const related = (window.LR_PRODUCTS || []).filter(x => x.category === p.category && x.slug !== p.slug).slice(0, 4);
+    const fmt = n => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(n);
+    document.getElementById('pd-related').innerHTML = related.map(r => `
+      <a href="product.html?slug=${r.slug}" class="product-card">
+        <div class="product-card-media"><img src="${r.image}" alt="${r.name}" loading="lazy" /></div>
+        <div class="product-card-body">
+          <span class="product-card-cat">${r.categoryLabel}</span>
+          <h3>${r.name}</h3>
+        </div>
+        <div class="product-card-foot">
+          <div class="price"><small>From</small>${fmt(r.priceFrom)}</div>
+        </div>
+      </a>`).join('') || `<p class="text-muted">No related products in this category.</p>`;
+  })();
+</script>
+</body>
+</html>
