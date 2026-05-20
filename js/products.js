@@ -277,6 +277,70 @@ window.LR_byCategory = function(catSlug) {
 };
 
 /* ---------------------------------------------------------------
+   VARIANT PRICING
+   Indicative multipliers anchored to product.priceFrom = the
+   cheapest valid config of that product (smallest DN, cheapest
+   carbon grade, STD thickness, shot-blasted finish, 1.5D radius).
+   Tweak the tables when client provides real numbers.
+   --------------------------------------------------------------- */
+window.LR_PRICE = {
+  // Multiplier per nominal size — anchored to DN15 = 1.0
+  size: {
+    15: 1.0, 20: 1.15, 25: 1.35, 32: 1.6, 40: 1.9, 50: 2.3,
+    65: 3.0, 80: 3.8, 100: 5.0, 125: 6.5, 150: 8.5, 200: 13,
+    250: 18, 300: 25
+  },
+  // Wall thickness — anchored to STD = 1.0
+  thickness: {
+    'STD': 1.0, 'SCH 40': 1.05, 'SCH 40S': 1.05,
+    'XS': 1.4, 'SCH 80': 1.5, 'SCH 80S': 1.5,
+    'S1 – S8': 1.2
+  },
+  // Material grade — anchored to S235 = 1.0 (cheapest carbon)
+  material: {
+    'S235': 1.0, 'ST37': 1.0, 'S265': 1.05,
+    'A234-WPB': 1.10,
+    'P235TR1': 1.10, 'P235TR2': 1.12,
+    'P235GH': 1.18, 'P265GH': 1.22,
+    'A403-WP304L': 2.80,
+    'A403-WP316L': 3.40
+  },
+  // Surface coating — anchored to Shot-blasted = 1.0
+  coating: {
+    'Shot-blasted': 1.0, 'Painted': 1.08, 'Galvanized': 1.18
+  },
+  // Bend radius for elbows
+  radius: { '1.5D': 1.0, '3D': 1.25, '1.5D / 3D': 1.0 }
+};
+
+window.LR_computePrice = function (product, options) {
+  if (!product) return 0;
+  const o = options || {};
+
+  // Parse DN from "DN 50 (2″)" or just "50"
+  let dn = null;
+  if (o.Size) {
+    const m = String(o.Size).match(/(\d+)/);
+    if (m) dn = parseInt(m[1], 10);
+  }
+  const sizeMul = (dn && window.LR_PRICE.size[dn]) || 1.0;
+
+  const thickMul = window.LR_PRICE.thickness[o.Thickness] || 1.0;
+  const matMul   = window.LR_PRICE.material[o.Material]   || 1.0;
+  const coatMul  = window.LR_PRICE.coating[o.Coating]     || 1.0;
+  const radMul   = window.LR_PRICE.radius[o.Radius]       || 1.0;
+
+  return (product.priceFrom || 0) * sizeMul * thickMul * matMul * coatMul * radMul;
+};
+
+window.LR_formatPrice = function (n) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency', currency: 'EUR',
+    maximumFractionDigits: n >= 100 ? 0 : 2
+  }).format(n);
+};
+
+/* ---------------------------------------------------------------
    Path resolver — image paths are stored relative to site root
    (e.g. "assets/img/products/elbow-90.jpg"). When this file is
    loaded from a subfolder like /products/ or /fr/produits/, every

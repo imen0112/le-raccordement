@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../css/main.css?v=20260520e" />
+<link rel="stylesheet" href="../css/main.css?v=20260520f" />
 <script type="application/ld+json" id="pd-jsonld"></script>
 </head>
 <body>
@@ -154,9 +154,9 @@
             <!-- Price + add-to-cart -->
             <div class="atc">
               <div>
-                <div class="kicker">Indicative price</div>
+                <div class="kicker" id="pd-price-label">Indicative price (from)</div>
                 <div class="atc-price">
-                  From <span id="pd-price"></span>
+                  <span id="pd-price"></span>
                   <span class="atc-meta">per piece · ex-works · MOQ <span id="pd-moq"></span></span>
                 </div>
               </div>
@@ -345,9 +345,9 @@
   </div>
 </aside>
 
-<script src="../js/products.js?v=20260520e"></script>
-<script src="../js/cart.js?v=20260520e"></script>
-<script src="../js/main.js?v=20260520e"></script>
+<script src="../js/products.js?v=20260520f"></script>
+<script src="../js/cart.js?v=20260520f"></script>
+<script src="../js/main.js?v=20260520f"></script>
 <script>
   /* Standard pipe sizing table (ASME B16.9 / EN 10253 reference)
      Sizes are reference values used industry-wide. */
@@ -441,9 +441,32 @@
       });
     }
     document.getElementById('pd-description').textContent = p.description;
-    document.getElementById('pd-price').textContent = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(p.priceFrom);
     document.getElementById('pd-moq').textContent = p.minOrder;
     document.getElementById('pd-add').setAttribute('data-slug', p.slug);
+
+    // Live price update — recompute whenever a selector changes
+    const priceEl    = document.getElementById('pd-price');
+    const priceLabel = document.getElementById('pd-price-label');
+    const fmt$ = window.LR_formatPrice || (n => '€' + n.toFixed(2));
+    function readOptions() {
+      const out = {};
+      document.querySelectorAll('[data-opt]').forEach(sel => {
+        if (sel.offsetParent === null) return; // skip hidden (eg radius when not elbow)
+        if (sel.value) out[sel.dataset.opt] = sel.value;
+      });
+      return out;
+    }
+    function updatePrice() {
+      const opts = readOptions();
+      const hasAny = Object.keys(opts).length > 0;
+      const price = hasAny ? window.LR_computePrice(p, opts) : (p.priceFrom || 0);
+      priceEl.textContent = fmt$(price);
+      if (priceLabel) priceLabel.textContent = hasAny ? 'Configured price' : 'Indicative price (from)';
+    }
+    document.querySelector('[data-pd-options]').addEventListener('change', updatePrice);
+    const elbowExtra = document.getElementById('opt-elbow-extra');
+    if (elbowExtra) elbowExtra.addEventListener('change', updatePrice);
+    updatePrice();
 
     // Breadcrumb
     document.getElementById('pd-crumb').innerHTML = `<a href="../">Home</a><span class="sep">/</span><a href="./">Products</a><span class="sep">/</span><a href="${p.category}.html">${p.categoryLabel}</a><span class="sep">/</span><span>${p.name}</span>`;

@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../css/main.css?v=20260520e" />
+<link rel="stylesheet" href="../css/main.css?v=20260520f" />
 
 <script type="application/ld+json">
 {
@@ -221,9 +221,9 @@
   </div>
 </aside>
 
-<script src="../js/products.js?v=20260520e"></script>
-<script src="../js/cart.js?v=20260520e"></script>
-<script src="../js/main.js?v=20260520e"></script>
+<script src="../js/products.js?v=20260520f"></script>
+<script src="../js/cart.js?v=20260520f"></script>
+<script src="../js/main.js?v=20260520f"></script>
 <script>
   /* Render product grid + handle category filter + search + sort */
   (function () {
@@ -276,7 +276,7 @@
             </div>
             <div class="product-card-foot">
               <div class="price"><small>From</small>${fmt(p.priceFrom)}</div>
-              <button class="btn btn-primary btn-sm" data-add-to-cart data-slug="${p.slug}" onclick="event.preventDefault(); event.stopPropagation();">Add</button>
+              <span class="btn btn-dark btn-sm" aria-hidden="true" tabindex="-1" style="pointer-events:none;">Configure <span class="arrow">→</span></span>
             </div>
           </a>`).join('');
         requestAnimationFrame(() => {

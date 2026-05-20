@@ -39,14 +39,21 @@
   }
   function clear() { state.items = []; save(); }
   function count() { return state.items.reduce((s, i) => s + i.qty, 0); }
+  function unitPrice(item) {
+    const p = (window.LR_PRODUCTS || []).find(x => x.slug === item.slug);
+    if (!p) return 0;
+    // If item has options + computePrice helper available → variant price
+    if (item.options && window.LR_computePrice) {
+      return window.LR_computePrice(p, item.options);
+    }
+    return p.priceFrom || 0;
+  }
   function subtotal() {
-    return state.items.reduce((s, i) => {
-      const p = (window.LR_PRODUCTS || []).find(x => x.slug === i.slug);
-      return s + (p ? p.priceFrom * i.qty : 0);
-    }, 0);
+    return state.items.reduce((s, i) => s + unitPrice(i) * i.qty, 0);
   }
   function fmt(n) {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(n);
+    return (window.LR_formatPrice ? window.LR_formatPrice(n)
+      : new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(n));
   }
 
   /* ---------- Badge ---------- */
@@ -133,7 +140,7 @@
         <div class="img-box"><img src="${p.image}" alt=""></div>
         <div>
           <div class="name">${p.name}</div>
-          <div class="meta">${optBits || p.categoryLabel} · From ${fmt(p.priceFrom)} / pc</div>
+          <div class="meta">${optBits || p.categoryLabel} · ${fmt(unitPrice(i))} / pc</div>
           <div class="actions" style="margin-top:.75rem">
             <div class="qty">
               <button data-qty="dec" data-slug="${p.slug}" data-variant='${i.variant || ""}' aria-label="Decrease">−</button>
@@ -146,7 +153,7 @@
           </div>
         </div>
         <div style="font-family:var(--ff-display);font-weight:600;color:var(--c-ink);font-size:1.125rem;text-align:right">
-          ${fmt(p.priceFrom * i.qty)}
+          ${fmt(unitPrice(i) * i.qty)}
           <div style="font-family:var(--ff-mono);font-size:11px;color:var(--c-muted);font-weight:400;text-transform:uppercase;letter-spacing:.06em;margin-top:4px">indicative</div>
         </div>
       </div>`;
