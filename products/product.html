@@ -307,9 +307,13 @@
     pdImg.src = p.image;
     pdImg.alt = p.name;
 
-    // Gallery thumbnails — photo + technical drawing
+    // Gallery thumbnails — main photo + extra angles + technical drawing
+    const photoThumbs = [
+      { src: p.image, label: 'Photo 1', cls: 'photo' },
+      ...(p.gallery || []).map((src, i) => ({ src, label: `Photo ${i + 2}`, cls: 'photo' }))
+    ];
     const thumbs = [
-      { src: p.image, label: 'Photo', cls: 'photo' },
+      ...photoThumbs,
       p.technical ? { src: p.technical, label: 'Technical', cls: 'tech' } : null
     ].filter(Boolean);
     if (thumbs.length > 1) {
