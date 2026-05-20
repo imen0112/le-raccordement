@@ -9,7 +9,7 @@ window.LR_PRODUCTS = [
     name: 'Elbow 90° LR — 1.5D',
     category: 'elbows',
     categoryLabel: 'Elbows',
-    image: 'assets/img/products/elbow-90.png',
+    image: 'assets/img/products/elbow-90.jpg',
     short: 'Long-radius 90° elbow in seamless or welded carbon steel — bend radius 1.5 × DN.',
     description: 'Long-radius (LR) 1.5D 90° elbow for butt-welded piping systems. Produced from seamless or welded carbon and stainless steel pipes by cold forming and full heat treatment. Engineered for pressure piping in oil & gas, water, chemical and power applications.',
     angle: '90°',
@@ -33,7 +33,7 @@ window.LR_PRODUCTS = [
     name: 'Elbow 90° LR — 3D',
     category: 'elbows',
     categoryLabel: 'Elbows',
-    image: 'assets/img/products/elbow-90.png',
+    image: 'assets/img/products/elbow-90.jpg',
     short: 'Extra-long-radius 90° elbow (3 × DN) — smoother flow, lower pressure drop for high-velocity lines.',
     description: 'Extra-long-radius 3D 90° elbow for pipelines requiring reduced turbulence and pressure loss. Cold-formed from seamless or welded pipes. Frequently specified in long-distance transport, slurry, and high-velocity fluid services.',
     angle: '90°',
@@ -57,7 +57,7 @@ window.LR_PRODUCTS = [
     name: 'Elbow 45° LR',
     category: 'elbows',
     categoryLabel: 'Elbows',
-    image: 'assets/img/products/elbow-45.png',
+    image: 'assets/img/products/elbow-45.jpg',
     short: 'Long-radius 45° elbow — for moderate flow changes in pressure piping.',
     description: 'Long-radius 45° butt-welding elbow used to gently redirect flow in process and transport piping. Cold-formed from seamless or welded pipes, normalized and dimensionally inspected to ASME B16.9 and EN 10253.',
     angle: '45°',
@@ -81,7 +81,7 @@ window.LR_PRODUCTS = [
     name: 'Elbow 180° (Return Bend)',
     category: 'elbows',
     categoryLabel: 'Elbows',
-    image: 'assets/img/products/elbow-180.png',
+    image: 'assets/img/products/elbow-180.jpg',
     short: '180° return bend — for hairpin returns in heat exchangers and process loops.',
     description: '180° return bend (U-bend) used to reverse flow direction in heaters, exchangers, and serpentine process lines. Manufactured from seamless or welded pipes to ASME B16.9 and EN 10253 dimensional standards.',
     angle: '180°',
@@ -107,7 +107,7 @@ window.LR_PRODUCTS = [
     name: 'Equal Tee',
     category: 'tees',
     categoryLabel: 'Tees',
-    image: 'assets/img/products/equal-tee.png',
+    image: 'assets/img/products/equal-tee.jpg',
     short: 'Equal butt-weld tee for branched pipework — symmetric flow distribution in DN50 – DN200.',
     description: 'Equal butt-welding tee with three identical bore diameters, designed to split or merge flow with minimum pressure drop. Cold-formed from seamless or welded pipe, normalized and tested to ASME and EN standards.',
     type: 'Equal',
@@ -130,7 +130,7 @@ window.LR_PRODUCTS = [
     name: 'Reducing Tee',
     category: 'tees',
     categoryLabel: 'Tees',
-    image: 'assets/img/products/reducing-tee.png',
+    image: 'assets/img/products/reducing-tee.jpg',
     short: 'Reducing tee with smaller branch outlet — for asymmetric flow distribution.',
     description: 'Butt-welding reducing tee with a smaller branch diameter than the run, used where the off-take line carries less flow. Manufactured from seamless or welded pipe to ASME B16.9 and EN 10253.',
     type: 'Reducing',
@@ -155,7 +155,7 @@ window.LR_PRODUCTS = [
     name: 'Concentric Reducer',
     category: 'reducers',
     categoryLabel: 'Reducers',
-    image: 'assets/img/products/concentric-reducer.png',
+    image: 'assets/img/products/concentric-reducer.jpg',
     short: 'Concentric reducer (Form 1 & Form 2) — coaxial transition between two pipe diameters.',
     description: 'Concentric butt-welding reducer connecting two pipes of different diameters along a common axis. Form 1 covers larger steps (DN25×DN20 – DN100×DN50), Form 2 covers the smaller-step / wider range (DN20×DN15 – DN200×DN100).',
     type: 'Concentric — Form 1 & Form 2',
@@ -203,7 +203,7 @@ window.LR_PRODUCTS = [
     name: 'Cap & Dished End',
     category: 'caps',
     categoryLabel: 'Caps',
-    image: 'assets/img/products/cap.png',
+    image: 'assets/img/products/cap.jpg',
     short: 'Pressure cap / dished end for pipe terminations — DN15 – DN200 in seamless and welded steel.',
     description: 'Butt-welding cap (dished end) used to close the end of a pipe run. Manufactured by cold forming from seamless or welded pipe in carbon and stainless grades, fully heat-treated and pressure-tested on request.',
     sizeRange: 'DN15 – DN200 / ½″ – 8″',
@@ -228,28 +228,28 @@ window.LR_CATEGORIES = [
     name: 'Elbows',
     tagline: 'Long-radius bends, 45° · 90° · 180°',
     description: '1.5D & 3D long-radius elbows in DN15 – DN300, formed from seamless or welded pipe to ASME B16.9 and EN 10253.',
-    image: 'assets/img/products/elbow-90.png'
+    image: 'assets/img/products/elbow-90.jpg'
   },
   {
     slug: 'tees',
     name: 'Tees',
     tagline: 'Equal & reducing branched fittings',
     description: 'Equal butt-welding tees from DN50 to DN200, cold-formed, normalized and tested for pressure pipework.',
-    image: 'assets/img/products/equal-tee.png'
+    image: 'assets/img/products/equal-tee.jpg'
   },
   {
     slug: 'reducers',
     name: 'Reducers',
     tagline: 'Concentric & eccentric',
     description: 'Coaxial and offset reducers up to DN200×DN100 — Form 1, Form 2 and eccentric geometries available.',
-    image: 'assets/img/products/concentric-reducer.png'
+    image: 'assets/img/products/concentric-reducer.jpg'
   },
   {
     slug: 'caps',
     name: 'Caps',
     tagline: 'Pipe terminations',
     description: 'Dished-end caps from ½″ to 8″ in carbon and stainless grades, pressure-tested on request.',
-    image: 'assets/img/products/cap.png'
+    image: 'assets/img/products/cap.jpg'
   }
 ];
 

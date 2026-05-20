@@ -819,7 +819,7 @@ h1, h2, h3, h4 {
 .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--c-line-strong); }
 .product-card-media {
   aspect-ratio: 1 / 1;
-  background: #FAFBFC;
+  background: #fff;
   display: grid;
   place-items: center;
   position: relative;
@@ -902,7 +902,7 @@ h1, h2, h3, h4 {
 .pd-media {
   position: sticky;
   top: 100px;
-  background: #FAFBFC;
+  background: #fff;
   border-radius: var(--radius-lg);
   border: 1px solid var(--c-line);
   aspect-ratio: 1 / 1;
