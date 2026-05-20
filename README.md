@@ -68,10 +68,14 @@ python3 -m http.server 8000
 
 ## Deploy
 
-GitHub Pages (simplest):
-1. Push to `main` on `github.com/imen0112/le-raccordement`
-2. Settings → Pages → Source: `Deploy from a branch`, `main` / `(root)`
-3. Site live at `https://imen0112.github.io/le-raccordement/`
+This repo auto-deploys to GitHub Pages on every push to `main` via the workflow at `.github/workflows/deploy.yml`.
+
+**One-time setup (already required for the action to work):**
+1. Open the repo on GitHub → **Settings** → **Pages**
+2. Under **Build and deployment** → **Source**, select **GitHub Actions**
+3. Done. From the next push onward, every commit to `main` is built and deployed automatically.
+
+The site is live at `https://imen0112.github.io/le-raccordement/` (or your custom domain once you add a `CNAME` file).
 
 For a custom domain (`leraccordement.com`):
 1. Add a `CNAME` file at the repo root containing just `leraccordement.com`
