@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/main.css?v=20260520f" />
+<link rel="stylesheet" href="css/main.css?v=20260520g" />
 
 <script type="application/ld+json">
 {
@@ -156,25 +156,12 @@
               <div class="kicker">Plant address</div>
               <div style="font-family:var(--ff-display); font-weight:600; color:var(--c-ink); font-size:var(--fs-20); margin-top:2px;">Zone Industrielle de Doukhane</div>
               <div style="font-family:var(--ff-display); font-weight:500; color:var(--c-text); font-size:var(--fs-17); margin-top:4px;">El Hencha — 3043 Sfax, Tunisia</div>
-              <div style="display:flex; flex-wrap:wrap; gap:var(--s-4); margin-top:var(--s-3);">
-                <a href="https://www.google.com/maps/search/?api=1&query=34.9904165,10.7473911" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; color:var(--c-navy-700); font-weight:600; font-size:var(--fs-14);">Open in Google Maps →</a>
-                <a href="https://www.openstreetmap.org/?mlat=34.9904165&mlon=10.7473911#map=17/34.9904165/10.7473911" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; color:var(--c-navy-700); font-weight:600; font-size:var(--fs-14);">Open in OpenStreetMap →</a>
-              </div>
+              <a href="https://www.google.com/maps/search/?api=1&query=34.9904165,10.7473911" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:6px; margin-top:var(--s-3); color:var(--c-navy-700); font-weight:600; font-size:var(--fs-14);">Open in Google Maps →</a>
             </div>
           </div>
         </div>
 
-        <!-- Map — exact factory coordinates -->
-        <div style="margin-top:var(--s-8); border-radius:var(--radius-lg); overflow:hidden; aspect-ratio: 4/3; border:1px solid var(--c-line);">
-          <iframe
-            src="https://www.openstreetmap.org/export/embed.html?bbox=10.7424%2C34.9874%2C10.7524%2C34.9934&layer=mapnik&marker=34.9904165,10.7473911"
-            style="width:100%; height:100%; border:0;"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="Le Raccordement — Zone Industrielle de Doukhane, El Hencha, Sfax, Tunisia"></iframe>
-        </div>
-
-        <div class="card" style="margin-top:var(--s-6); background:var(--c-bg-soft);">
+        <div class="card" style="margin-top:var(--s-8); background:var(--c-bg-soft);">
           <h3 class="h-4">Plan a visit</h3>
           <p class="text-muted mt-2" style="font-size:var(--fs-14)">Buyers, inspectors and EPC teams are welcome to audit our facility. Send a 48-hour notice — we'll arrange a tour with the production team.</p>
         </div>
@@ -183,13 +170,58 @@
   </div>
 </section>
 
+<!-- MAP — last section on the page, compact, scroll-safe -->
+<section class="section-tight" style="padding-bottom:var(--s-12);">
+  <div class="container-wide">
+    <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:var(--s-3); margin-bottom:var(--s-4);">
+      <div>
+        <span class="kicker">Where we are</span>
+        <h3 class="h-3" style="margin-top:4px;">Zone Industrielle de Doukhane · El Hencha · Sfax</h3>
+      </div>
+      <a href="https://www.google.com/maps/search/?api=1&query=34.9904165,10.7473911" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        Open in Google Maps
+      </a>
+    </div>
+    <div class="map-wrap" id="contact-map">
+      <iframe
+        src="https://www.openstreetmap.org/export/embed.html?bbox=10.7424%2C34.9874%2C10.7524%2C34.9934&layer=mapnik&marker=34.9904165,10.7473911"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Le Raccordement — Zone Industrielle de Doukhane, El Hencha, Sfax, Tunisia"></iframe>
+      <button class="map-unlock" type="button" aria-label="Click to interact with the map">
+        <span>Click to interact</span>
+      </button>
+    </div>
+  </div>
+</section>
+
 </main>
+
+<script>
+  // Map: click to enable interaction so scroll-wheel doesn't get hijacked
+  (function () {
+    const wrap = document.getElementById('contact-map');
+    if (!wrap) return;
+    const unlock = wrap.querySelector('.map-unlock');
+    function enable() {
+      wrap.classList.add('is-active');
+    }
+    function disable() {
+      wrap.classList.remove('is-active');
+    }
+    unlock && unlock.addEventListener('click', enable);
+    document.addEventListener('click', (e) => {
+      if (!wrap.contains(e.target)) disable();
+    });
+  })();
+</script>
 
 <footer class="site-footer"><div class="container-wide"><div class="footer-grid footer"><div class="footer-brand"><img src="assets/img/logo/logo.png" alt="Le Raccordement"/><p style="font-size:var(--fs-14); color:rgba(255,255,255,0.65); max-width:36ch">North Africa's first manufacturer of seamless and welded butt-weld pipe fittings.</p></div><div><h4>Products</h4><ul><li><a href="products/elbows.html">Elbows</a></li><li><a href="products/tees.html">Tees</a></li><li><a href="products/reducers.html">Reducers</a></li><li><a href="products/caps.html">Caps</a></li><li><a href="products/all.html">Quick quote builder</a></li><li><a href="products/">All products</a></li></ul></div><div><h4>Company</h4><ul><li><a href="about.html">About us</a></li><li><a href="certifications.html">Quality &amp; certifications</a></li><li><a href="clients.html">Clients</a></li><li><a href="contact.html">Contact</a></li></ul></div><div><h4>Contact</h4><div class="footer-contact"><span>Zone Industrielle de Doukhane</span><span>El Hencha — 3043 Sfax, Tunisia</span><a href="mailto:contact@leraccordement.com">contact@leraccordement.com</a><a href="tel:+21674000000">+216 74 000 000</a></div></div></div><div class="footer-bottom"><span>© <span data-year>2026</span> Le Raccordement. All rights reserved.</span><span>Made in Sfax, Tunisia.</span></div></div></footer>
 
 <aside class="cart-drawer" id="cart-drawer"><div class="overlay" data-close-cart></div><div class="panel"><div class="cart-head"><h3>Your quote list</h3><button data-close-cart><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><div class="cart-list" id="cart-drawer-list"></div><div class="cart-foot"><div class="meta"><span>Indicative subtotal</span><strong id="cart-drawer-subtotal">€0.00</strong></div><a href="cart.html" class="btn btn-primary btn-block">Review &amp; request quote <span class="arrow">→</span></a></div></div></aside>
 
-<script src="js/products.js?v=20260520f"></script><script src="js/cart.js?v=20260520f"></script><script src="js/main.js?v=20260520f"></script>
+<script src="js/products.js?v=20260520g"></script><script src="js/cart.js?v=20260520g"></script><script src="js/main.js?v=20260520g"></script>
 <style>
   @media (min-width: 1024px) {
     #ctx-layout { grid-template-columns: 1fr 1.2fr; align-items: start; gap: var(--s-16) !important; }

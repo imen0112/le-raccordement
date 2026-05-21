@@ -1378,6 +1378,59 @@ h1, h2, h3, h4 {
 .filter-status strong { color: var(--c-ink); }
 .filter-status em { font-style: normal; color: var(--c-navy-700); }
 
+/* Scroll-safe map wrapper used on the contact page */
+.map-wrap {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  max-height: 40vh;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--c-line);
+  background: var(--c-bg-soft);
+}
+.map-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  pointer-events: none;          /* page scroll passes through */
+}
+.map-wrap.is-active iframe {
+  pointer-events: auto;          /* enabled after explicit click */
+}
+.map-wrap .map-unlock {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  cursor: pointer;
+  border: 0;
+  color: var(--c-ink);
+  font-family: var(--ff-display);
+  font-size: var(--fs-13);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: background var(--t-fast) var(--ease);
+}
+.map-wrap .map-unlock span {
+  background: rgba(255,255,255,0.92);
+  border: 1px solid var(--c-line);
+  padding: 8px 14px;
+  border-radius: 999px;
+  box-shadow: var(--shadow-sm);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+.map-wrap:hover .map-unlock span {
+  opacity: 1;
+  transform: translateY(0);
+}
+.map-wrap.is-active .map-unlock { display: none; }
+
 /* ---------- 14. CART DRAWER ---------- */
 .cart-drawer {
   position: fixed;
