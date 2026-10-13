@@ -2068,3 +2068,33 @@ h1, h2, h3, h4 {
 @media (max-width: 899px) {
   .family-head-media, .ref-media { max-width: 300px; padding: var(--s-5); }
 }
+
+/* Horizontal filter bar with dropdowns */
+.catalog-bar { display: flex; gap: var(--s-3); flex-wrap: wrap; align-items: center; }
+.catalog-bar .filter-search { flex: 1 1 320px; }
+.fbar { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-4); position: relative; z-index: 5; }
+.fdrop { position: relative; }
+.fdrop > summary {
+  list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+  padding: .55rem .95rem; border: 1px solid var(--c-line-strong); border-radius: 999px; background: #fff;
+  font-size: var(--fs-14); font-weight: 500; color: var(--c-ink); white-space: nowrap;
+}
+.fdrop > summary::-webkit-details-marker { display: none; }
+.fdrop > summary::after { content: ''; width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-2px) rotate(45deg); opacity: .6; transition: transform var(--t-fast) var(--ease); }
+.fdrop[open] > summary::after { transform: translateY(2px) rotate(-135deg); }
+.fdrop > summary:hover { border-color: var(--c-navy-700); }
+.fdrop.is-active > summary { background: var(--c-navy-800); border-color: var(--c-navy-800); color: #fff; }
+.fdrop-n { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: var(--c-green-500); color: var(--c-navy-900); font-size: 12px; font-weight: 700; }
+.fdrop-panel {
+  position: absolute; top: calc(100% + 6px); left: 0; min-width: 270px; max-width: 340px;
+  margin: 0; padding: var(--s-2); border: 1px solid var(--c-line); border-radius: var(--radius); background: #fff;
+  box-shadow: 0 16px 40px rgba(7,24,44,0.14); display: flex; flex-direction: column; gap: 2px;
+}
+.fdrop-panel.is-long { max-height: 320px; overflow-y: auto; }
+@media (max-width: 599px) {
+  .fbar { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+  .fdrop { position: static; }
+  .fdrop-panel { left: 0; right: 0; max-width: none; }
+}
+.fdrop-panel .facet-opt { gap: var(--s-3); padding: 7px 8px; }
+.catalog-layout.catalog-layout-bar { grid-template-columns: minmax(0, 1fr); margin-top: var(--s-2); }
