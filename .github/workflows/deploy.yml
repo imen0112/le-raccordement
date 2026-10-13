@@ -29,14 +29,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      - name: Check catalog pages and quote API
+        run: |
+          python3 tools/catalog/check_site.py
+          cd server/quote-api && python3 -m unittest test_app
+
+      - name: Assemble public site (without tools, server code and tests)
+        run: |
+          mkdir _site
+          rsync -a --exclude '.git' --exclude '.github' --exclude '_site' --exclude 'tools' \
+            --exclude 'server' --exclude 'tests' --exclude 'README.md' --exclude '.DS_Store' ./ _site/
+
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          # Upload the whole repo as the static site (no build step needed)
-          path: '.'
+          path: '_site'
 
       - name: Deploy to GitHub Pages
         id: deployment

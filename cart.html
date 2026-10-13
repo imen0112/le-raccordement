@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#0E2A47" />
 <title>Your Quote List · Le Raccordement</title>
-<meta name="description" content="Review your selected pipe fittings and submit a quote request — Le Raccordement responds within one business day." />
+<meta name="description" content="Review your selected pipe fittings and submit a quote request: Le Raccordement responds within one business day." />
 <meta name="robots" content="noindex, follow" />
 <link rel="canonical" href="https://leraccordement.com/cart.html" />
 <link rel="icon" type="image/png" href="assets/img/logo/logo.png" />
@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/main.css?v=20260520g" />
+<link rel="stylesheet" href="css/main.css?v=20261013a" />
 </head>
 <body>
 
@@ -34,7 +34,7 @@
   </div>
 </div></span><a href="certifications.html">Quality</a><a href="clients.html">Clients</a><a href="contact.html">Contact</a></nav>
     <div class="header-actions">
-      <div class="lang-toggle"><a href="cart.html" class="active">EN</a><a href="fr/panier.html" hreflang="fr">FR</a></div>
+      <div class="lang-toggle"><a href="cart.html" class="active">EN</a><span class="lang-soon" title="Version française bientôt disponible">FR</span></div>
       <button class="cart-btn" data-open-cart aria-label="Open quote list"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="cart-badge">0</span></button>
       <a href="contact.html" class="btn btn-primary btn-sm">Request a quote</a>
       <button class="nav-toggle" data-open-nav aria-label="Open menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
@@ -50,49 +50,49 @@
   <div class="container-wide">
     <div class="breadcrumb"><a href="./">Home</a><span class="sep">/</span><span>Quote List</span></div>
     <h1>Your quote list.</h1>
-    <p class="lead">Review your selection, adjust quantities, then send. We respond within one business day with a tailored quote — material availability, final price and delivery terms.</p>
+    <p class="lead">Review your references, adjust quantities, then send your details. We reply within one business day with a tailored quote, availability, price and delivery terms.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container-wide">
-    <div style="display:grid; gap:var(--s-12); grid-template-columns:1fr;" id="cart-layout">
+    <div style="display:grid; gap:var(--s-12);" id="cart-layout">
       <div>
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--s-4);">
-          <h2 class="h-3">Items</h2>
-          <button class="btn btn-ghost btn-sm" data-clear-cart>Clear list</button>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:var(--s-4); margin-bottom:var(--s-4); flex-wrap:wrap;">
+          <h2 class="h-3">Requested references</h2>
+          <div style="display:flex; gap:var(--s-2);">
+            <a href="products/" class="btn btn-ghost btn-sm">Continue browsing</a>
+            <button class="btn btn-ghost btn-sm" type="button" data-clear-cart>Clear list</button>
+          </div>
         </div>
         <div id="cart-page-list"></div>
       </div>
-
-      <div id="quote-form-wrap">
+      <div id="quote-form-wrap" hidden>
         <div class="summary">
           <h3>Quote summary</h3>
-          <div class="row"><span>Items</span><strong id="summary-count">0</strong></div>
-          <div class="row"><span>Indicative subtotal</span><strong id="summary-subtotal">€0.00</strong></div>
-          <div class="row total"><span>Indicative total</span><strong id="summary-total">€0.00</strong></div>
+          <div class="row"><span>References</span><strong id="summary-count">0</strong></div>
+          <div class="row"><span>Total quantity (pcs)</span><strong id="summary-units">0</strong></div>
           <p style="font-size:var(--fs-12); color:var(--c-muted); margin-top:var(--s-3);">
-            Prices shown are indicative starting prices. Your final quote will reflect material grade, size, schedule, surface treatment, quantity and Incoterms.
+            No prices online: we quote each request for your exact references, quantities, certificates and Incoterms.
           </p>
         </div>
-
         <div class="card" style="margin-top:var(--s-6)">
           <h3 class="h-3">Send your quote request</h3>
-          <p class="text-muted mt-2" style="font-size:var(--fs-14)">We'll reply by email within one business day.</p>
-          <form class="form mt-6" data-quote-form>
+          <p class="text-muted mt-2" style="font-size:var(--fs-14)">Fields marked * are required. We reply by email within one business day.</p>
+          <form class="form mt-6" data-quote-form novalidate>
             <div class="field-grid">
-              <div class="field"><label for="q-name">Full name *</label><input id="q-name" name="name" required /></div>
-              <div class="field"><label for="q-company">Company</label><input id="q-company" name="company" /></div>
+              <div class="field"><label for="q-name">Full name *</label><input id="q-name" name="name" autocomplete="name" required maxlength="120" /></div>
+              <div class="field"><label for="q-company">Company *</label><input id="q-company" name="company" autocomplete="organization" required maxlength="160" /></div>
             </div>
             <div class="field-grid">
-              <div class="field"><label for="q-email">Email *</label><input id="q-email" name="email" type="email" required /></div>
-              <div class="field"><label for="q-phone">Phone</label><input id="q-phone" name="phone" type="tel" /></div>
+              <div class="field"><label for="q-email">Business email *</label><input id="q-email" name="email" type="email" autocomplete="email" required maxlength="200" /></div>
+              <div class="field"><label for="q-phone">Phone *</label><input id="q-phone" name="phone" type="tel" autocomplete="tel" required maxlength="40" placeholder="+216 …" /></div>
             </div>
             <div class="field-grid">
-              <div class="field"><label for="q-country">Country</label><input id="q-country" name="country" placeholder="Tunisia, France, Italy…" /></div>
+              <div class="field"><label for="q-country">Country</label><input id="q-country" name="country" autocomplete="country-name" maxlength="80" placeholder="Tunisia, France, Italy…" /></div>
               <div class="field"><label for="q-incoterm">Preferred Incoterm</label>
                 <select id="q-incoterm" name="incoterm">
-                  <option value="">— Select —</option>
+                  <option value="">Select…</option>
                   <option>EXW · Ex Works</option>
                   <option>FOB · Free On Board</option>
                   <option>CIF · Cost, Insurance &amp; Freight</option>
@@ -101,9 +101,14 @@
                 </select>
               </div>
             </div>
-            <div class="field"><label for="q-message">Project details &amp; special requirements</label><textarea id="q-message" name="message" placeholder="Application, project deadline, required certificates, packaging, custom dimensions…"></textarea></div>
-            <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top:var(--s-4)">Send quote request <span class="arrow">→</span></button>
-            <p style="font-size:var(--fs-12); color:var(--c-muted); text-align:center; margin-top:var(--s-2)">By sending, you agree we may contact you regarding this quote.</p>
+            <div class="field"><label for="q-message">Message</label><textarea id="q-message" name="message" maxlength="4000" placeholder="Project, deadline, required certificates (EN 10204 3.1…), packaging, delivery address…"></textarea></div>
+            <!-- Anti-spam honeypot: leave empty -->
+            <div class="hp-field" aria-hidden="true"><label for="q-website">Website</label><input id="q-website" name="website" tabindex="-1" autocomplete="off" /></div>
+            <div class="form-error" id="quote-error" role="alert" hidden></div>
+            <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top:var(--s-2)" data-quote-submit>Send quote request <span class="arrow">→</span></button>
+            <p class="form-privacy">
+              Your details are used only to answer this quote request and are sent to Le Raccordement (<span id="quote-to"></span>). They are not shared with third parties or used for marketing. To access or delete them, write to contact@leraccordement.com.
+            </p>
           </form>
         </div>
       </div>
@@ -113,17 +118,19 @@
 
 </main>
 
-<footer class="site-footer"><div class="container-wide"><div class="footer-grid footer"><div class="footer-brand"><img src="assets/img/logo/logo.png" alt="Le Raccordement"/><p style="font-size:var(--fs-14); color:rgba(255,255,255,0.65); max-width:36ch">North Africa's first manufacturer of seamless and welded butt-weld pipe fittings.</p></div><div><h4>Products</h4><ul><li><a href="products/elbows.html">Elbows</a></li><li><a href="products/tees.html">Tees</a></li><li><a href="products/reducers.html">Reducers</a></li><li><a href="products/caps.html">Caps</a></li><li><a href="products/all.html">Quick quote builder</a></li><li><a href="products/">All products</a></li></ul></div><div><h4>Company</h4><ul><li><a href="about.html">About us</a></li><li><a href="certifications.html">Quality &amp; certifications</a></li><li><a href="clients.html">Clients</a></li><li><a href="contact.html">Contact</a></li></ul></div><div><h4>Contact</h4><div class="footer-contact"><span>Zone Industrielle de Doukhane</span><span>El Hencha — 3043 Sfax, Tunisia</span><a href="mailto:contact@leraccordement.com">contact@leraccordement.com</a><a href="tel:+21674000000">+216 74 000 000</a></div></div></div><div class="footer-bottom"><span>© <span data-year>2026</span> Le Raccordement. All rights reserved.</span><span>Made in Sfax, Tunisia.</span></div></div></footer>
+<footer class="site-footer"><div class="container-wide"><div class="footer-grid footer"><div class="footer-brand"><img src="assets/img/logo/logo.png" alt="Le Raccordement"/><p style="font-size:var(--fs-14); color:rgba(255,255,255,0.65); max-width:36ch">North Africa's first manufacturer of seamless and welded butt-weld pipe fittings.</p></div><div><h4>Products</h4><ul><li><a href="products/elbows.html">Elbows</a></li><li><a href="products/tees.html">Tees</a></li><li><a href="products/reducers.html">Reducers</a></li><li><a href="products/caps.html">Caps</a></li><li><a href="products/all.html">Quick quote builder</a></li><li><a href="products/">All products</a></li></ul></div><div><h4>Company</h4><ul><li><a href="about.html">About us</a></li><li><a href="certifications.html">Quality &amp; certifications</a></li><li><a href="clients.html">Clients</a></li><li><a href="contact.html">Contact</a></li></ul></div><div><h4>Contact</h4><div class="footer-contact"><span>Zone Industrielle de Doukhane</span><span>El Hencha, 3043 Sfax, Tunisia</span><a href="mailto:contact@leraccordement.com">contact@leraccordement.com</a><a href="tel:+21674000000">+216 74 000 000</a></div></div></div><div class="footer-bottom"><span>© <span data-year>2026</span> Le Raccordement. All rights reserved.</span><span>Made in Sfax, Tunisia.</span></div></div></footer>
 
-<aside class="cart-drawer" id="cart-drawer"><div class="overlay" data-close-cart></div><div class="panel"><div class="cart-head"><h3>Your quote list</h3><button data-close-cart><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><div class="cart-list" id="cart-drawer-list"></div><div class="cart-foot"><div class="meta"><span>Indicative subtotal</span><strong id="cart-drawer-subtotal">€0.00</strong></div><a href="cart.html" class="btn btn-primary btn-block">Review &amp; request quote <span class="arrow">→</span></a></div></div></aside>
+<aside class="cart-drawer" id="cart-drawer"><div class="overlay" data-close-cart></div><div class="panel"><div class="cart-head"><h3>Your quote list</h3><button data-close-cart><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><div class="cart-list" id="cart-drawer-list"></div><div class="cart-foot"><div class="meta"><span>In your list</span><strong id="cart-drawer-subtotal">0 ref.</strong></div><a href="cart.html" class="btn btn-primary btn-block">Review &amp; request quote <span class="arrow">→</span></a></div></div></aside>
 
-<script src="js/products.js?v=20260520g"></script>
-<script src="js/cart.js?v=20260520g"></script>
-<script src="js/main.js?v=20260520g"></script>
+<script src="js/config.js?v=20261013a"></script>
+<script src="js/products.js?v=20261013a"></script>
+<script src="js/cart.js?v=20261013a"></script>
+<script src="js/main.js?v=20261013a"></script>
+<script src="js/quote.js?v=20261013a"></script>
 <style>
   /* Larger screens: 2-column cart layout */
-  @media (min-width: 1024px) {
-    #cart-layout { grid-template-columns: 1.5fr 1fr; align-items: start; gap: var(--s-16) !important; }
+  @media (min-width: 1200px) {
+    #cart-layout { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; gap: var(--s-12) !important; }
   }
 </style>
 </body>

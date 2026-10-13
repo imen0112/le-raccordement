@@ -1,99 +1,100 @@
-/* Single source of truth for all products.
-   priceFrom is set to null where pricing should be quote-only.
-   Replace with real numbers when client provides them. */
+/* Product types (marketing pages: products/product.html?slug=…).
+   The orderable references come from the Excel files, see data/catalog/.
+   No prices: every request goes through a quote. */
 
 window.LR_PRODUCTS = [
   /* ----- ELBOWS ----- */
   {
     slug: 'elbow-90-1-5d',
-    name: 'Elbow 90° LR — 1.5D',
+    articles: ['Coude à souder 90° 1.5D'],   // Excel 'Article' prefixes → catalog references
+    name: 'Elbow 90° LR 1.5D',
     category: 'elbows',
     categoryLabel: 'Elbows',
     image: 'assets/img/products/elbow-90.jpg',
     technical: 'assets/img/products/technical/elbow-90.png',
     gallery: ["assets/img/products/gallery/elbow-90-alt.png"],
-    short: 'Long-radius 90° elbow in seamless or welded carbon steel — bend radius 1.5 × DN.',
+    short: 'Long-radius 90° elbow in seamless or welded carbon steel, bend radius 1.5 × DN.',
     description: 'Long-radius (LR) 1.5D 90° elbow for butt-welded piping systems. Produced from seamless or welded carbon and stainless steel pipes by cold forming and full heat treatment. Engineered for pressure piping in oil & gas, water, chemical and power applications.',
     angle: '90°',
     radius: '1.5D',
-    sizeRange: 'DN15 – DN300 / ½″ – 12″',
+    sizeRange: 'DN15 to DN300 / ½″ to 12″',
     standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2605'],
     materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
-    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 – S8'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 to S8'],
     coating: ['Shot-blasted', 'Painted', 'Galvanized'],
     rawMaterial: 'Seamless & welded pipes',
     marking: 'Stamped (micro-percussion)',
     packaging: 'Pallets, cartons',
-    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    certificate: 'EN 10204: Mill Test Certificate 3.1 / Report 2.2',
     applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
-    priceFrom: 14.50,
-    leadTime: '3 – 6 weeks',
+    leadTime: '3 to 6 weeks',
     minOrder: '50 pcs'
   },
   {
     slug: 'elbow-90-3d',
-    name: 'Elbow 90° LR — 3D',
+    articles: ['Coude à souder 90° 3D'],   // Excel 'Article' prefixes → catalog references
+    name: 'Elbow 90° LR 3D',
     category: 'elbows',
     categoryLabel: 'Elbows',
     image: 'assets/img/products/elbow-90.jpg',
     technical: 'assets/img/products/technical/elbow-90.png',
     gallery: ["assets/img/products/gallery/elbow-90-alt.png"],
-    short: 'Extra-long-radius 90° elbow (3 × DN) — smoother flow, lower pressure drop for high-velocity lines.',
+    short: 'Extra-long-radius 90° elbow (3 × DN), smoother flow, lower pressure drop for high-velocity lines.',
     description: 'Extra-long-radius 3D 90° elbow for pipelines requiring reduced turbulence and pressure loss. Cold-formed from seamless or welded pipes. Frequently specified in long-distance transport, slurry, and high-velocity fluid services.',
     angle: '90°',
     radius: '3D',
-    sizeRange: 'DN15 – DN300 / ½″ – 12″',
+    sizeRange: 'DN15 to DN300 / ½″ to 12″',
     standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2605'],
     materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
-    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 – S8'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 to S8'],
     coating: ['Shot-blasted', 'Painted', 'Galvanized'],
     rawMaterial: 'Seamless & welded pipes',
     marking: 'Stamped (micro-percussion)',
     packaging: 'Pallets, cartons',
-    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    certificate: 'EN 10204: Mill Test Certificate 3.1 / Report 2.2',
     applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
-    priceFrom: 18.20,
-    leadTime: '3 – 6 weeks',
+    leadTime: '3 to 6 weeks',
     minOrder: '50 pcs'
   },
   {
     slug: 'elbow-45',
+    articles: ['Coude à souder 45°'],   // Excel 'Article' prefixes → catalog references
     name: 'Elbow 45° LR',
     category: 'elbows',
     categoryLabel: 'Elbows',
     image: 'assets/img/products/elbow-45.jpg',
     technical: 'assets/img/products/technical/elbow-45.png',
     gallery: ["assets/img/products/gallery/elbow-45-alt-a.jpg", "assets/img/products/gallery/elbow-45-alt-b.jpg"],
-    short: 'Long-radius 45° elbow — for moderate flow changes in pressure piping.',
+    short: 'Long-radius 45° elbow, for moderate flow changes in pressure piping.',
     description: 'Long-radius 45° butt-welding elbow used to gently redirect flow in process and transport piping. Cold-formed from seamless or welded pipes, normalized and dimensionally inspected to ASME B16.9 and EN 10253.',
     angle: '45°',
     radius: '1.5D',
-    sizeRange: 'DN15 – DN300 / ½″ – 12″',
+    sizeRange: 'DN15 to DN300 / ½″ to 12″',
     standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2605'],
     materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
-    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 – S8'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 to S8'],
     coating: ['Shot-blasted', 'Painted', 'Galvanized'],
     rawMaterial: 'Seamless & welded pipes',
     marking: 'Stamped (micro-percussion)',
     packaging: 'Pallets, cartons',
-    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    certificate: 'EN 10204: Mill Test Certificate 3.1 / Report 2.2',
     applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
-    priceFrom: 12.80,
-    leadTime: '3 – 6 weeks',
+    leadTime: '3 to 6 weeks',
     minOrder: '50 pcs'
   },
   {
     slug: 'elbow-180',
+    articles: [],   // Excel 'Article' prefixes → catalog references
     name: 'Elbow 180° (Return Bend)',
     category: 'elbows',
     categoryLabel: 'Elbows',
     image: 'assets/img/products/elbow-180.jpg',
     technical: 'assets/img/products/technical/elbow-180.png',
-    short: '180° return bend — for hairpin returns in heat exchangers and process loops.',
+    short: '180° return bend, for hairpin returns in heat exchangers and process loops.',
     description: '180° return bend (U-bend) used to reverse flow direction in heaters, exchangers, and serpentine process lines. Manufactured from seamless or welded pipes to ASME B16.9 and EN 10253 dimensional standards.',
     angle: '180°',
     radius: '1.5D / 3D',
-    sizeRange: 'DN15 – DN200 / ½″ – 8″',
+    sizeRange: 'DN15 to DN200 / ½″ to 8″',
     standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2605'],
     materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
     thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S'],
@@ -101,51 +102,51 @@ window.LR_PRODUCTS = [
     rawMaterial: 'Seamless & welded pipes',
     marking: 'Stamped (micro-percussion)',
     packaging: 'Pallets, cartons',
-    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    certificate: 'EN 10204: Mill Test Certificate 3.1 / Report 2.2',
     applications: ['Power Generation', 'Heat Exchangers', 'Chemical Engineering', 'Petroleum & Oil', 'Shipbuilding'],
-    priceFrom: 24.00,
-    leadTime: '4 – 7 weeks',
+    leadTime: '4 to 7 weeks',
     minOrder: '25 pcs'
   },
 
   /* ----- TEES ----- */
   {
     slug: 'equal-tee',
+    articles: ['Té égal à souder'],   // Excel 'Article' prefixes → catalog references
     name: 'Equal Tee',
     category: 'tees',
     categoryLabel: 'Tees',
     image: 'assets/img/products/equal-tee.jpg',
     technical: 'assets/img/products/technical/equal-tee.png',
     gallery: ["assets/img/products/gallery/tee-alt-a.jpg", "assets/img/products/gallery/tee-alt-b.png"],
-    short: 'Equal butt-weld tee for branched pipework — symmetric flow distribution in DN50 – DN200.',
+    short: 'Equal butt-weld tee for branched pipework, symmetric flow distribution in DN50 to DN200.',
     description: 'Equal butt-welding tee with three identical bore diameters, designed to split or merge flow with minimum pressure drop. Cold-formed from seamless or welded pipe, normalized and tested to ASME and EN standards.',
     type: 'Equal',
-    sizeRange: 'DN50 – DN200 / 2″ – 8″',
+    sizeRange: 'DN50 to DN200 / 2″ to 8″',
     standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2615'],
     materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
-    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 – S8'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 to S8'],
     coating: ['Shot-blasted', 'Painted', 'Galvanized'],
     rawMaterial: 'Seamless & welded pipes',
     marking: 'Stamped (micro-percussion)',
     packaging: 'Pallets, cartons',
-    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    certificate: 'EN 10204: Mill Test Certificate 3.1 / Report 2.2',
     applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
-    priceFrom: 22.00,
-    leadTime: '3 – 6 weeks',
+    leadTime: '3 to 6 weeks',
     minOrder: '25 pcs'
   },
   {
     slug: 'reducing-tee',
+    articles: [],   // Excel 'Article' prefixes → catalog references
     name: 'Reducing Tee',
     category: 'tees',
     categoryLabel: 'Tees',
     image: 'assets/img/products/reducing-tee.jpg',
     technical: 'assets/img/products/technical/reducing-tee.png',
     gallery: ["assets/img/products/gallery/tee-alt-a.jpg"],
-    short: 'Reducing tee with smaller branch outlet — for asymmetric flow distribution.',
+    short: 'Reducing tee with smaller branch outlet, for asymmetric flow distribution.',
     description: 'Butt-welding reducing tee with a smaller branch diameter than the run, used where the off-take line carries less flow. Manufactured from seamless or welded pipe to ASME B16.9 and EN 10253.',
     type: 'Reducing',
-    sizeRange: 'DN50×DN25 – DN200×DN100',
+    sizeRange: 'DN50×DN25 to DN200×DN100',
     standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2615'],
     materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
     thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S'],
@@ -153,87 +154,86 @@ window.LR_PRODUCTS = [
     rawMaterial: 'Seamless & welded pipes',
     marking: 'Stamped (micro-percussion)',
     packaging: 'Pallets, cartons',
-    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    certificate: 'EN 10204: Mill Test Certificate 3.1 / Report 2.2',
     applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Water Distribution'],
-    priceFrom: 26.50,
-    leadTime: '4 – 7 weeks',
+    leadTime: '4 to 7 weeks',
     minOrder: '25 pcs'
   },
 
   /* ----- REDUCERS ----- */
   {
     slug: 'concentric-reducer',
+    articles: ['RC à souder'],   // Excel 'Article' prefixes → catalog references
     name: 'Concentric Reducer',
     category: 'reducers',
     categoryLabel: 'Reducers',
     image: 'assets/img/products/concentric-reducer.jpg',
     technical: 'assets/img/products/technical/concentric-reducer.png',
     gallery: ["assets/img/products/gallery/reducer-alt.png"],
-    short: 'Concentric reducer (Form 1 & Form 2) — coaxial transition between two pipe diameters.',
-    description: 'Concentric butt-welding reducer connecting two pipes of different diameters along a common axis. Form 1 covers larger steps (DN25×DN20 – DN100×DN50), Form 2 covers the smaller-step / wider range (DN20×DN15 – DN200×DN100).',
-    type: 'Concentric — Form 1 & Form 2',
-    sizeRange: 'Form 1: DN25×DN20 – DN100×DN50 · Form 2: DN20×DN15 – DN200×DN100',
+    short: 'Concentric reducer (Form 1 & Form 2), coaxial transition between two pipe diameters.',
+    description: 'Concentric butt-welding reducer connecting two pipes of different diameters along a common axis. Form 1 covers larger steps (DN25×DN20 to DN100×DN50), Form 2 covers the smaller-step / wider range (DN20×DN15 to DN200×DN100).',
+    type: 'Concentric, Form 1 & Form 2',
+    sizeRange: 'Form 1: DN25×DN20 to DN100×DN50 · Form 2: DN20×DN15 to DN200×DN100',
     standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2616'],
     materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
-    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 – S8'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 to S8'],
     coating: ['Shot-blasted', 'Painted', 'Galvanized'],
     rawMaterial: 'Seamless & welded pipes',
     marking: 'Stamped (micro-percussion)',
     packaging: 'Pallets, cartons',
-    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    certificate: 'EN 10204: Mill Test Certificate 3.1 / Report 2.2',
     applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
-    priceFrom: 9.80,
-    leadTime: '3 – 6 weeks',
+    leadTime: '3 to 6 weeks',
     minOrder: '50 pcs'
   },
   {
     slug: 'eccentric-reducer',
+    articles: ['RE à souder'],   // Excel 'Article' prefixes → catalog references
     name: 'Eccentric Reducer',
     category: 'reducers',
     categoryLabel: 'Reducers',
     image: 'assets/img/products/eccentric-reducer.png',
     technical: 'assets/img/products/technical/eccentric-reducer.png',
-    short: 'Eccentric reducer — offset transition that maintains a flat side, ideal for horizontal pump suction lines.',
-    description: 'Eccentric butt-welding reducer with offset centerlines, keeping one outer surface flush. Specified for horizontal piping where air pockets must be eliminated — typically on pump suction lines and process headers.',
+    short: 'Eccentric reducer, offset transition that maintains a flat side, ideal for horizontal pump suction lines.',
+    description: 'Eccentric butt-welding reducer with offset centerlines, keeping one outer surface flush. Specified for horizontal piping where air pockets must be eliminated, typically on pump suction lines and process headers.',
     type: 'Eccentric',
-    sizeRange: 'DN20×DN15 – DN200×DN100 / ¾″×½″ – 8″×4″',
+    sizeRange: 'DN20×DN15 to DN200×DN100 / ¾″×½″ to 8″×4″',
     standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2616'],
     materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
-    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 – S8'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 to S8'],
     coating: ['Shot-blasted', 'Painted', 'Galvanized'],
     rawMaterial: 'Seamless & welded pipes',
     marking: 'Stamped (micro-percussion)',
     packaging: 'Pallets, cartons',
-    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    certificate: 'EN 10204: Mill Test Certificate 3.1 / Report 2.2',
     applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
-    priceFrom: 11.20,
-    leadTime: '3 – 6 weeks',
+    leadTime: '3 to 6 weeks',
     minOrder: '50 pcs'
   },
 
   /* ----- CAPS ----- */
   {
     slug: 'cap',
+    articles: ['Caps à souder', 'Fond à souder'],   // Excel 'Article' prefixes → catalog references
     name: 'Cap & Dished End',
     category: 'caps',
     categoryLabel: 'Caps',
     image: 'assets/img/products/cap.jpg',
     technical: 'assets/img/products/technical/cap.png',
     gallery: ["assets/img/products/gallery/cap-alt-a.png", "assets/img/products/gallery/cap-alt-b.png"],
-    short: 'Pressure cap / dished end for pipe terminations — DN15 – DN200 in seamless and welded steel.',
+    short: 'Pressure cap / dished end for pipe terminations: DN15 to DN200 in seamless and welded steel.',
     description: 'Butt-welding cap (dished end) used to close the end of a pipe run. Manufactured by cold forming from seamless or welded pipe in carbon and stainless grades, fully heat-treated and pressure-tested on request.',
-    sizeRange: 'DN15 – DN200 / ½″ – 8″',
+    sizeRange: 'DN15 to DN200 / ½″ to 8″',
     standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2617'],
     materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
-    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 – S8'],
+    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S', 'S1 to S8'],
     coating: ['Shot-blasted', 'Painted', 'Galvanized'],
     rawMaterial: 'Seamless & welded pipes',
     marking: 'Stamped (micro-percussion)',
     packaging: 'Pallets, cartons',
-    certificate: 'EN 10204 — Mill Test Certificate 3.1 / Report 2.2',
+    certificate: 'EN 10204: Mill Test Certificate 3.1 / Report 2.2',
     applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
-    priceFrom: 7.50,
-    leadTime: '3 – 6 weeks',
+    leadTime: '3 to 6 weeks',
     minOrder: '50 pcs'
   }
 ];
@@ -243,7 +243,7 @@ window.LR_CATEGORIES = [
     slug: 'elbows',
     name: 'Elbows',
     tagline: 'Long-radius bends, 45° · 90° · 180°',
-    description: '1.5D & 3D long-radius elbows in DN15 – DN300, formed from seamless or welded pipe to ASME B16.9 and EN 10253.',
+    description: '1.5D & 3D long-radius elbows in DN15 to DN300, formed from seamless or welded pipe to ASME B16.9 and EN 10253.',
     image: 'assets/img/products/elbow-90.jpg'
   },
   {
@@ -257,7 +257,7 @@ window.LR_CATEGORIES = [
     slug: 'reducers',
     name: 'Reducers',
     tagline: 'Concentric & eccentric',
-    description: 'Coaxial and offset reducers up to DN200×DN100 — Form 1, Form 2 and eccentric geometries available.',
+    description: 'Coaxial and offset reducers up to DN200×DN100: Form 1, Form 2 and eccentric geometries available.',
     image: 'assets/img/products/concentric-reducer.jpg'
   },
   {
@@ -277,71 +277,7 @@ window.LR_byCategory = function(catSlug) {
 };
 
 /* ---------------------------------------------------------------
-   VARIANT PRICING
-   Indicative multipliers anchored to product.priceFrom = the
-   cheapest valid config of that product (smallest DN, cheapest
-   carbon grade, STD thickness, shot-blasted finish, 1.5D radius).
-   Tweak the tables when client provides real numbers.
-   --------------------------------------------------------------- */
-window.LR_PRICE = {
-  // Multiplier per nominal size — anchored to DN15 = 1.0
-  size: {
-    15: 1.0, 20: 1.15, 25: 1.35, 32: 1.6, 40: 1.9, 50: 2.3,
-    65: 3.0, 80: 3.8, 100: 5.0, 125: 6.5, 150: 8.5, 200: 13,
-    250: 18, 300: 25
-  },
-  // Wall thickness — anchored to STD = 1.0
-  thickness: {
-    'STD': 1.0, 'SCH 40': 1.05, 'SCH 40S': 1.05,
-    'XS': 1.4, 'SCH 80': 1.5, 'SCH 80S': 1.5,
-    'S1 – S8': 1.2
-  },
-  // Material grade — anchored to S235 = 1.0 (cheapest carbon)
-  material: {
-    'S235': 1.0, 'ST37': 1.0, 'S265': 1.05,
-    'A234-WPB': 1.10,
-    'P235TR1': 1.10, 'P235TR2': 1.12,
-    'P235GH': 1.18, 'P265GH': 1.22,
-    'A403-WP304L': 2.80,
-    'A403-WP316L': 3.40
-  },
-  // Surface coating — anchored to Shot-blasted = 1.0
-  coating: {
-    'Shot-blasted': 1.0, 'Painted': 1.08, 'Galvanized': 1.18
-  },
-  // Bend radius for elbows
-  radius: { '1.5D': 1.0, '3D': 1.25, '1.5D / 3D': 1.0 }
-};
-
-window.LR_computePrice = function (product, options) {
-  if (!product) return 0;
-  const o = options || {};
-
-  // Parse DN from "DN 50 (2″)" or just "50"
-  let dn = null;
-  if (o.Size) {
-    const m = String(o.Size).match(/(\d+)/);
-    if (m) dn = parseInt(m[1], 10);
-  }
-  const sizeMul = (dn && window.LR_PRICE.size[dn]) || 1.0;
-
-  const thickMul = window.LR_PRICE.thickness[o.Thickness] || 1.0;
-  const matMul   = window.LR_PRICE.material[o.Material]   || 1.0;
-  const coatMul  = window.LR_PRICE.coating[o.Coating]     || 1.0;
-  const radMul   = window.LR_PRICE.radius[o.Radius]       || 1.0;
-
-  return (product.priceFrom || 0) * sizeMul * thickMul * matMul * coatMul * radMul;
-};
-
-window.LR_formatPrice = function (n) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency', currency: 'EUR',
-    maximumFractionDigits: n >= 100 ? 0 : 2
-  }).format(n);
-};
-
-/* ---------------------------------------------------------------
-   Path resolver — image paths are stored relative to site root
+   Path resolver, image paths are stored relative to site root
    (e.g. "assets/img/products/elbow-90.jpg"). When this file is
    loaded from a subfolder like /products/ or /fr/produits/, every
    relative path needs to step UP before stepping back DOWN.

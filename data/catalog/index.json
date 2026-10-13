@@ -1,0 +1,29 @@
+{
+ "generated": "2026-10-13",
+ "families": [
+  {
+   "slug": "elbows",
+   "count": 168,
+   "name": "Elbows",
+   "nameFr": "Coudes"
+  },
+  {
+   "slug": "tees",
+   "count": 42,
+   "name": "Tees",
+   "nameFr": "Tés"
+  },
+  {
+   "slug": "reducers",
+   "count": 276,
+   "name": "Reducers",
+   "nameFr": "Réductions"
+  },
+  {
+   "slug": "caps",
+   "count": 72,
+   "name": "Caps",
+   "nameFr": "Caps & fonds"
+  }
+ ]
+}

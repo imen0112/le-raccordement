@@ -1,0 +1,2 @@
+# No third-party dependency: the API uses the Python standard library only.
+# This file lets Railway detect a Python service.

@@ -4,31 +4,52 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#0E2A47" />
-<title>Products — Seamless Pipe Fittings · Elbows · Tees · Reducers · Caps | Le Raccordement</title>
-<meta name="description" content="Complete catalog of butt-weld pipe fittings — elbows (45°, 90°, 180°, 1.5D & 3D), equal & reducing tees, concentric & eccentric reducers, caps. ASME B16.9, EN 10253, DIN. Carbon and stainless steel grades from DN15 to DN300." />
+<title>Products: Seamless Pipe Fittings · Elbows · Tees · Reducers · Caps | Le Raccordement</title>
+<meta name="description" content="Complete catalog of butt-weld pipe fittings, elbows (45°, 90°, 180°, 1.5D & 3D), equal & reducing tees, concentric & eccentric reducers, caps. ASME B16.9, EN 10253, DIN. Carbon and stainless steel grades from DN15 to DN300." />
 <link rel="canonical" href="https://leraccordement.com/products/" />
-<link rel="alternate" hreflang="en" href="https://leraccordement.com/products/" />
-<link rel="alternate" hreflang="fr" href="https://leraccordement.com/fr/produits/" />
 <link rel="icon" type="image/png" href="../assets/img/logo/logo.png" />
 
-<meta property="og:title" content="Pipe-Fittings Catalog — Le Raccordement" />
-<meta property="og:description" content="Elbows, tees, reducers and caps to ASME B16.9 & EN 10253. Carbon and stainless steel, DN15 – DN300." />
+<meta property="og:title" content="Pipe-Fittings Catalog | Le Raccordement" />
+<meta property="og:description" content="Elbows, tees, reducers and caps to ASME B16.9 & EN 10253. Carbon and stainless steel, DN15 to DN300." />
 <meta property="og:image" content="../assets/img/products/elbow-90.jpg" />
 <meta property="og:type" content="website" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../css/main.css?v=20260520g" />
+<link rel="stylesheet" href="../css/main.css?v=20261013a" />
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  "name": "Pipe Fittings Catalog",
-  "url": "https://leraccordement.com/products/",
-  "description": "Complete catalog of seamless and welded butt-weld pipe fittings by Le Raccordement.",
-  "isPartOf": { "@type": "WebSite", "name": "Le Raccordement", "url": "https://leraccordement.com/" }
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "https://leraccordement.com/products/#webpage",
+      "name": "Pipe Fittings Catalog: Elbows, Tees, Reducers, Caps",
+      "url": "https://leraccordement.com/products/",
+      "description": "Complete catalog of seamless and welded butt-weld pipe fittings by Le Raccordement: ASME B16.9, EN 10253, DIN. DN15 to DN300.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://leraccordement.com/#website" },
+      "about": { "@id": "https://leraccordement.com/#organization" },
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Elbows", "url": "https://leraccordement.com/products/elbows.html" },
+          { "@type": "ListItem", "position": 2, "name": "Tees", "url": "https://leraccordement.com/products/tees.html" },
+          { "@type": "ListItem", "position": 3, "name": "Reducers", "url": "https://leraccordement.com/products/reducers.html" },
+          { "@type": "ListItem", "position": 4, "name": "Caps", "url": "https://leraccordement.com/products/caps.html" }
+        ]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://leraccordement.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://leraccordement.com/products/" }
+      ]
+    }
+  ]
 }
 </script>
 </head>
@@ -37,7 +58,7 @@
 <!-- HEADER -->
 <header class="site-header">
   <div class="container-wide header-inner">
-    <a href="../" class="brand" aria-label="Le Raccordement — home">
+    <a href="../" class="brand" aria-label="Le Raccordement home page">
       <img src="../assets/img/logo/logo.png" alt="Le Raccordement" />
     </a>
     <nav class="nav" aria-label="Primary">
@@ -63,7 +84,7 @@
     <div class="header-actions">
       <div class="lang-toggle" role="group" aria-label="Language">
         <a href="./" class="active" aria-current="page">EN</a>
-        <a href="../fr/produits/" hreflang="fr">FR</a>
+        <span class="lang-soon" title="Version française bientôt disponible">FR</span>
       </div>
       <button class="cart-btn" data-open-cart aria-label="Open quote list">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
@@ -99,47 +120,72 @@
 
 <section class="page-head">
   <div class="container-wide">
-    <div class="breadcrumb"><a href="../">Home</a><span class="sep">/</span><span>Products</span></div>
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="../">Home</a><span class="sep">/</span><span aria-current="page">Products</span></nav>
     <h1>The full catalog.</h1>
-    <p class="lead">All fittings, all grades. Filter by category or browse the complete range — every item is produced from seamless or welded pipe to ASME B16.9, EN 10253 and DIN.</p>
-    <div class="mt-6">
-      <a href="all.html" class="btn btn-dark btn-sm">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        Quick quote builder — select multiple <span class="arrow">→</span>
+    <p class="lead">Four families of butt-weld fittings, every reference listed with its full designation, filterable by size, standard, grade and finish. Pick your references, set quantities and request a quote in one go.</p>
+  </div>
+</section>
+
+<section class="section-tight" aria-labelledby="families-title">
+  <div class="container-wide">
+    <h2 class="sr-only" id="families-title">Product families</h2>
+<!-- FAMILIES:START -->
+    <div class="family-grid">
+      <a href="elbows.html" class="family-tile">
+        <span class="family-tile-name">Elbows</span>
+        <span class="family-tile-count"><strong>168</strong> references</span>
+        <span class="family-tile-meta">45° and 90° butt-weld elbows, 1.5D and 3D radius</span>
+        <span class="family-tile-list" lang="fr">Coude à souder 45° 1.5D · Coude à souder 45° 3D · Coude à souder 90° 1.5D · Coude à souder 90° 3D</span>
+        <span class="family-tile-std">ASME B16.9 · EN 10253-1 (EN/1)</span>
+        <span class="family-tile-cta">View the list <span class="arrow">→</span></span>
       </a>
+      <a href="tees.html" class="family-tile">
+        <span class="family-tile-name">Tees</span>
+        <span class="family-tile-count"><strong>42</strong> references</span>
+        <span class="family-tile-meta">Equal butt-weld tees</span>
+        <span class="family-tile-list" lang="fr">Té égal à souder</span>
+        <span class="family-tile-std">ASME B16.9 · EN 10253-1 (EN/1)</span>
+        <span class="family-tile-cta">View the list <span class="arrow">→</span></span>
+      </a>
+      <a href="reducers.html" class="family-tile">
+        <span class="family-tile-name">Reducers</span>
+        <span class="family-tile-count"><strong>276</strong> references</span>
+        <span class="family-tile-meta">Concentric and eccentric butt-weld reducers</span>
+        <span class="family-tile-list" lang="fr">RC à souder · RC à souder Forme 1 · RC à souder Forme 2 · RE à souder</span>
+        <span class="family-tile-std">ASME B16.9 · EN 10253-1 (EN/1)</span>
+        <span class="family-tile-cta">View the list <span class="arrow">→</span></span>
+      </a>
+      <a href="caps.html" class="family-tile">
+        <span class="family-tile-name">Caps</span>
+        <span class="family-tile-count"><strong>72</strong> references</span>
+        <span class="family-tile-meta">Butt-weld caps and dished ends</span>
+        <span class="family-tile-list" lang="fr">Caps à souder · Fond à souder</span>
+        <span class="family-tile-std">ASME B16.9 · EN 10253-1 (EN/1)</span>
+        <span class="family-tile-cta">View the list <span class="arrow">→</span></span>
+      </a>
+    </div>
+<!-- FAMILIES:END -->
+
+    <div class="ref-finder" id="ref-finder">
+      <label class="ref-finder-label" for="ref-finder-input">Already know the reference or size?</label>
+      <div class="filter-search ref-finder-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="ref-finder-input" placeholder="e.g. C3S21N, 60,3x2,9, RC 88,9, galv…" autocomplete="off" />
+      </div>
+      <div id="ref-finder-results" aria-live="polite"></div>
     </div>
   </div>
 </section>
 
-<!-- Filter toolbar -->
-<section class="section-tight" style="border-bottom:1px solid var(--c-line); position:sticky; top:92px; z-index:20; background:rgba(255,255,255,0.94); backdrop-filter:saturate(180%) blur(14px);">
+<section class="section-tight" style="padding-bottom:0">
   <div class="container-wide">
-    <div class="filter-toolbar">
-      <div id="cat-filter" class="filter-chips">
-        <button class="btn btn-sm btn-dark" data-filter="all">All <span style="opacity:.6; margin-left:4px">·</span> <span id="cat-count-all">10</span></button>
-        <button class="btn btn-sm btn-ghost" data-filter="elbows">Elbows</button>
-        <button class="btn btn-sm btn-ghost" data-filter="tees">Tees</button>
-        <button class="btn btn-sm btn-ghost" data-filter="reducers">Reducers</button>
-        <button class="btn btn-sm btn-ghost" data-filter="caps">Caps</button>
-      </div>
-      <div class="filter-tools">
-        <label class="filter-search" aria-label="Search products">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="search" id="cat-search" placeholder="Search size, material, standard…" />
-        </label>
-        <label class="filter-sort">
-          <span class="kicker">Sort</span>
-          <select id="cat-sort">
-            <option value="default">Category</option>
-            <option value="price-asc">Price · low → high</option>
-            <option value="price-desc">Price · high → low</option>
-            <option value="name">Name A–Z</option>
-          </select>
-        </label>
-      </div>
-    </div>
-    <div class="filter-status">
-      <span id="cat-count-display"></span>
+    <h2 class="h-2 mt-4">Geometries &amp; technical background</h2>
+    <p class="text-muted mt-2" style="max-width:62ch">Overview pages for each fitting geometry, with materials, standards and applications.</p>
+    <div class="mt-6">
+      <a href="all.html" class="btn btn-dark btn-sm">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Quick quote builder, select multiple <span class="arrow">→</span>
+      </a>
     </div>
   </div>
 </section>
@@ -154,9 +200,8 @@
   <div class="container">
     <div class="cta-strip">
       <div>
-        <span class="eyebrow light">Custom builds</span>
         <h2 class="mt-4">Don't see your spec?</h2>
-        <p>We produce non-standard sizes, thicknesses and certificates to your drawing. Send your BOM — we reply within one business day.</p>
+        <p>We produce non-standard sizes, thicknesses and certificates to your drawing. Send your BOM. We reply within one business day.</p>
       </div>
       <div class="cta-strip-actions">
         <a href="../contact.html" class="btn btn-primary btn-lg">Request a custom quote <span class="arrow">→</span></a>
@@ -190,7 +235,7 @@
       <div><h4>Contact</h4>
         <div class="footer-contact">
           <span>Zone Industrielle de Doukhane</span>
-          <span>El Hencha — 3043 Sfax, Tunisia</span>
+          <span>El Hencha, 3043 Sfax, Tunisia</span>
           <a href="mailto:contact@leraccordement.com">contact@leraccordement.com</a>
           <a href="tel:+21674000000">+216 74 000 000</a>
         </div>
@@ -214,114 +259,66 @@
     </div>
     <div class="cart-list" id="cart-drawer-list"></div>
     <div class="cart-foot">
-      <div class="meta"><span>Indicative subtotal</span><strong id="cart-drawer-subtotal">€0.00</strong></div>
+      <div class="meta"><span>In your list</span><strong id="cart-drawer-subtotal">0 ref.</strong></div>
       <a href="../cart.html" class="btn btn-primary btn-block">Review &amp; request quote <span class="arrow">→</span></a>
-      <p style="margin-top:var(--s-3); font-size:var(--fs-12); color:var(--c-muted); text-align:center">Prices are indicative — final quote within 1 business day.</p>
+      <p style="margin-top:var(--s-3); font-size:var(--fs-12); color:var(--c-muted); text-align:center">Final quote by email within 1 business day.</p>
     </div>
   </div>
 </aside>
 
-<script src="../js/products.js?v=20260520g"></script>
-<script src="../js/cart.js?v=20260520g"></script>
-<script src="../js/main.js?v=20260520g"></script>
+<script src="../js/products.js?v=20261013a"></script>
+<script src="../js/cart.js?v=20261013a"></script>
+<script src="../js/main.js?v=20261013a"></script>
 <script>
-  /* Render product grid + handle category filter + search + sort */
+  /* Product-type cards (overview pages). References are listed on the family pages. */
   (function () {
-    const grid       = document.getElementById('products-grid');
-    const filterWrap = document.getElementById('cat-filter');
-    const searchInp  = document.getElementById('cat-search');
-    const sortSel    = document.getElementById('cat-sort');
-    const countDisp  = document.getElementById('cat-count-display');
-    const fmt = n => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(n);
-
-    const state = { filter: 'all', query: '', sort: 'default' };
-
-    function match(p, q) {
-      if (!q) return true;
-      const hay = [p.name, p.categoryLabel, p.sizeRange, ...(p.materials || []), ...(p.standards || []), ...(p.thickness || [])]
-        .join(' ').toLowerCase();
-      return q.toLowerCase().split(/\s+/).every(t => hay.includes(t));
+    const grid = document.getElementById('products-grid');
+    const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    grid.innerHTML = (window.LR_PRODUCTS || []).map(p => `
+      <a href="product.html?slug=${p.slug}" class="product-card">
+        <div class="product-card-media"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" /></div>
+        <div class="product-card-body">
+          <span class="product-card-cat">${esc(p.categoryLabel)}</span>
+          <h3>${esc(p.name)}</h3>
+          <div class="product-card-specs">
+            ${(p.standards || []).slice(0, 2).map(s => `<span class="spec-pill">${esc(s)}</span>`).join('')}
+          </div>
+        </div>
+      </a>`).join('');
+  })();
+</script>
+<script src="../js/facets.js?v=20261013a"></script>
+<script>
+  /* Reference finder across the four families (loads the JSON on first use) */
+  (function () {
+    const input = document.getElementById('ref-finder-input');
+    const out = document.getElementById('ref-finder-results');
+    const F = window.LR_FACETS;
+    const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    let all = null, loading = null, t;
+    function load() {
+      if (!loading) loading = Promise.all(['elbows', 'tees', 'reducers', 'caps'].map(f => fetch(`../data/catalog/${f}.json`).then(r => r.json())))
+        .then(list => { all = [].concat(...list.map(d => d.items)); window.LR_REF_INDEX = window.LR_REF_INDEX || {}; all.forEach(it => { window.LR_REF_INDEX[it.id] = it; }); });
+      return loading;
     }
-    function sortFn(arr) {
-      if (state.sort === 'price-asc')  return arr.sort((a,b) => a.priceFrom - b.priceFrom);
-      if (state.sort === 'price-desc') return arr.sort((a,b) => b.priceFrom - a.priceFrom);
-      if (state.sort === 'name')       return arr.sort((a,b) => a.name.localeCompare(b.name));
-      return arr;
+    function run() {
+      const q = input.value.trim();
+      if (q.length < 2) { out.innerHTML = ''; return; }
+      load().then(() => {
+        const hits = all.filter(it => F.matchesQuery(it, q));
+        if (!hits.length) { out.innerHTML = `<p class="catalog-note">No reference matches “${esc(q)}”.</p>`; return; }
+        const shown = hits.slice(0, 25);
+        out.innerHTML = `<p class="catalog-note"><strong>${hits.length}</strong> matching reference${hits.length > 1 ? 's' : ''}${hits.length > 25 ? ' (first 25 shown, refine your search)' : ''}.</p>
+          <div class="ref-table-wrap"><table class="ref-table"><thead><tr><th scope="col">Reference</th><th scope="col">Designation</th><th scope="col">Family</th><th scope="col">Quantity</th></tr></thead><tbody>
+          ${shown.map(it => `<tr data-ref-row><td data-label="Reference" class="ref-code"><a href="${it.family}/${it.slug}.html">${esc(it.code)}</a></td>
+            <td data-label="Designation" class="ref-desig" lang="fr">${esc(it.designationDisplay)}</td>
+            <td data-label="Family"><a href="${it.family}.html">${esc(it.family.charAt(0).toUpperCase() + it.family.slice(1))}</a></td>
+            <td data-label="Quantity" class="ref-actions"><div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="Decrease">−</button><input type="text" inputmode="numeric" value="1" data-row-qty aria-label="Quantity for ${esc(it.code)}"/><button type="button" data-qty="inc" aria-label="Increase">+</button></div>
+            <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(it.id)}">Add<span class="sr-only"> ${esc(it.code)}</span></button></td></tr>`).join('')}
+          </tbody></table></div>`;
+      }).catch(() => { out.innerHTML = '<p class="catalog-note">Search is temporarily unavailable, open a family above.</p>'; });
     }
-
-    function paint() {
-      let items = (window.LR_PRODUCTS || [])
-        .filter(p => state.filter === 'all' || p.category === state.filter)
-        .filter(p => match(p, state.query));
-      items = sortFn(items.slice());
-
-      if (items.length === 0) {
-        grid.innerHTML = `<div style="grid-column:1/-1; padding:var(--s-12); text-align:center; color:var(--c-muted);">
-          <p style="font-family:var(--ff-display); color:var(--c-ink); font-weight:600; font-size:var(--fs-18);">No matches.</p>
-          <p style="margin-top:var(--s-2);">Try a different search term or pick another category.</p>
-        </div>`;
-      } else {
-        grid.innerHTML = items.map(p => `
-          <a href="product.html?slug=${p.slug}" class="product-card reveal">
-            <div class="product-card-media">
-              <img src="${p.image}" alt="${p.name}" loading="lazy" />
-            </div>
-            <div class="product-card-body">
-              <span class="product-card-cat">${p.categoryLabel}</span>
-              <h3>${p.name}</h3>
-              <div class="product-card-specs">
-                ${(p.standards || []).slice(0,2).map(s => `<span class="spec-pill">${s}</span>`).join('')}
-                <span class="spec-pill">${(p.sizeRange || '').split(' / ')[0]}</span>
-              </div>
-            </div>
-            <div class="product-card-foot">
-              <div class="price"><small>From</small>${fmt(p.priceFrom)}</div>
-              <span class="btn btn-dark btn-sm" aria-hidden="true" tabindex="-1" style="pointer-events:none;">Configure <span class="arrow">→</span></span>
-            </div>
-          </a>`).join('');
-        requestAnimationFrame(() => {
-          document.querySelectorAll('.product-card.reveal').forEach((el, i) => {
-            setTimeout(() => el.classList.add('is-visible'), 40 * i);
-          });
-        });
-      }
-
-      // Active filter button
-      filterWrap.querySelectorAll('button').forEach(b => {
-        b.classList.toggle('btn-dark', b.dataset.filter === state.filter);
-        b.classList.toggle('btn-ghost', b.dataset.filter !== state.filter);
-      });
-      // Counts
-      const total = (window.LR_PRODUCTS || []).length;
-      document.getElementById('cat-count-all').textContent = total;
-      const catLabel = state.filter === 'all' ? 'products' : state.filter;
-      countDisp.innerHTML = `<strong>${items.length}</strong> of ${total} ${catLabel}${state.query ? ` matching "<em>${state.query}</em>"` : ''}`;
-    }
-
-    filterWrap.addEventListener('click', e => {
-      const b = e.target.closest('[data-filter]');
-      if (!b) return;
-      state.filter = b.dataset.filter;
-      const url = new URL(window.location.href);
-      if (state.filter === 'all') url.searchParams.delete('cat');
-      else url.searchParams.set('cat', state.filter);
-      window.history.replaceState({}, '', url);
-      paint();
-    });
-
-    let debounce;
-    searchInp.addEventListener('input', e => {
-      state.query = e.target.value.trim();
-      clearTimeout(debounce);
-      debounce = setTimeout(paint, 120);
-    });
-    sortSel.addEventListener('change', e => {
-      state.sort = e.target.value;
-      paint();
-    });
-
-    state.filter = new URLSearchParams(window.location.search).get('cat') || 'all';
-    paint();
+    input.addEventListener('input', () => { clearTimeout(t); t = setTimeout(run, 180); });
   })();
 </script>
 </body>

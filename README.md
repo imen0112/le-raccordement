@@ -7,8 +7,9 @@ Modern, SEO-ready static website for **Le Raccordement** — manufacturer of sea
 - **Pure HTML5 + handwritten CSS + vanilla JS** — no build step, hosts anywhere (GitHub Pages, Netlify, Vercel, any static host)
 - **Tailwind-free / framework-free** for maximum portability and editing ease
 - Fonts: Inter + Space Grotesk + JetBrains Mono (Google Fonts)
-- Cart: localStorage-backed quote-list (no backend yet)
-- Forms: open the user's mail client with the quote/contact body pre-filled (replace with Formspree/Netlify Forms/etc. for real inbox delivery)
+- Catalog: 558 references imported from the official Excel article files, one static page per reference, interdependent filters on each family page
+- Quote list: localStorage-backed, no prices; requests are emailed to commande@leraccordement.com by the quote API in [`server/quote-api`](server/quote-api/README.md) (Railway + Resend)
+- Contact form: still opens the visitor's mail client
 
 ## Pages
 
@@ -16,45 +17,67 @@ Modern, SEO-ready static website for **Le Raccordement** — manufacturer of sea
 | --- | --- |
 | `/` | Home — aerial hero video, product categories, factory mosaic, capabilities, industries, certifications strip, CTA |
 | `/about.html` | Inside the plant — mission, numbers, 8-step process, factory gallery |
-| `/products/` | Full catalog — all SKUs, filter by category |
-| `/products/elbows.html` | Elbow category landing |
-| `/products/tees.html` | Tee category landing |
-| `/products/reducers.html` | Reducer category landing |
-| `/products/caps.html` | Cap category landing |
-| `/products/product.html?slug=…` | Product detail (renders any SKU by query string) |
-| `/cart.html` | Quote list + request form |
+| `/products/` | The four families, reference finder, product-type overview |
+| `/products/elbows.html` (tees, reducers, caps) | Family page — every reference, filters, search, add to quote list |
+| `/products/<family>/<code>.html` | One technical page per reference (generated) |
+| `/products/product.html?slug=…` | Product-type page (geometry, materials, applications + its catalog references) |
+| `/cart.html` | Quote list + quote request form |
+| `/quote-sent.html` | Confirmation (shown only after the API confirmed the email) |
 | `/certifications.html` | ISO 9001, standards, inspection capabilities |
 | `/clients.html` | Logo wall, geographies, sectors |
 | `/contact.html` | Contact info, OSM map, message form |
 | `/fr/...` | French mirror (to be built) |
 
-## Editing
+## Catalog data
 
-### Add or edit a product
-All product data lives in [`js/products.js`](js/products.js). Edit a SKU there — name, description, materials, prices, image path — and it propagates to:
-- the catalog listing
-- the category page
-- the product detail page
-- the dimension table (auto-filtered by `sizeRange`)
-- the cart
+The orderable references come from two Excel files (kept **outside** this public repo, they contain customer-specific codes):
+`ARTICLES EN10253-1.xlsx` and `CODE ARTICLES ASME SANS SOUDURE PEINTE.xlsx`.
 
-### Add a real backend for forms
-Replace the `mailto:` fallback in [`js/main.js`](js/main.js) with a real endpoint (Formspree, Netlify Forms, EmailJS, etc.). The handler already collects the cart contents into the message body.
+When the files change:
 
-### TODOs before launch
+```bash
+python3 -m pip install openpyxl            # once
+python3 tools/catalog/import_excel.py --en "…/ARTICLES EN10253-1.xlsx" \
+    --asme "…/CODE ARTICLES ASME SANS SOUDURE PEINTE.xlsx" --report-dir "…/outside-the-repo"
+python3 tools/catalog/build_pages.py       # reference pages, family tables, sitemap
+python3 tools/catalog/check_site.py        # links, titles, canonicals, JSON-LD, no prices
+```
+
+- `import_excel.py` writes `data/catalog/<family>.json` and, in `--report-dir`, a data-quality report plus a full private export.
+  Only "Local" rows are published (customer codes `.01`/`.02` are not); strictly identical duplicate rows are published once.
+- `build_pages.py` only rewrites content between `<!-- CATALOG / JSONLD / FAMILIES / REFERENCES :START/END -->` markers
+  and the generated folders `products/<family>/`.
+- Filters: [`js/facets.js`](js/facets.js) (pure logic) + [`js/catalog.js`](js/catalog.js) (family page UI). Each filter's options are
+  computed from the references matching all *other* active filters, so impossible combinations are never offered.
+
+Product-type pages (geometry, applications…) still live in [`js/products.js`](js/products.js); their `articles` field links them to catalog references.
+
+## Quote requests
+
+[`js/quote.js`](js/quote.js) posts the quote list to the API set in [`js/config.js`](js/config.js) (`quoteEndpoint`).
+Deployment of the API: see [`server/quote-api/README.md`](server/quote-api/README.md). Until `quoteEndpoint` is set the form says
+plainly that online sending is not configured and offers a pre-filled email instead — it never shows a fake success.
+
+## Tests
+
+- Catalog & quote list (browser): serve the repo root and open `/tests/` — data checks against the Excel values, brute-force verification of the filters, quote-list behaviour.
+- Quote API: `cd server/quote-api && python3 -m unittest -v test_app`
+- Static site: `python3 tools/catalog/check_site.py` (also run by the deploy workflow, which blocks the deploy on failure)
+
+## TODOs before launch
+
+- [ ] Deploy `server/quote-api` (Railway + Resend) and set `quoteEndpoint` in `js/config.js`
+- [ ] Confirm that "EN/1" in the article files means EN 10253-1 (shown as "EN 10253-1 (EN/1)")
 - [ ] Replace placeholder phone number `+216 74 000 000` with the real plant number (footer + `contact.html` + `index.html` JSON-LD)
-- [ ] Replace indicative prices in `js/products.js` (`priceFrom` field) with real starting prices
 - [ ] Upload tech-sheet PDFs to `assets/datasheets/{slug}.pdf` and enable the "Download datasheet" button in `products/product.html`
-- [ ] Build the French (`/fr/`) mirror
-- [ ] Replace `https://leraccordement.com` placeholder canonical URLs if a different domain is used
-- [ ] Hook a real form endpoint (Formspree/Netlify/etc.) in `js/main.js`
+- [ ] Build the French (`/fr/`) mirror, then restore the FR toggle links and `hreflang`
 
 ## SEO
 
 - Per-page `<title>`, `<meta description>`, canonical, OpenGraph + Twitter cards
-- `hreflang` EN/FR alternates on every page
-- Organization + Product JSON-LD structured data
-- `sitemap.xml` + `robots.txt`
+- Organization JSON-LD (home), CollectionPage + ItemList + BreadcrumbList (families), Product + BreadcrumbList (each reference) — no price, availability or review is declared
+- `sitemap.xml` (558 reference pages + core pages) + `robots.txt`; filtered family URLs are `noindex, follow` and canonical to the family page
+- `hreflang` removed until the French mirror exists (it pointed to missing pages)
 - Semantic HTML with proper heading hierarchy
 
 ## Local preview

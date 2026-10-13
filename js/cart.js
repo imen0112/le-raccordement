@@ -1,68 +1,170 @@
-/* Cart — localStorage backed, runs on every page */
+/* Quote list (cart), localStorage backed, runs on every page.
+   No prices: the site collects quote requests, it does not sell online.
+
+   Two kinds of lines:
+   - kind 'ref'   : a catalog reference (code + snapshot of its specs)
+   - kind 'model' : a product-type page configuration (slug + chosen options) */
 (function () {
-  const KEY = 'lr_cart_v1';
-  const state = {
-    items: load()
-  };
+  const KEY = 'lr_cart_v2';
+  const OLD_KEY = 'lr_cart_v1';
+  const ROOT = new URL('..', (document.currentScript && document.currentScript.src) || window.location.href).href;
+  const MAX_QTY = 999999;
+
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const state = { items: load() };
 
   function load() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || []; }
-    catch (e) { return []; }
+    try {
+      const v2 = JSON.parse(localStorage.getItem(KEY));
+      if (Array.isArray(v2)) return v2;
+      // Migrate the previous format (slug/variant/options)
+      const v1 = JSON.parse(localStorage.getItem(OLD_KEY));
+      if (Array.isArray(v1)) {
+        const items = v1.map(i => ({ key: 'model:' + i.slug + '|' + (i.variant || ''), kind: 'model', slug: i.slug, options: i.options || null, qty: clampQty(i.qty) }));
+        localStorage.setItem(KEY, JSON.stringify(items));
+        localStorage.removeItem(OLD_KEY);
+        return items;
+      }
+    } catch (e) { /* storage unavailable or corrupt → empty list */ }
+    return [];
   }
   function save() {
-    localStorage.setItem(KEY, JSON.stringify(state.items));
-    paintBadge();
-    paintDrawer();
-    paintCartPage();
+    try { localStorage.setItem(KEY, JSON.stringify(state.items)); } catch (e) { /* private mode: list lives for this page only */ }
+    paint();
   }
+  function clampQty(q) { return Math.min(MAX_QTY, Math.max(1, parseInt(q, 10) || 1)); }
 
-  function add(slug, qty, options) {
-    qty = parseInt(qty, 10) || 1;
+  /* ---------- Mutations ---------- */
+  function addRef(rec, qty) {
+    if (!rec || !rec.code) return;
+    qty = clampQty(qty);
+    const key = 'ref:' + rec.id;
+    const existing = state.items.find(i => i.key === key);
+    if (existing) existing.qty = clampQty(existing.qty + qty);
+    else state.items.push({
+      key, kind: 'ref', id: rec.id, code: rec.code, slug: rec.slug, family: rec.family,
+      designation: rec.designationDisplay, dims: rec.dimsLabel, norme: rec.norme, nuance: rec.nuance,
+      finition: rec.finitionRaw || rec.finition, type: rec.type, qty
+    });
+    save();
+    toast(`Added <strong>${esc(rec.code)}</strong> × ${qty} to your quote list · <a href="${ROOT}cart.html">View list (${count()})</a>`);
+  }
+  function add(slug, qty, options) {   // product-type pages (configurator)
     const product = (window.LR_PRODUCTS || []).find(p => p.slug === slug);
     if (!product) return;
+    qty = clampQty(qty);
     const variant = options ? JSON.stringify(options) : '';
-    const existing = state.items.find(i => i.slug === slug && i.variant === variant);
-    if (existing) existing.qty += qty;
-    else state.items.push({ slug, qty, variant, options: options || null });
+    const key = 'model:' + slug + '|' + variant;
+    const existing = state.items.find(i => i.key === key);
+    if (existing) existing.qty = clampQty(existing.qty + qty);
+    else state.items.push({ key, kind: 'model', slug, options: options || null, qty });
     save();
-    toast(`Added <strong>${product.name}</strong> × ${qty}`);
+    toast(`Added <strong>${esc(product.name)}</strong> × ${qty}`);
   }
-  function setQty(slug, variant, qty) {
-    const it = state.items.find(i => i.slug === slug && i.variant === (variant || ''));
+  function setQty(key, qty) {
+    const it = state.items.find(i => i.key === key);
     if (!it) return;
-    it.qty = Math.max(1, parseInt(qty, 10) || 1);
+    it.qty = clampQty(qty);
     save();
   }
-  function remove(slug, variant) {
-    state.items = state.items.filter(i => !(i.slug === slug && i.variant === (variant || '')));
-    save();
-  }
+  function remove(key) { state.items = state.items.filter(i => i.key !== key); save(); }
   function clear() { state.items = []; save(); }
-  function count() { return state.items.reduce((s, i) => s + i.qty, 0); }
-  function unitPrice(item) {
-    const p = (window.LR_PRODUCTS || []).find(x => x.slug === item.slug);
-    if (!p) return 0;
-    // If item has options + computePrice helper available → variant price
-    if (item.options && window.LR_computePrice) {
-      return window.LR_computePrice(p, item.options);
-    }
-    return p.priceFrom || 0;
-  }
-  function subtotal() {
-    return state.items.reduce((s, i) => s + unitPrice(i) * i.qty, 0);
-  }
-  function fmt(n) {
-    return (window.LR_formatPrice ? window.LR_formatPrice(n)
-      : new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(n));
-  }
+  function count() { return state.items.length; }
+  function units() { return state.items.reduce((s, i) => s + i.qty, 0); }
 
-  /* ---------- Badge ---------- */
+  /* Uniform description of a line, used by the drawer, the cart page and the quote request. */
+  function describe(i) {
+    if (i.kind === 'ref') {
+      return {
+        key: i.key, kind: 'ref', code: i.code, designation: i.designation,
+        specs: [i.dims && ('Ø ' + i.dims), i.norme, i.nuance, i.type, i.finition].filter(Boolean),
+        url: `${ROOT}products/${i.family}/${i.slug}.html`, qty: i.qty,
+        detail: { family: i.family, dims: i.dims, norme: i.norme, nuance: i.nuance, type: i.type, finition: i.finition }
+      };
+    }
+    const p = (window.LR_PRODUCTS || []).find(x => x.slug === i.slug);
+    const opts = i.options ? Object.entries(i.options).map(([k, v]) => `${k}: ${v}`) : [];
+    return {
+      key: i.key, kind: 'model', code: 'No code', designation: p ? p.name : i.slug,
+      specs: opts.length ? opts : ['Configuration to be specified'],
+      url: `${ROOT}products/product.html?slug=${encodeURIComponent(i.slug)}`, qty: i.qty,
+      detail: { productType: p ? p.name : i.slug, options: i.options || null }
+    };
+  }
+  function lines() { return state.items.map(describe); }
+
+  /* ---------- Painting ---------- */
+  function paint() { paintBadge(); paintDrawer(); paintCartPage(); }
+
   function paintBadge() {
     document.querySelectorAll('.cart-badge').forEach(b => {
       const c = count();
       b.textContent = c;
       b.classList.toggle('is-visible', c > 0);
+      b.setAttribute('aria-label', c + (c === 1 ? ' reference' : ' references') + ' in your quote list');
     });
+  }
+
+  function qtyControl(l) {
+    return `<div class="qty qty-sm">
+      <button type="button" data-qty="dec" data-key="${esc(l.key)}" aria-label="Decrease quantity of ${esc(l.code)}">−</button>
+      <input type="text" inputmode="numeric" value="${l.qty}" data-qty-input data-key="${esc(l.key)}" aria-label="Quantity of ${esc(l.code)}" />
+      <button type="button" data-qty="inc" data-key="${esc(l.key)}" aria-label="Increase quantity of ${esc(l.code)}">+</button>
+    </div>`;
+  }
+  const trash = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>';
+
+  function paintDrawer() {
+    const list = document.getElementById('cart-drawer-list');
+    const sub = document.getElementById('cart-drawer-subtotal');
+    if (sub) sub.textContent = `${count()} ref. · ${units()} pcs`;
+    if (!list) return;
+    if (!state.items.length) {
+      list.innerHTML = `<div class="cart-empty">
+        <p style="font-family:var(--ff-display);color:var(--c-ink);font-weight:600;margin-bottom:.5rem">Your quote list is empty</p>
+        <p style="font-size:var(--fs-14)">Add references from the catalog to request a quote.</p>
+        <a href="${ROOT}products/" class="btn btn-dark btn-sm" style="margin-top:1.25rem">Browse products</a>
+      </div>`;
+      return;
+    }
+    list.innerHTML = lines().map(l => `<div class="cart-item cart-item-noimg">
+        <div>
+          <div class="cart-item-code">${esc(l.code)}</div>
+          <div class="cart-item-name" lang="fr">${esc(l.designation)}</div>
+          <div class="cart-item-spec">${esc(l.specs.join(' · '))}</div>
+          <div class="cart-item-qty-row">${qtyControl(l)}</div>
+        </div>
+        <button class="cart-item-remove" type="button" aria-label="Remove ${esc(l.code)}" data-remove data-key="${esc(l.key)}">${trash}</button>
+      </div>`).join('');
+  }
+
+  function paintCartPage() {
+    const list = document.getElementById('cart-page-list');
+    if (!list) return;
+    const formWrap = document.getElementById('quote-form-wrap');
+    const cnt = document.getElementById('summary-count');
+    const un = document.getElementById('summary-units');
+    if (cnt) cnt.textContent = count();
+    if (un) un.textContent = units();
+    if (!state.items.length) {
+      list.innerHTML = `<div class="cart-empty">
+        <p style="font-family:var(--ff-display);color:var(--c-ink);font-weight:600;font-size:1.25rem;margin-bottom:.5rem">Your quote list is empty.</p>
+        <p>Browse the catalog and add references to request a quote.</p>
+        <a href="${ROOT}products/" class="btn btn-primary" style="margin-top:1.5rem">Browse products</a>
+      </div>`;
+      if (formWrap) formWrap.hidden = true;
+      return;
+    }
+    if (formWrap) formWrap.hidden = false;
+    list.innerHTML = `<table class="ref-table cart-table">
+      <thead><tr><th scope="col">Reference</th><th scope="col">Designation</th><th scope="col">Specifications</th><th scope="col">Quantity</th><th scope="col"><span class="sr-only">Remove</span></th></tr></thead>
+      <tbody>${lines().map(l => `<tr>
+        <td data-label="Reference" class="ref-code"><a href="${esc(l.url)}">${esc(l.code)}</a></td>
+        <td data-label="Designation" lang="fr">${esc(l.designation)}</td>
+        <td data-label="Specifications" class="ref-specs">${esc(l.specs.join(' · '))}</td>
+        <td data-label="Quantity">${qtyControl(l)}</td>
+        <td class="ref-remove"><button class="btn-icon" type="button" data-remove data-key="${esc(l.key)}" aria-label="Remove ${esc(l.code)}">${trash}</button></td>
+      </tr>`).join('')}</tbody></table>`;
   }
 
   /* ---------- Drawer ---------- */
@@ -79,95 +181,6 @@
     d.classList.remove('is-open');
     document.body.style.overflow = '';
   }
-  function paintDrawer() {
-    const list = document.getElementById('cart-drawer-list');
-    const subEl = document.getElementById('cart-drawer-subtotal');
-    if (!list) return;
-    if (state.items.length === 0) {
-      list.innerHTML = `<div class="cart-empty">
-        <p style="font-family:var(--ff-display);color:var(--c-ink);font-weight:600;margin-bottom:.5rem">Your quote is empty</p>
-        <p style="font-size:var(--fs-14)">Add products to request a tailored quote.</p>
-        <a href="products/" class="btn btn-dark btn-sm" style="margin-top:1.25rem">Browse products</a>
-      </div>`;
-      if (subEl) subEl.textContent = fmt(0);
-      return;
-    }
-    list.innerHTML = state.items.map(i => {
-      const p = (window.LR_PRODUCTS || []).find(x => x.slug === i.slug);
-      if (!p) return '';
-      const optBits = i.options ? Object.entries(i.options).map(([k, v]) => `${k}: ${v}`).join(' · ') : '';
-      return `<div class="cart-item">
-        <div class="cart-item-img"><img src="${p.image}" alt=""></div>
-        <div>
-          <div class="cart-item-name">${p.name}</div>
-          <div class="cart-item-spec">${optBits || p.categoryLabel}</div>
-          <div class="cart-item-qty">
-            <button aria-label="Decrease" data-qty="dec" data-slug="${p.slug}" data-variant='${i.variant || ""}'>−</button>
-            <span>${i.qty}</span>
-            <button aria-label="Increase" data-qty="inc" data-slug="${p.slug}" data-variant='${i.variant || ""}'>+</button>
-          </div>
-        </div>
-        <button class="cart-item-remove" aria-label="Remove" data-remove data-slug="${p.slug}" data-variant='${i.variant || ""}'>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
-        </button>
-      </div>`;
-    }).join('');
-    if (subEl) subEl.textContent = fmt(subtotal());
-  }
-
-  /* ---------- Cart Page ---------- */
-  function paintCartPage() {
-    const list = document.getElementById('cart-page-list');
-    if (!list) return;
-    if (state.items.length === 0) {
-      list.innerHTML = `<div class="cart-empty">
-        <p style="font-family:var(--ff-display);color:var(--c-ink);font-weight:600;font-size:1.25rem;margin-bottom:.5rem">Your quote list is empty.</p>
-        <p>Browse our catalog and add products to request a quote.</p>
-        <a href="products/" class="btn btn-primary" style="margin-top:1.5rem">Browse products</a>
-      </div>`;
-      paintSummary(0, 0);
-      const form = document.getElementById('quote-form-wrap');
-      if (form) form.style.display = 'none';
-      return;
-    }
-    const form = document.getElementById('quote-form-wrap');
-    if (form) form.style.display = '';
-    list.innerHTML = state.items.map(i => {
-      const p = (window.LR_PRODUCTS || []).find(x => x.slug === i.slug);
-      if (!p) return '';
-      const optBits = i.options ? Object.entries(i.options).map(([k, v]) => `${k}: ${v}`).join(' · ') : '';
-      return `<div class="cart-line">
-        <div class="img-box"><img src="${p.image}" alt=""></div>
-        <div>
-          <div class="name">${p.name}</div>
-          <div class="meta">${optBits || p.categoryLabel} · ${fmt(unitPrice(i))} / pc</div>
-          <div class="actions" style="margin-top:.75rem">
-            <div class="qty">
-              <button data-qty="dec" data-slug="${p.slug}" data-variant='${i.variant || ""}' aria-label="Decrease">−</button>
-              <input value="${i.qty}" data-qty-input data-slug="${p.slug}" data-variant='${i.variant || ""}' inputmode="numeric" />
-              <button data-qty="inc" data-slug="${p.slug}" data-variant='${i.variant || ""}' aria-label="Increase">+</button>
-            </div>
-            <button class="remove" data-remove data-slug="${p.slug}" data-variant='${i.variant || ""}' aria-label="Remove">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
-            </button>
-          </div>
-        </div>
-        <div style="font-family:var(--ff-display);font-weight:600;color:var(--c-ink);font-size:1.125rem;text-align:right">
-          ${fmt(unitPrice(i) * i.qty)}
-          <div style="font-family:var(--ff-mono);font-size:11px;color:var(--c-muted);font-weight:400;text-transform:uppercase;letter-spacing:.06em;margin-top:4px">indicative</div>
-        </div>
-      </div>`;
-    }).join('');
-    paintSummary(count(), subtotal());
-  }
-  function paintSummary(c, s) {
-    const cnt = document.getElementById('summary-count');
-    const sub = document.getElementById('summary-subtotal');
-    const tot = document.getElementById('summary-total');
-    if (cnt) cnt.textContent = c;
-    if (sub) sub.textContent = fmt(s);
-    if (tot) tot.textContent = fmt(s);
-  }
 
   /* ---------- Toast ---------- */
   let toastTimer;
@@ -177,23 +190,31 @@
       t = document.createElement('div');
       t.id = 'toast';
       t.className = 'toast';
+      t.setAttribute('role', 'status');
+      t.setAttribute('aria-live', 'polite');
       document.body.appendChild(t);
     }
-    t.innerHTML = `<span class="dot"></span>${html}`;
+    t.innerHTML = `<span class="dot"></span><span>${html}</span>`;
     t.classList.add('is-visible');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('is-visible'), 2600);
+    toastTimer = setTimeout(() => t.classList.remove('is-visible'), 4000);
   }
 
-  /* ---------- Global event delegation ---------- */
+  /* ---------- Events ---------- */
   document.addEventListener('click', function (e) {
+    const refBtn = e.target.closest('[data-add-ref]');
+    if (refBtn) {
+      const rec = (window.LR_REF_INDEX || {})[refBtn.getAttribute('data-add-ref')];
+      const scope = refBtn.closest('[data-ref-row]') || document;
+      const inp = scope.querySelector('[data-row-qty]');
+      addRef(rec, inp ? inp.value : 1);
+      if (refBtn.hasAttribute('data-then-cart')) window.location.href = ROOT + 'cart.html';
+      return;
+    }
     const addBtn = e.target.closest('[data-add-to-cart]');
     if (addBtn) {
-      const slug = addBtn.getAttribute('data-slug');
       const qtyInput = document.querySelector('[data-pd-qty]');
-      const qty = qtyInput ? qtyInput.value : 1;
-      const options = collectOptions();
-      add(slug, qty, options);
+      add(addBtn.getAttribute('data-slug'), qtyInput ? qtyInput.value : 1, collectOptions());
       openDrawer();
       return;
     }
@@ -202,60 +223,47 @@
     const qtyBtn = e.target.closest('[data-qty]');
     if (qtyBtn) {
       const dir = qtyBtn.getAttribute('data-qty');
-      const slug = qtyBtn.getAttribute('data-slug');
-      const variant = qtyBtn.getAttribute('data-variant') || '';
-      // page-detail qty buttons (no slug attr)
-      if (!slug) {
-        const inp = document.querySelector('[data-pd-qty]');
-        if (inp) {
-          let v = parseInt(inp.value, 10) || 1;
-          v = dir === 'inc' ? v + 1 : Math.max(1, v - 1);
-          inp.value = v;
-        }
+      const key = qtyBtn.getAttribute('data-key');
+      if (!key) {   // standalone quantity steppers (product pages, catalog rows)
+        const wrap = qtyBtn.closest('.qty');
+        const inp = (wrap && wrap.querySelector('input')) || document.querySelector('[data-pd-qty]');
+        if (inp) inp.value = clampQty((parseInt(inp.value, 10) || 1) + (dir === 'inc' ? 1 : -1));
         return;
       }
-      const it = state.items.find(i => i.slug === slug && i.variant === variant);
-      if (it) setQty(slug, variant, it.qty + (dir === 'inc' ? 1 : -1));
+      const it = state.items.find(i => i.key === key);
+      if (it) setQty(key, it.qty + (dir === 'inc' ? 1 : -1));
       return;
     }
     const rm = e.target.closest('[data-remove]');
-    if (rm) {
-      remove(rm.getAttribute('data-slug'), rm.getAttribute('data-variant') || '');
-      return;
-    }
+    if (rm) { remove(rm.getAttribute('data-key')); return; }
     if (e.target.closest('[data-clear-cart]')) {
       if (confirm('Clear your quote list?')) clear();
     }
   });
 
-  document.addEventListener('input', function (e) {
+  // Quantity typed in the cart: apply on change (not on every keystroke, so the field can be emptied while typing)
+  document.addEventListener('change', function (e) {
     const inp = e.target.closest('[data-qty-input]');
-    if (!inp) return;
-    setQty(inp.getAttribute('data-slug'), inp.getAttribute('data-variant') || '', inp.value);
+    if (inp) setQty(inp.getAttribute('data-key'), inp.value);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeDrawer();
+  });
+  // Keep tabs in sync
+  window.addEventListener('storage', function (e) {
+    if (e.key === KEY) { state.items = load(); paint(); }
   });
 
   function collectOptions() {
     const wrap = document.querySelector('[data-pd-options]');
     if (!wrap) return null;
     const out = {};
-    wrap.querySelectorAll('select').forEach(s => {
-      if (s.value) out[s.dataset.opt] = s.value;
-    });
+    wrap.querySelectorAll('select').forEach(s => { if (s.value) out[s.dataset.opt] = s.value; });
     return Object.keys(out).length ? out : null;
   }
 
-  /* ---------- Init on page load ---------- */
-  function init() {
-    paintBadge();
-    paintDrawer();
-    paintCartPage();
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paint);
+  else paint();
 
-  // Expose
-  window.LR_CART = { add, remove, setQty, clear, count, subtotal, openDrawer, closeDrawer };
+  window.LR_CART = { addRef, add, remove, setQty, clear, count, units, lines, openDrawer, closeDrawer, toast, ROOT };
 })();

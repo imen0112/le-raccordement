@@ -64,29 +64,14 @@
     });
   }
 
-  // Contact / quote form (mailto fallback — replace with real handler later)
-  document.addEventListener('submit', function (e) {
-    const form = e.target.closest('[data-quote-form]');
-    if (!form) return;
-    e.preventDefault();
-    const data = new FormData(form);
-    const cart = JSON.parse(localStorage.getItem('lr_cart_v1') || '[]');
-    const lines = cart.map(i => {
-      const p = (window.LR_PRODUCTS || []).find(x => x.slug === i.slug);
-      return p ? `• ${p.name} × ${i.qty}` : '';
-    }).filter(Boolean).join('\n');
-    const body = `Name: ${data.get('name')}\nCompany: ${data.get('company') || '—'}\nEmail: ${data.get('email')}\nPhone: ${data.get('phone') || '—'}\nCountry: ${data.get('country') || '—'}\n\nMessage:\n${data.get('message') || '—'}\n\n--- Requested items ---\n${lines || '—'}\n`;
-    const subject = encodeURIComponent('Quote request — Le Raccordement');
-    window.location.href = `mailto:contact@leraccordement.com?subject=${subject}&body=${encodeURIComponent(body)}`;
-  });
-
+  // Quote form: see js/quote.js (cart page). Contact form below still uses the mail client.
   document.addEventListener('submit', function (e) {
     const form = e.target.closest('[data-contact-form]');
     if (!form) return;
     e.preventDefault();
     const data = new FormData(form);
-    const body = `Name: ${data.get('name')}\nCompany: ${data.get('company') || '—'}\nEmail: ${data.get('email')}\nPhone: ${data.get('phone') || '—'}\nSubject: ${data.get('subject') || '—'}\n\nMessage:\n${data.get('message') || '—'}\n`;
-    const subject = encodeURIComponent(data.get('subject') || 'Contact — Le Raccordement');
+    const body = `Name: ${data.get('name')}\nCompany: ${data.get('company') || 'not provided'}\nEmail: ${data.get('email')}\nPhone: ${data.get('phone') || 'not provided'}\nSubject: ${data.get('subject') || 'not provided'}\n\nMessage:\n${data.get('message') || 'not provided'}\n`;
+    const subject = encodeURIComponent(data.get('subject') || 'Contact, Le Raccordement');
     window.location.href = `mailto:contact@leraccordement.com?subject=${subject}&body=${encodeURIComponent(body)}`;
   });
 })();

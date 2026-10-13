@@ -4,21 +4,46 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#0E2A47" />
-<title>All Products — Quick Quote Builder | Le Raccordement</title>
-<meta name="description" content="Browse every Le Raccordement pipe fitting on a single page — select multiple products with checkboxes and add them all to your quote at once." />
+<title>All Products: Quick Quote Builder | Le Raccordement</title>
+<meta name="description" content="Browse every Le Raccordement pipe fitting on a single page, select multiple products with checkboxes and add them all to your quote at once." />
 <link rel="canonical" href="https://leraccordement.com/products/all.html" />
-<link rel="alternate" hreflang="en" href="https://leraccordement.com/products/all.html" />
-<link rel="alternate" hreflang="fr" href="https://leraccordement.com/fr/produits/tous.html" />
 <link rel="icon" type="image/png" href="../assets/img/logo/logo.png" />
 
-<meta property="og:title" content="All Products — Le Raccordement" />
+<meta property="og:title" content="All Products | Le Raccordement" />
 <meta property="og:description" content="Select multiple fittings at once and request a single bulk quote." />
 <meta property="og:image" content="../assets/img/products/elbow-90.jpg" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../css/main.css?v=20260520g" />
+<link rel="stylesheet" href="../css/main.css?v=20261013a" />
+
+<!-- JSON-LD: CollectionPage + Breadcrumb -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "https://leraccordement.com/products/all.html#webpage",
+      "url": "https://leraccordement.com/products/all.html",
+      "name": "All Products: Quick Quote Builder",
+      "description": "Browse every Le Raccordement pipe fitting on a single page, select multiple products with checkboxes and add them all to your quote at once.",
+      "inLanguage": "en",
+      "isPartOf": { "@id": "https://leraccordement.com/#website" },
+      "about": { "@id": "https://leraccordement.com/#organization" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://leraccordement.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Products", "item": "https://leraccordement.com/products/" },
+        { "@type": "ListItem", "position": 3, "name": "All Products", "item": "https://leraccordement.com/products/all.html" }
+      ]
+    }
+  ]
+}
+</script>
 <style>
   /* Bulk-select grid */
   .bulk-grid {
@@ -175,7 +200,7 @@
   </div>
 </div></span><a href="../certifications.html">Quality</a><a href="../clients.html">Clients</a><a href="../contact.html">Contact</a></nav>
     <div class="header-actions">
-      <div class="lang-toggle"><a href="all.html" class="active">EN</a><a href="../fr/produits/tous.html" hreflang="fr">FR</a></div>
+      <div class="lang-toggle"><a href="all.html" class="active">EN</a><span class="lang-soon" title="Version française bientôt disponible">FR</span></div>
       <button class="cart-btn" data-open-cart aria-label="Open quote list"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="cart-badge">0</span></button>
       <a href="../contact.html" class="btn btn-primary btn-sm">Request a quote</a>
       <button class="nav-toggle" data-open-nav aria-label="Open menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
@@ -189,7 +214,7 @@
 
 <section class="page-head">
   <div class="container-wide">
-    <div class="breadcrumb"><a href="../">Home</a><span class="sep">/</span><a href="./">Products</a><span class="sep">/</span><span>All products — quick select</span></div>
+    <div class="breadcrumb"><a href="../">Home</a><span class="sep">/</span><a href="./">Products</a><span class="sep">/</span><span>All products, quick select</span></div>
     <span class="eyebrow">Quick quote builder</span>
     <h1 class="mt-4">Pick everything you need,<br/>in one go.</h1>
     <p class="lead mt-6">Tick the boxes on each product you'd like to quote, set quantities, then add them all to your quote list with one click. Use the category buttons to narrow the list.</p>
@@ -224,7 +249,6 @@
       <span id="bulk-units" style="margin-left:8px;">· 0 pcs total</span>
     </div>
     <div style="display:flex; gap:var(--s-3); align-items:center;">
-      <span id="bulk-subtotal" style="font-family:var(--ff-display); font-weight:600; color:var(--c-ink); font-size:var(--fs-15);">€0.00</span>
       <button class="btn btn-primary btn-lg" id="bulk-add-btn" disabled style="opacity:.5">Add selection to quote <span class="arrow">→</span></button>
     </div>
   </div>
@@ -238,28 +262,26 @@
       <div class="footer-brand"><img src="../assets/img/logo/logo.png" alt="Le Raccordement"/><p style="font-size:var(--fs-14); color:rgba(255,255,255,0.65); max-width:36ch">North Africa's first manufacturer of seamless and welded butt-weld pipe fittings.</p></div>
       <div><h4>Products</h4><ul><li><a href="elbows.html">Elbows</a></li><li><a href="tees.html">Tees</a></li><li><a href="reducers.html">Reducers</a></li><li><a href="caps.html">Caps</a></li><li><a href="./">All products</a></li></ul></div>
       <div><h4>Company</h4><ul><li><a href="../about.html">About us</a></li><li><a href="../certifications.html">Quality &amp; certifications</a></li><li><a href="../clients.html">Clients</a></li><li><a href="../contact.html">Contact</a></li></ul></div>
-      <div><h4>Contact</h4><div class="footer-contact"><span>Zone Industrielle de Doukhane</span><span>El Hencha — 3043 Sfax, Tunisia</span><a href="mailto:contact@leraccordement.com">contact@leraccordement.com</a><a href="tel:+21674000000">+216 74 000 000</a></div></div>
+      <div><h4>Contact</h4><div class="footer-contact"><span>Zone Industrielle de Doukhane</span><span>El Hencha, 3043 Sfax, Tunisia</span><a href="mailto:contact@leraccordement.com">contact@leraccordement.com</a><a href="tel:+21674000000">+216 74 000 000</a></div></div>
     </div>
     <div class="footer-bottom"><span>© <span data-year>2026</span> Le Raccordement. All rights reserved.</span><span>Made in Sfax, Tunisia.</span></div>
   </div>
 </footer>
 
-<aside class="cart-drawer" id="cart-drawer"><div class="overlay" data-close-cart></div><div class="panel"><div class="cart-head"><h3>Your quote list</h3><button data-close-cart><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><div class="cart-list" id="cart-drawer-list"></div><div class="cart-foot"><div class="meta"><span>Indicative subtotal</span><strong id="cart-drawer-subtotal">€0.00</strong></div><a href="../cart.html" class="btn btn-primary btn-block">Review &amp; request quote <span class="arrow">→</span></a></div></div></aside>
+<aside class="cart-drawer" id="cart-drawer"><div class="overlay" data-close-cart></div><div class="panel"><div class="cart-head"><h3>Your quote list</h3><button data-close-cart><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><div class="cart-list" id="cart-drawer-list"></div><div class="cart-foot"><div class="meta"><span>In your list</span><strong id="cart-drawer-subtotal">0 ref.</strong></div><a href="../cart.html" class="btn btn-primary btn-block">Review &amp; request quote <span class="arrow">→</span></a></div></div></aside>
 
-<script src="../js/products.js?v=20260520g"></script>
-<script src="../js/cart.js?v=20260520g"></script>
-<script src="../js/main.js?v=20260520g"></script>
+<script src="../js/products.js?v=20261013a"></script>
+<script src="../js/cart.js?v=20261013a"></script>
+<script src="../js/main.js?v=20261013a"></script>
 <script>
   (function () {
     const grid = document.getElementById('bulk-grid');
     const filterWrap = document.getElementById('bulk-filter');
     const countEl = document.getElementById('bulk-count');
     const unitsEl = document.getElementById('bulk-units');
-    const subtotalEl = document.getElementById('bulk-subtotal');
     const addBtn = document.getElementById('bulk-add-btn');
     const selectAllBtn = document.getElementById('select-all');
     const clearBtn = document.getElementById('clear-selection');
-    const fmt = n => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR' }).format(n);
 
     // per-product selection state: { [slug]: { selected: bool, qty: int } }
     const state = {};
@@ -279,7 +301,7 @@
             <div class="bulk-card-body">
               <span class="bulk-card-cat">${p.categoryLabel}</span>
               <h3>${p.name}</h3>
-              <div class="price"><small>From</small>${fmt(p.priceFrom)}</div>
+              <span class="product-card-quote">Price on request</span>
               <div class="bulk-row-qty">
                 <div class="qty">
                   <button data-bulk-qty="dec" data-slug="${p.slug}" aria-label="Decrease">−</button>
@@ -303,13 +325,8 @@
       const selected = Object.entries(state).filter(([_, s]) => s.selected);
       const count = selected.length;
       const units = selected.reduce((s, [_, v]) => s + v.qty, 0);
-      const subtotal = selected.reduce((s, [slug, v]) => {
-        const p = (window.LR_PRODUCTS || []).find(x => x.slug === slug);
-        return s + (p ? p.priceFrom * v.qty : 0);
-      }, 0);
       countEl.textContent = count;
       unitsEl.textContent = `· ${units} pcs total`;
-      subtotalEl.textContent = fmt(subtotal);
       addBtn.disabled = count === 0;
       addBtn.style.opacity = count === 0 ? .5 : 1;
     }

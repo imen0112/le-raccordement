@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="robots" content="noindex" />
+<title>Catalog tests</title>
+<style>
+  body { font: 14px/1.5 system-ui, sans-serif; margin: 24px; color: #111; background: #fff; }
+  .pass { color: #1a7f37; } .fail { color: #c0392b; font-weight: 600; }
+  pre { white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<h1>Catalog tests</h1>
+<p>Serve the site root (e.g. <code>python3 -m http.server</code>) and open <code>/tests/</code>. Results also land in <code>window.TEST_RESULTS</code>.</p>
+<div id="out">Running…</div>
+<script src="../js/facets.js"></script>
+<script src="../js/products.js"></script>
+<script src="../js/cart.js"></script>
+<script src="catalog.test.js"></script>
+</body>
+</html>
