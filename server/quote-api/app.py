@@ -44,6 +44,7 @@ CFG = {
 }
 MAX_BODY = 64 * 1024
 MAX_ITEMS = 200
+MIN_QTY = 50   # minimum order per reference (pieces)
 
 EMAIL_RE = re.compile(r"^[^\s@<>()\",;:]+@[^\s@<>()\",;:]+\.[A-Za-z]{2,}$")
 PHONE_RE = re.compile(r'^\+?[\d\s().\-/]{6,30}$')
@@ -118,6 +119,8 @@ def validate(body):
         qty = it.get('qty')
         if isinstance(qty, bool) or not isinstance(qty, int) or not 1 <= qty <= 999999:
             raise Invalid('Invalid quantity')
+        if qty < MIN_QTY:
+            raise Invalid('Minimum quantity is %d pieces per reference' % MIN_QTY)
         kind = 'model' if it.get('kind') == 'model' else 'ref'
         line = {'kind': kind, 'qty': qty,
                 'code': text(it, 'code', 40, kind == 'ref', label='Reference'),

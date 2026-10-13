@@ -83,7 +83,7 @@ window.LR_PRODUCTS = [
     certificate: 'EN 10204: Mill Test Certificate 3.1 / Report 2.2',
     applications: ['Petroleum & Oil', 'Natural Gas', 'Chemical Engineering', 'Power Generation', 'Shipbuilding', 'Water Distribution', 'Nuclear Energy', 'Waste Disposal'],
     leadTime: '3 to 6 weeks',
-    minOrder: '25 pcs'
+    minOrder: '50 pcs'
   },
 
   /* ----- REDUCERS ----- */

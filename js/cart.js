@@ -8,6 +8,7 @@
   const KEY = 'lr_cart_v2';
   const OLD_KEY = 'lr_cart_v1';
   const ROOT = new URL('..', (document.currentScript && document.currentScript.src) || window.location.href).href;
+  const MIN_QTY = 50;       // minimum order per reference (pieces)
   const MAX_QTY = 999999;
 
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -16,7 +17,7 @@
   function load() {
     try {
       const v2 = JSON.parse(localStorage.getItem(KEY));
-      if (Array.isArray(v2)) return v2;
+      if (Array.isArray(v2)) return v2.map(i => Object.assign(i, { qty: clampQty(i.qty) }));
       // Migrate the previous format (slug/variant/options)
       const v1 = JSON.parse(localStorage.getItem(OLD_KEY));
       if (Array.isArray(v1)) {
@@ -32,7 +33,7 @@
     try { localStorage.setItem(KEY, JSON.stringify(state.items)); } catch (e) { /* private mode: list lives for this page only */ }
     paint();
   }
-  function clampQty(q) { return Math.min(MAX_QTY, Math.max(1, parseInt(q, 10) || 1)); }
+  function clampQty(q) { return Math.min(MAX_QTY, Math.max(MIN_QTY, parseInt(q, 10) || MIN_QTY)); }
 
   /* ---------- Mutations ---------- */
   function addRef(rec, qty) {
@@ -227,7 +228,7 @@
       if (!key) {   // standalone quantity steppers (product pages, catalog rows)
         const wrap = qtyBtn.closest('.qty');
         const inp = (wrap && wrap.querySelector('input')) || document.querySelector('[data-pd-qty]');
-        if (inp) inp.value = clampQty((parseInt(inp.value, 10) || 1) + (dir === 'inc' ? 1 : -1));
+        if (inp) inp.value = clampQty((parseInt(inp.value, 10) || MIN_QTY) + (dir === 'inc' ? 1 : -1));
         return;
       }
       const it = state.items.find(i => i.key === key);
@@ -244,7 +245,9 @@
   // Quantity typed in the cart: apply on change (not on every keystroke, so the field can be emptied while typing)
   document.addEventListener('change', function (e) {
     const inp = e.target.closest('[data-qty-input]');
-    if (inp) setQty(inp.getAttribute('data-key'), inp.value);
+    if (inp) { setQty(inp.getAttribute('data-key'), inp.value); return; }
+    const row = e.target.closest('[data-row-qty], [data-pd-qty]');
+    if (row) row.value = clampQty(row.value);
   });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') closeDrawer();
@@ -265,5 +268,5 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paint);
   else paint();
 
-  window.LR_CART = { addRef, add, remove, setQty, clear, count, units, lines, openDrawer, closeDrawer, toast, ROOT };
+  window.LR_CART = { MIN_QTY, addRef, add, remove, setQty, clear, count, units, lines, openDrawer, closeDrawer, toast, ROOT };
 })();

@@ -51,7 +51,7 @@ def payload(**over):
               'designationFr': 'Coude à souder 90° 3D 21,3x2 S235 EN/1 Noir', 'qty': 120,
               'family': 'elbows', 'dims': '21,3×2', 'norme': 'EN/1', 'nuance': 'S235', 'type': 'Sans soudure', 'finition': 'Noir',
               'url': 'https://leraccordement.com/products/elbows/c3s21n.html'},
-             {'kind': 'ref', 'code': 'R2W219114G', 'designation': 'RC à souder Forme 2 – 219,1/6,3x168,3/4,5', 'qty': 8,
+             {'kind': 'ref', 'code': 'R2W219114G', 'designation': 'RC à souder Forme 2 – 219,1/6,3x168,3/4,5', 'qty': 80,
               'family': 'reducers', 'dims': '219,1×6,3 / 114,3×3,6', 'norme': 'EN/1', 'nuance': 'S235', 'type': 'Soudé', 'finition': 'Galv.', 'url': ''}],
          'page': 'https://leraccordement.com/cart.html'}
     for k, v in over.items():
@@ -88,8 +88,8 @@ class QuoteApiTest(unittest.TestCase):
         self.assertEqual(mail['reply_to'], 'amira@hydrosud.tn')
         self.assertEqual(mail['subject'], 'Nouvelle demande de devis %s · Site Le Raccordement' % data['id'])
         self.assertEqual(SENT[0]['auth'], 'Bearer re_test_key')
-        for s in ('C3S21N', 'R2W219114G', '>120<', '>8<', 'Hydro Sud SARL', '+216 74 123 456', 'Coude à souder 90° 3D',
-                  'EN/1', 'Galv.', 'via le site Internet', 'Total pièces', '>128<'):
+        for s in ('C3S21N', 'R2W219114G', '>120<', '>80<', 'Hydro Sud SARL', '+216 74 123 456', 'Coude à souder 90° 3D',
+                  'EN/1', 'Galv.', 'via le site Internet', 'Total pièces', '>200<'):
             self.assertIn(s, mail['html'], s)
         self.assertIn('Qté : 120', mail['text'])
         self.assertIn('Origine : https://leraccordement.com/cart.html', mail['text'])
@@ -125,6 +125,7 @@ class QuoteApiTest(unittest.TestCase):
             (payload(items=[]), 'empty'),
             (payload(items=[{'kind': 'ref', 'code': 'C3S21N', 'designation': 'x', 'qty': 0}]), 'quantity'),
             (payload(items=[{'kind': 'ref', 'code': 'C3S21N', 'designation': 'x', 'qty': '5'}]), 'quantity'),
+            (payload(items=[{'kind': 'ref', 'code': 'C3S21N', 'designation': 'x', 'qty': 49}]), 'minimum quantity is 50'),
             (payload(items=[{'kind': 'ref', 'code': '<script>', 'designation': 'x', 'qty': 1}]), 'reference'),
             (payload(requestKey='x'), 'Invalid request'),
         ]

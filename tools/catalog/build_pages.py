@@ -22,7 +22,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261013g'
+ASSET_V = '20261013h'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 FAMILY_TEXT = {
     'elbows':   {'title': 'Elbows',   'one': 'elbow',   'lead': '45° and 90° butt-weld elbows, 1.5D and 3D radius'},
@@ -245,8 +245,8 @@ def ref_page(it, items, chrome_top, chrome_bottom, head_assets):
         </dl>
         <div class="ref-buy" data-ref-row>
           <div class="kicker">Price on request</div>
-          <label class="ref-buy-qty"><span>Quantity (pcs)</span>
-            <span class="qty"><button type="button" data-qty="dec" aria-label="Decrease">−</button><input type="text" inputmode="numeric" value="1" data-row-qty aria-label="Quantity" /><button type="button" data-qty="inc" aria-label="Increase">+</button></span>
+          <label class="ref-buy-qty"><span>Quantity (pcs, min. 50)</span>
+            <span class="qty"><button type="button" data-qty="dec" aria-label="Decrease">−</button><input type="text" inputmode="numeric" value="50" data-row-qty aria-label="Quantity" /><button type="button" data-qty="inc" aria-label="Increase">+</button></span>
           </label>
           <div class="ref-buy-actions">
             <button type="button" class="btn btn-dark" data-add-ref="%(id)s">Add to quote list</button>

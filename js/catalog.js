@@ -68,7 +68,7 @@
       <td data-label="Standard · grade">${esc(it.f.norme)}<span class="ref-sub">${esc(it.nuance)}</span></td>
       <td data-label="Type · finish">${it.typeEn ? `${esc(it.typeEn)}<span class="ref-sub">${esc(it.finitionEn)}</span>` : esc(it.finitionEn)}</td>
       <td data-label="Quantity" class="ref-actions">
-        <div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="Decrease">−</button><input type="text" inputmode="numeric" value="1" data-row-qty aria-label="Quantity for ${esc(it.code)}"/><button type="button" data-qty="inc" aria-label="Increase">+</button></div>
+        <div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="Decrease">−</button><input type="text" inputmode="numeric" value="50" data-row-qty aria-label="Quantity for ${esc(it.code)}"/><button type="button" data-qty="inc" aria-label="Increase">+</button></div>
         <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(it.id)}">Add<span class="sr-only"> ${esc(it.code)} to quote list</span></button>
       </td>
     </tr>`;
@@ -138,7 +138,7 @@
     } else {
       els.table.innerHTML = `<table class="ref-table">
         <caption class="sr-only">${matched.length} references</caption>
-        <thead><tr><th scope="col">Reference</th><th scope="col">Designation</th><th scope="col">Dimensions (mm)</th><th scope="col">Standard · grade</th><th scope="col">Type · finish</th><th scope="col">Quantity</th></tr></thead>
+        <thead><tr><th scope="col">Reference</th><th scope="col">Designation</th><th scope="col">Dimensions (mm)</th><th scope="col">Standard · grade</th><th scope="col">Type · finish</th><th scope="col">Quantity (min. 50)</th></tr></thead>
         <tbody>${shown.map(rowHtml).join('')}</tbody></table>`;
     }
     const rest = matched.length - shown.length;
