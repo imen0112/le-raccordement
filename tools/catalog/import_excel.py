@@ -139,16 +139,54 @@ def parse_dims(fam, d_raw, ep_raw, standard_kind, issues, ref):
     return dims, f
 
 
-def dims_label(dims):
+def dims_label(dims, n=fr):
     if 'd1' in dims:
         if 't1' in dims:
-            return '%s×%s / %s×%s' % (fr(dims['d1']), fr(dims['t1']), fr(dims['d2']), fr(dims['t2']))
-        return '%s × %s %s' % (fr(dims['d1']), fr(dims['d2']), dims.get('sch') or '')
+            return '%s×%s / %s×%s' % (n(dims['d1']), n(dims['t1']), n(dims['d2']), n(dims['t2']))
+        return '%s × %s %s' % (n(dims['d1']), n(dims['d2']), dims.get('sch') or '')
     if 'sch' in dims:
-        return '%s %s' % (fr(dims['d']), dims['sch'])
+        return '%s %s' % (n(dims['d']), dims['sch'])
     if dims:
-        return '%s×%s' % (fr(dims['d']), fr(dims['t']))
+        return '%s×%s' % (n(dims['d']), n(dims['t']))
     return ''
+
+
+# ---- English display (fixed glossary, no machine translation). The French
+# originals stay in article / type / finitionRaw / designation for the French pages.
+ARTICLE_EN = [
+    (r'^Coude à souder (\d+°) ([\d.]+D)$', r'Butt-weld elbow \1 \2'),
+    (r'^Té égal à souder$', 'Butt-weld equal tee'),
+    (r'^RC à souder Forme (\d)$', r'Butt-weld concentric reducer, Form \1'),
+    (r'^RC à souder$', 'Butt-weld concentric reducer'),
+    (r'^RE à souder$', 'Butt-weld eccentric reducer'),
+    (r'^Caps à souder$', 'Butt-weld cap'),
+    (r'^Fond à souder$', 'Butt-weld dished end'),
+]
+TYPE_EN = {'Sans soudure': 'Seamless', 'Soudé': 'Welded'}
+FINISH_EN = {'Noir': 'Black', 'Galv.': 'Galvanized', 'Peint': 'Painted', 'Peinte': 'Painted'}
+NORME_EN = {'EN/1': 'EN 10253-1'}
+
+
+def article_en(article):
+    for pat, rep in ARTICLE_EN:
+        if re.match(pat, article):
+            return re.sub(pat, rep, article)
+    raise SystemExit('No English label for article %r: add it to ARTICLE_EN' % article)
+
+
+def designation_en(rec):
+    d = rec['dims']
+    if 'd1' in d:
+        size = ('%s × %s mm %s' % (key(d['d1']), key(d['d2']), d['sch'])) if 'sch' in d else dims_label(d, key) + ' mm'
+    elif 't' in d:
+        size = 'Ø%s × %s mm' % (key(d['d']), key(d['t']))
+    else:
+        size = 'Ø%s mm %s' % (key(d['d']), d['sch'])
+    parts = [rec['articleEn'], size, rec['nuance']]
+    if rec['typeEn']:
+        parts.append(rec['typeEn'].lower())
+    parts += [NORME_EN.get(rec['norme'], rec['norme']), rec['finitionEn'].lower()]
+    return ', '.join(parts)
 
 
 def expected_dim_token(dims):
@@ -250,15 +288,20 @@ def main():
                 'dRaw': clean(r.get('D')) if isinstance(r.get('D'), str) else r.get('D'),
                 'epRaw': clean(r.get('Ep')) if isinstance(r.get('Ep'), str) else r.get('Ep'),
                 'dims': dims,
-                'dimsLabel': dims_label(dims),
+                'dimsLabel': dims_label(dims, key),
+                'dimsLabelFr': dims_label(dims),
                 'designation': desig,
                 'designationDisplay': designation_display(desig),
                 'src': {'file': fname, 'sheet': sheet, 'rows': [rownum]},
             }
             if r.get('TRI Index') is not None:
                 rec['src']['tri'] = r.get('TRI Index')
-            rec['f'] = dict(f, article=article, type=rec['type'], nuance=rec['nuance'],
-                            norme=rec['norme'], finition=rec['finition'])
+            rec['articleEn'] = article_en(article)
+            rec['typeEn'] = TYPE_EN.get(rec['type']) if rec['type'] else None
+            rec['finitionEn'] = FINISH_EN[fin_raw]
+            rec['designationEn'] = designation_en(rec)
+            rec['f'] = dict(f, article=rec['articleEn'], type=rec['typeEn'], nuance=rec['nuance'],
+                            norme=NORME_EN.get(rec['norme'], rec['norme']), finition=rec['finitionEn'])
 
             # Designation ↔ columns consistency
             dnorm = re.sub(r'\s+', ' ', desig)
@@ -354,7 +397,8 @@ def main():
                 dm.get('d', dm.get('d1', 0)), dm.get('d2', 0), str(dm.get('t', dm.get('sch', ''))))
     records.sort(key=lambda r: (fam_order[r['family']],) + sort_key(r))
     public_keys = ['id', 'code', 'slug', 'family', 'article', 'type', 'nuance', 'norme', 'finition',
-                   'finitionRaw', 'dRaw', 'epRaw', 'dims', 'dimsLabel', 'designation', 'designationDisplay', 'f']
+                   'finitionRaw', 'dRaw', 'epRaw', 'dims', 'dimsLabel', 'dimsLabelFr', 'designation', 'designationDisplay',
+                   'articleEn', 'typeEn', 'finitionEn', 'designationEn', 'f']
     os.makedirs(OUT_DIR, exist_ok=True)
     generated = datetime.date.today().isoformat()
     counts = {}

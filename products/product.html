@@ -49,7 +49,7 @@
     <div class="header-actions">
       <div class="lang-toggle" role="group" aria-label="Language">
         <a href="#" class="active" aria-current="page">EN</a>
-        <a href="#" hreflang="fr" id="lang-fr">FR</a>
+        <span class="lang-soon" title="Version française bientôt disponible">FR</span>
       </div>
       <button class="cart-btn" data-open-cart aria-label="Open quote list">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
@@ -506,18 +506,17 @@
         const refs = data.items.filter(it => prefixes.some(pre => it.article.startsWith(pre)));
         window.LR_REF_INDEX = window.LR_REF_INDEX || {};
         refs.forEach(it => { window.LR_REF_INDEX[it.id] = it; });
-        const articles = Array.from(new Set(refs.map(it => it.article)));
+        const articles = Array.from(new Set(refs.map(it => it.articleEn)));
         const qs = articles.map(a => 'article=' + encodeURIComponent(a)).join('&');
         document.getElementById('pd-refs-title').textContent = `${refs.length} available references.`;
-        const label = n => n === 'EN/1' ? 'EN 10253-1 (EN/1)' : n;
         box.innerHTML = `<div class="ref-table-wrap"><table class="ref-table">
           <thead><tr><th scope="col">Reference</th><th scope="col">Designation</th><th scope="col">Dimensions (mm)</th><th scope="col">Standard · grade</th><th scope="col">Type · finish</th><th scope="col">Quantity</th></tr></thead>
           <tbody>${refs.map(it => `<tr data-ref-row>
             <td data-label="Reference" class="ref-code"><a href="${it.family}/${it.slug}.html">${esc(it.code)}</a></td>
-            <td data-label="Designation" class="ref-desig" lang="fr">${esc(it.designationDisplay)}</td>
+            <td data-label="Designation" class="ref-desig">${esc(it.designationEn)}</td>
             <td data-label="Dimensions" class="ref-dims">${esc(it.dimsLabel)}</td>
-            <td data-label="Standard · grade">${esc(label(it.norme))}<span class="ref-sub">${esc(it.nuance)}</span></td>
-            <td data-label="Type · finish">${esc(it.type || 'Not specified')}<span class="ref-sub">${esc(it.finitionRaw)}</span></td>
+            <td data-label="Standard · grade">${esc(it.f.norme)}<span class="ref-sub">${esc(it.nuance)}</span></td>
+            <td data-label="Type · finish">${esc(it.typeEn || 'Not specified')}<span class="ref-sub">${esc(it.finitionEn)}</span></td>
             <td data-label="Quantity" class="ref-actions"><div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="Decrease">−</button><input type="text" inputmode="numeric" value="1" data-row-qty aria-label="Quantity for ${esc(it.code)}"/><button type="button" data-qty="inc" aria-label="Increase">+</button></div>
               <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(it.id)}">Add<span class="sr-only"> ${esc(it.code)} to quote list</span></button></td>
           </tr>`).join('')}</tbody></table></div>

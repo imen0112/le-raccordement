@@ -137,7 +137,7 @@
           <span class="family-tile-name">Elbows</span>
           <span class="family-tile-count"><strong>168</strong> references</span>
           <span class="family-tile-meta">45° and 90° butt-weld elbows, 1.5D and 3D radius</span>
-          <span class="family-tile-std">ASME B16.9 · EN 10253-1 (EN/1)</span>
+          <span class="family-tile-std">ASME B16.9 · EN 10253-1</span>
           <span class="family-tile-cta">View the list <span class="arrow">→</span></span>
         </span>
       </a>
@@ -147,7 +147,7 @@
           <span class="family-tile-name">Tees</span>
           <span class="family-tile-count"><strong>42</strong> references</span>
           <span class="family-tile-meta">Equal butt-weld tees</span>
-          <span class="family-tile-std">ASME B16.9 · EN 10253-1 (EN/1)</span>
+          <span class="family-tile-std">ASME B16.9 · EN 10253-1</span>
           <span class="family-tile-cta">View the list <span class="arrow">→</span></span>
         </span>
       </a>
@@ -157,7 +157,7 @@
           <span class="family-tile-name">Reducers</span>
           <span class="family-tile-count"><strong>276</strong> references</span>
           <span class="family-tile-meta">Concentric and eccentric butt-weld reducers</span>
-          <span class="family-tile-std">ASME B16.9 · EN 10253-1 (EN/1)</span>
+          <span class="family-tile-std">ASME B16.9 · EN 10253-1</span>
           <span class="family-tile-cta">View the list <span class="arrow">→</span></span>
         </span>
       </a>
@@ -167,7 +167,7 @@
           <span class="family-tile-name">Caps</span>
           <span class="family-tile-count"><strong>72</strong> references</span>
           <span class="family-tile-meta">Butt-weld caps and dished ends</span>
-          <span class="family-tile-std">ASME B16.9 · EN 10253-1 (EN/1)</span>
+          <span class="family-tile-std">ASME B16.9 · EN 10253-1</span>
           <span class="family-tile-cta">View the list <span class="arrow">→</span></span>
         </span>
       </a>
@@ -182,25 +182,6 @@
       </div>
       <div id="ref-finder-results" aria-live="polite"></div>
     </div>
-  </div>
-</section>
-
-<section class="section-tight" style="padding-bottom:0">
-  <div class="container-wide">
-    <h2 class="h-2 mt-4">Geometries &amp; technical background</h2>
-    <p class="text-muted mt-2" style="max-width:62ch">Overview pages for each fitting geometry, with materials, standards and applications.</p>
-    <div class="mt-6">
-      <a href="all.html" class="btn btn-dark btn-sm">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        Quick quote builder, select multiple <span class="arrow">→</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container-wide">
-    <div class="product-grid" id="products-grid"></div>
   </div>
 </section>
 
@@ -277,24 +258,6 @@
 <script src="../js/products.js?v=20261013b"></script>
 <script src="../js/cart.js?v=20261013b"></script>
 <script src="../js/main.js?v=20261013b"></script>
-<script>
-  /* Product-type cards (overview pages). References are listed on the family pages. */
-  (function () {
-    const grid = document.getElementById('products-grid');
-    const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    grid.innerHTML = (window.LR_PRODUCTS || []).map(p => `
-      <a href="product.html?slug=${p.slug}" class="product-card">
-        <div class="product-card-media"><img src="${p.image}" alt="${esc(p.name)}" loading="lazy" /></div>
-        <div class="product-card-body">
-          <span class="product-card-cat">${esc(p.categoryLabel)}</span>
-          <h3>${esc(p.name)}</h3>
-          <div class="product-card-specs">
-            ${(p.standards || []).slice(0, 2).map(s => `<span class="spec-pill">${esc(s)}</span>`).join('')}
-          </div>
-        </div>
-      </a>`).join('');
-  })();
-</script>
 <script src="../js/facets.js?v=20261013b"></script>
 <script>
   /* Reference finder across the four families (loads the JSON on first use) */
@@ -319,7 +282,7 @@
         out.innerHTML = `<p class="catalog-note"><strong>${hits.length}</strong> matching reference${hits.length > 1 ? 's' : ''}${hits.length > 25 ? ' (first 25 shown, refine your search)' : ''}.</p>
           <div class="ref-table-wrap"><table class="ref-table"><thead><tr><th scope="col">Reference</th><th scope="col">Designation</th><th scope="col">Family</th><th scope="col">Quantity</th></tr></thead><tbody>
           ${shown.map(it => `<tr data-ref-row><td data-label="Reference" class="ref-code"><a href="${it.family}/${it.slug}.html">${esc(it.code)}</a></td>
-            <td data-label="Designation" class="ref-desig" lang="fr">${esc(it.designationDisplay)}</td>
+            <td data-label="Designation" class="ref-desig">${esc(it.designationEn)}</td>
             <td data-label="Family"><a href="${it.family}.html">${esc(it.family.charAt(0).toUpperCase() + it.family.slice(1))}</a></td>
             <td data-label="Quantity" class="ref-actions"><div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="Decrease">−</button><input type="text" inputmode="numeric" value="1" data-row-qty aria-label="Quantity for ${esc(it.code)}"/><button type="button" data-qty="inc" aria-label="Increase">+</button></div>
             <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(it.id)}">Add<span class="sr-only"> ${esc(it.code)}</span></button></td></tr>`).join('')}

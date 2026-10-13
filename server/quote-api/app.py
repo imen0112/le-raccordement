@@ -124,6 +124,7 @@ def validate(body):
                 'designation': text(it, 'designation', 300, True, label='Designation')}
         if kind == 'ref' and not CODE_RE.match(line['code']):
             raise Invalid('Invalid reference code')
+        line['designationFr'] = text(it, 'designationFr', 300)
         for k in ('family', 'dims', 'norme', 'nuance', 'type', 'finition'):
             line[k] = text(it, k, 120)
         url = text(it, 'url', 300)
@@ -152,6 +153,14 @@ def specs(line):
     return ' · '.join(parts)
 
 
+def desig_html(i):
+    """French ERP designation first (what the sales team uses), English as shown to the customer below."""
+    e = html.escape
+    if i.get('designationFr') and i['designationFr'] != i['designation']:
+        return '%s<br><span style="color:#57606a;font-size:12px">%s</span>' % (e(i['designationFr']), e(i['designation']))
+    return e(i['designation'])
+
+
 def build_email(req_id, received, cust, items, page):
     e = html.escape
     when = received.strftime('%d/%m/%Y %H:%M UTC')
@@ -163,7 +172,7 @@ def build_email(req_id, received, cust, items, page):
         '<tr><td %s>%d</td><td %s><strong style="font-family:monospace">%s</strong></td><td %s>%s</td><td %s>%s</td>'
         '<td %s align="right"><strong>%d</strong></td></tr>' % (
             td, n, td, (('<a href="%s">%s</a>' % (e(i['url']), e(i['code']))) if i['url'] else e(i['code'] or 'non renseigné')),
-            td, e(i['designation']), td, e(specs(i)), td, i['qty'])
+            td, desig_html(i), td, e(specs(i)), td, i['qty'])
         for n, i in enumerate(items, 1))
     contact = ''.join('<tr><td style="padding:4px 12px 4px 0;color:#57606a">%s</td><td style="padding:4px 0"><strong>%s</strong></td></tr>' % (e(k), v) for k, v in [
         ('Nom', e(cust['name'])), ('Société', e(cust['company'])),
@@ -186,7 +195,7 @@ def build_email(req_id, received, cust, items, page):
 <p style="font-size:12px;color:#57606a;margin-top:20px">Origine : site web de Le Raccordement, %(page)s<br>Répondre à cet e-mail répond directement au client.</p>
 </body></html>''' % {'id': e(req_id), 'when': e(when), 'n': len(items), 'total': total, 'contact': contact,
                      'message': e(cust['message']) or 'non renseigné', 'th': th, 'td': td, 'rows': rows, 'page': e(page or 'leraccordement.com')}
-    lines = ['%d. %s | %s | %s | Qté : %d' % (n, i['code'] or 'non renseigné', i['designation'], specs(i), i['qty']) for n, i in enumerate(items, 1)]
+    lines = ['%d. %s | %s | %s | Qté : %d' % (n, i['code'] or 'non renseigné', i['designationFr'] or i['designation'], specs(i), i['qty']) for n, i in enumerate(items, 1)]
     body_text = '\n'.join([
         'Demande de devis reçue via le site Internet de Le Raccordement.', '',
         'Demande : %s' % req_id, 'Date : %s' % when, '',

@@ -77,7 +77,7 @@
     body.innerHTML = `<h2 class="h-3">Summary</h2>
       <p class="text-muted mt-2">${esc(q.customer.name)} · ${esc(q.customer.company)}</p>
       <div class="ref-table-wrap mt-4"><table class="ref-table"><thead><tr><th scope="col">Reference</th><th scope="col">Designation</th><th scope="col">Quantity</th></tr></thead>
-      <tbody>${q.items.map(i => `<tr><td data-label="Reference" class="ref-code">${esc(i.code)}</td><td data-label="Designation" lang="fr">${esc(i.designation)}</td><td data-label="Quantity">${esc(i.qty)}</td></tr>`).join('')}</tbody></table></div>
+      <tbody>${q.items.map(i => `<tr><td data-label="Reference" class="ref-code">${esc(i.code)}</td><td data-label="Designation">${esc(i.designation)}</td><td data-label="Quantity">${esc(i.qty)}</td></tr>`).join('')}</tbody></table></div>
       <p class="mt-8"><a class="btn btn-dark" href="products/">Back to the catalog</a></p>`;
   })();
 </script>

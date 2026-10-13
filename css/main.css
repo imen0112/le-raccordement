@@ -2024,3 +2024,19 @@ h1, h2, h3, h4 {
 .industry-list li { display: grid; gap: 4px; padding-block: var(--s-4); border-top: 1px solid var(--c-line); }
 .industry-list strong { font-family: var(--ff-display); font-weight: 600; color: var(--c-ink); }
 .industry-list span { font-size: var(--fs-14); color: var(--c-muted); }
+
+/* Reference page: classic product layout (photo left, details right) */
+.ref-hero { padding-top: calc(92px + var(--s-8)); background: var(--c-bg-soft); border-bottom: 1px solid var(--c-line); }
+.ref-product { display: grid; gap: var(--s-8); grid-template-columns: minmax(0, 1fr); margin-top: var(--s-6); align-items: start; }
+@media (min-width: 900px) { .ref-product { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--s-12); } }
+.ref-media { margin: 0; background: #fff; border: 1px solid var(--c-line); border-radius: var(--radius-lg); padding: var(--s-8); }
+.ref-media img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: contain; }
+.ref-media figcaption { margin-top: var(--s-4); font-size: var(--fs-12); color: var(--c-muted); text-align: center; }
+.ref-info .ref-title { margin-top: var(--s-3); }
+.ref-keyspecs { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--s-3) var(--s-6); margin: var(--s-6) 0; padding: var(--s-5) 0; border-block: 1px solid var(--c-line); }
+.ref-keyspecs dt { font-size: var(--fs-12); color: var(--c-muted); }
+.ref-keyspecs dd { margin: 2px 0 0; font-weight: 600; color: var(--c-ink); }
+.ref-info .ref-buy { position: static; background: #fff; }
+.ref-buy-actions { display: flex; flex-wrap: wrap; gap: var(--s-3); }
+.ref-buy-actions .btn { flex: 1 1 180px; justify-content: center; }
+.ref-tech .spec-table { max-width: 900px; }

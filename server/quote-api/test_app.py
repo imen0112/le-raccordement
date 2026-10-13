@@ -47,7 +47,8 @@ def payload(**over):
          'customer': {'name': 'Amira Ben Salah', 'company': 'Hydro Sud SARL', 'email': 'amira@hydrosud.tn',
                       'phone': '+216 74 123 456', 'country': 'Tunisia', 'incoterm': 'EXW · Ex Works', 'message': 'Delivery in March.\nCert 3.1 please.'},
          'items': [
-             {'kind': 'ref', 'code': 'C3S21N', 'designation': 'Coude à souder 90° 3D – 21,3x2 – S235 – EN/1 – Noir', 'qty': 120,
+             {'kind': 'ref', 'code': 'C3S21N', 'designation': 'Butt-weld elbow 90° 3D, Ø21.3 × 2 mm, S235, seamless, EN 10253-1, black',
+              'designationFr': 'Coude à souder 90° 3D 21,3x2 S235 EN/1 Noir', 'qty': 120,
               'family': 'elbows', 'dims': '21,3×2', 'norme': 'EN/1', 'nuance': 'S235', 'type': 'Sans soudure', 'finition': 'Noir',
               'url': 'https://leraccordement.com/products/elbows/c3s21n.html'},
              {'kind': 'ref', 'code': 'R2W219114G', 'designation': 'RC à souder Forme 2 – 219,1/6,3x168,3/4,5', 'qty': 8,

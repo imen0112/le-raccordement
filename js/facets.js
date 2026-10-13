@@ -24,11 +24,8 @@
     _default: ['norme', 'article', 'type', 'd', 'ep', 'nuance', 'finition']
   };
   const NUMERIC = { d: 1, d1: 1, d2: 1 };
-  // "EN/1" is the code used in the source files; the file name identifies it
-  // as EN 10253-1. Shown with both so the original value stays visible.
-  const NORME_LABELS = { 'EN/1': 'EN 10253-1 (EN/1)' };
-
-  const frNum = v => String(v).replace('.', ',');
+  // Facet values are the English labels built at import (data/catalog/*.json → f).
+  const num = v => String(v);
 
   function valueOf(item, key) {
     const v = item.f ? item.f[key] : undefined;
@@ -37,13 +34,12 @@
 
   function valueLabel(key, v) {
     if (v === NONE) return 'Not specified';
-    if (NUMERIC[key]) return frNum(v);
+    if (NUMERIC[key]) return num(v);
     if (key === 'ep') {
-      if (/^[\d.]+\/[\d.]+$/.test(v)) return v.split('/').map(frNum).join(' / ') + ' mm';
-      if (/^[\d.]+$/.test(v)) return frNum(v) + ' mm';
+      if (/^[\d.]+\/[\d.]+$/.test(v)) return v.split('/').join(' / ') + ' mm';
+      if (/^[\d.]+$/.test(v)) return v + ' mm';
       return v;
     }
-    if (key === 'norme') return NORME_LABELS[v] || v;
     return v;
   }
 
@@ -53,8 +49,10 @@
 
   function searchText(item) {
     if (!item._q) {
-      item._q = fold([item.code, item.designation, item.designationDisplay, item.article,
-        item.dimsLabel, item.norme, item.nuance, item.finition, item.finitionRaw, item.type].join(' '));
+      // English and French fields, so a buyer can search in either language
+      item._q = fold([item.code, item.designationEn, item.articleEn, item.typeEn, item.finitionEn, item.f && item.f.norme,
+        item.designation, item.designationDisplay, item.article, item.dimsLabel, item.dimsLabelFr,
+        item.norme, item.nuance, item.finition, item.finitionRaw, item.type].join(' '));
     }
     return item._q;
   }

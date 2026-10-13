@@ -32,6 +32,9 @@
   ok('RCS3326STDP keeps its original D text', by('RCS3326STDP') && by('RCS3326STDP').dRaw === '33,4x26,7' && by('RCS3326STDP').dims.d1 === 33.4);
   ok('Peinte kept as raw value, grouped as Peint', all.filter(i => i.finitionRaw === 'Peinte').length === 108 && all.filter(i => i.finitionRaw === 'Peinte').every(i => i.finition === 'Peint'));
   ok('Designation kept verbatim (incl. original spacing)', by('C3S21N').designation === 'Coude à souder  90° 3D _21,3x2_S235 _EN/1 _Noir ');
+  ok('English designation built from the glossary', by('C3S21N').designationEn === 'Butt-weld elbow 90° 3D, Ø21.3 × 2 mm, S235, seamless, EN 10253-1, black');
+  ok('Every reference has English article, finish and designation', all.every(i => i.articleEn && i.finitionEn && i.designationEn && !/[àéè]/.test(i.designationEn)));
+  ok('English facet values (no French in filters)', all.every(i => !/souder|Soudé|Sans soudure|Noir|Peint|Galv\.$/.test([i.f.article, i.f.type, i.f.finition].join(' '))));
 
   /* ---------- Facets: brute-force consistency ---------- */
   let seed = 42;
@@ -83,9 +86,9 @@
   {
     const items = data.elbows.items, keys = F.facetKeys('elbows', items);
     const normes = F.compute(items, keys, { d: ['26.9'] }, '').find(x => x.key === 'norme').options.map(o => o.value);
-    ok('Elbows: Ø 26,9 selected → only EN/1 offered as standard', normes.join() === 'EN/1', normes);
+    ok('Elbows: Ø 26.9 selected → only EN 10253-1 offered as standard', normes.join() === 'EN 10253-1', normes);
     const ds = F.compute(items, keys, { norme: ['ASME B16.9'] }, '').find(x => x.key === 'd').options.map(o => o.value);
-    ok('Elbows: ASME B16.9 selected → Ø 26,9 / 33,7 / 76,1 no longer offered', ['26.9', '33.7', '76.1'].every(v => ds.indexOf(v) === -1) && ds.indexOf('26.7') !== -1);
+    ok('Elbows: ASME B16.9 selected → Ø 26.9 / 33.7 / 76.1 no longer offered', ['26.9', '33.7', '76.1'].every(v => ds.indexOf(v) === -1) && ds.indexOf('26.7') !== -1);
     const sel = { norme: ['ASME B16.9'] };
     const normeOpts = F.compute(items, keys, sel, '').find(x => x.key === 'norme').options.map(o => o.value);
     ok('Elbows: a facet keeps its own alternatives (multi-select)', normeOpts.length === 2);
@@ -124,7 +127,7 @@
     C.addRef(r1, 5); C.addRef(r1, 3); C.addRef(r2, '12');
     let l = C.lines();
     ok('Cart: same reference merges quantities', l.length === 2 && l[0].qty === 8 && l[1].qty === 12);
-    ok('Cart: line carries code, designation, specs', l[0].code === 'C3S21N' && l[0].designation === r1.designationDisplay && l[0].specs.indexOf('EN/1') !== -1);
+    ok('Cart: line carries code, English designation, specs', l[0].code === 'C3S21N' && l[0].designation === r1.designationEn && l[0].specs.indexOf('EN 10253-1') !== -1);
     C.setQty(l[1].key, 0);
     ok('Cart: quantity never below 1', C.lines()[1].qty === 1);
     C.setQty(l[1].key, 'abc');
@@ -143,5 +146,5 @@
   const failed = results.filter(r => !r.pass);
   window.TEST_RESULTS = { total: results.length, failed: failed.length, failures: failed };
   document.getElementById('out').innerHTML = `<p><strong>${results.length - failed.length}/${results.length} passed</strong></p>` +
-    results.map(r => `<div class="${r.pass ? 'pass' : 'fail'}">${r.pass ? '✓' : '✗'} ${r.name}${r.detail ? ' — <pre>' + String(r.detail).replace(/</g, '&lt;') + '</pre>' : ''}</div>`).join('');
+    results.map(r => `<div class="${r.pass ? 'pass' : 'fail'}">${r.pass ? '✓' : '✗'} ${r.name}${r.detail ? ' : <pre>' + String(r.detail).replace(/</g, '&lt;') + '</pre>' : ''}</div>`).join('');
 })().catch(e => { window.TEST_RESULTS = { error: String(e && e.stack || e) }; document.getElementById('out').textContent = 'ERROR ' + e; });

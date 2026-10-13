@@ -43,8 +43,8 @@
     if (existing) existing.qty = clampQty(existing.qty + qty);
     else state.items.push({
       key, kind: 'ref', id: rec.id, code: rec.code, slug: rec.slug, family: rec.family,
-      designation: rec.designationDisplay, dims: rec.dimsLabel, norme: rec.norme, nuance: rec.nuance,
-      finition: rec.finitionRaw || rec.finition, type: rec.type, qty
+      designation: rec.designationEn, designationFr: rec.designationDisplay, dims: rec.dimsLabel,
+      norme: rec.f ? rec.f.norme : rec.norme, nuance: rec.nuance, finition: rec.finitionEn, type: rec.typeEn, qty
     });
     save();
     toast(`Added <strong>${esc(rec.code)}</strong> × ${qty} to your quote list · <a href="${ROOT}cart.html">View list (${count()})</a>`);
@@ -79,7 +79,7 @@
         key: i.key, kind: 'ref', code: i.code, designation: i.designation,
         specs: [i.dims && ('Ø ' + i.dims), i.norme, i.nuance, i.type, i.finition].filter(Boolean),
         url: `${ROOT}products/${i.family}/${i.slug}.html`, qty: i.qty,
-        detail: { family: i.family, dims: i.dims, norme: i.norme, nuance: i.nuance, type: i.type, finition: i.finition }
+        detail: { family: i.family, dims: i.dims, norme: i.norme, nuance: i.nuance, type: i.type, finition: i.finition, designationFr: i.designationFr }
       };
     }
     const p = (window.LR_PRODUCTS || []).find(x => x.slug === i.slug);
@@ -130,7 +130,7 @@
     list.innerHTML = lines().map(l => `<div class="cart-item cart-item-noimg">
         <div>
           <div class="cart-item-code">${esc(l.code)}</div>
-          <div class="cart-item-name" lang="fr">${esc(l.designation)}</div>
+          <div class="cart-item-name">${esc(l.designation)}</div>
           <div class="cart-item-spec">${esc(l.specs.join(' · '))}</div>
           <div class="cart-item-qty-row">${qtyControl(l)}</div>
         </div>
@@ -160,7 +160,7 @@
       <thead><tr><th scope="col">Reference</th><th scope="col">Designation</th><th scope="col">Specifications</th><th scope="col">Quantity</th><th scope="col"><span class="sr-only">Remove</span></th></tr></thead>
       <tbody>${lines().map(l => `<tr>
         <td data-label="Reference" class="ref-code"><a href="${esc(l.url)}">${esc(l.code)}</a></td>
-        <td data-label="Designation" lang="fr">${esc(l.designation)}</td>
+        <td data-label="Designation">${esc(l.designation)}</td>
         <td data-label="Specifications" class="ref-specs">${esc(l.specs.join(' · '))}</td>
         <td data-label="Quantity">${qtyControl(l)}</td>
         <td class="ref-remove"><button class="btn-icon" type="button" data-remove data-key="${esc(l.key)}" aria-label="Remove ${esc(l.code)}">${trash}</button></td>

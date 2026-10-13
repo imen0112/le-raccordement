@@ -62,10 +62,10 @@
   function rowHtml(it) {
     return `<tr data-ref-row>
       <td data-label="Reference" class="ref-code"><a href="${esc(family)}/${esc(it.slug)}.html">${esc(it.code)}</a></td>
-      <td data-label="Designation" class="ref-desig" lang="fr">${esc(it.designationDisplay)}</td>
+      <td data-label="Designation" class="ref-desig">${esc(it.designationEn)}</td>
       <td data-label="Dimensions" class="ref-dims">${esc(it.dimsLabel)}</td>
-      <td data-label="Standard · grade">${esc(F.valueLabel('norme', it.norme))}<span class="ref-sub">${esc(it.nuance)}</span></td>
-      <td data-label="Type · finish">${esc(it.type || 'Not specified')}<span class="ref-sub">${esc(it.finitionRaw)}</span></td>
+      <td data-label="Standard · grade">${esc(it.f.norme)}<span class="ref-sub">${esc(it.nuance)}</span></td>
+      <td data-label="Type · finish">${esc(it.typeEn || 'Not specified')}<span class="ref-sub">${esc(it.finitionEn)}</span></td>
       <td data-label="Quantity" class="ref-actions">
         <div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="Decrease">−</button><input type="text" inputmode="numeric" value="1" data-row-qty aria-label="Quantity for ${esc(it.code)}"/><button type="button" data-qty="inc" aria-label="Increase">+</button></div>
         <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(it.id)}">Add<span class="sr-only"> ${esc(it.code)} to quote list</span></button>
