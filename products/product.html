@@ -32,7 +32,7 @@
       <span class="nav-item-mega"><a href="./" class="nav-item-mega-trigger">Products</a>
 <div class="mega-panel" role="menu">
   <div class="mega-grid">
-    <a href="elbows.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/elbow-90.jpg" alt=""></div><span class="mega-tile-name">Elbows</span><span class="mega-tile-meta">45° · 90° · 180°</span></a>
+    <a href="elbows.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/elbow-90.jpg" alt=""></div><span class="mega-tile-name">Elbows</span><span class="mega-tile-meta">45° · 90°</span></a>
     <a href="tees.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/equal-tee.jpg" alt=""></div><span class="mega-tile-name">Tees</span><span class="mega-tile-meta">Equal · Reducing</span></a>
     <a href="reducers.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/concentric-reducer.jpg" alt=""></div><span class="mega-tile-name">Reducers</span><span class="mega-tile-meta">Concentric · Eccentric</span></a>
     <a href="caps.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/cap.jpg" alt=""></div><span class="mega-tile-name">Caps</span><span class="mega-tile-meta">Dished ends</span></a>
@@ -349,6 +349,9 @@
 
   (function () {
     const slug = new URLSearchParams(window.location.search).get('slug');
+    // Product types withdrawn from the range: send old links to their family page
+    const REMOVED = { 'elbow-180': 'elbows.html' };
+    if (REMOVED[slug]) { window.location.replace(REMOVED[slug]); return; }
     const p = (window.LR_PRODUCTS || []).find(x => x.slug === slug);
     const notFound = document.getElementById('pd-not-found');
     const content = document.getElementById('pd-content');

@@ -82,31 +82,6 @@ window.LR_PRODUCTS = [
     leadTime: '3 to 6 weeks',
     minOrder: '50 pcs'
   },
-  {
-    slug: 'elbow-180',
-    articles: [],   // Excel 'Article' prefixes → catalog references
-    name: 'Elbow 180° (Return Bend)',
-    category: 'elbows',
-    categoryLabel: 'Elbows',
-    image: 'assets/img/products/elbow-180.jpg',
-    technical: 'assets/img/products/technical/elbow-180.png',
-    short: '180° return bend, for hairpin returns in heat exchangers and process loops.',
-    description: '180° return bend (U-bend) used to reverse flow direction in heaters, exchangers, and serpentine process lines. Manufactured from seamless or welded pipes to ASME B16.9 and EN 10253 dimensional standards.',
-    angle: '180°',
-    radius: '1.5D / 3D',
-    sizeRange: 'DN15 to DN200 / ½″ to 8″',
-    standards: ['ASME B16.9', 'EN 10253-1', 'EN 10253-2', 'DIN 2605'],
-    materials: ['A234-WPB', 'S235', 'ST37', 'S265', 'P235TR1', 'P235TR2', 'P235GH', 'P265GH', 'A403-WP304L', 'A403-WP316L'],
-    thickness: ['SCH 40', 'SCH 80', 'STD', 'XS', 'SCH 40S', 'SCH 80S'],
-    coating: ['Shot-blasted', 'Painted', 'Galvanized'],
-    rawMaterial: 'Seamless & welded pipes',
-    marking: 'Stamped (micro-percussion)',
-    packaging: 'Pallets, cartons',
-    certificate: 'EN 10204: Mill Test Certificate 3.1 / Report 2.2',
-    applications: ['Power Generation', 'Heat Exchangers', 'Chemical Engineering', 'Petroleum & Oil', 'Shipbuilding'],
-    leadTime: '4 to 7 weeks',
-    minOrder: '25 pcs'
-  },
 
   /* ----- TEES ----- */
   {
@@ -242,7 +217,7 @@ window.LR_CATEGORIES = [
   {
     slug: 'elbows',
     name: 'Elbows',
-    tagline: 'Long-radius bends, 45° · 90° · 180°',
+    tagline: 'Long-radius bends, 45° · 90°',
     description: '1.5D & 3D long-radius elbows in DN15 to DN300, formed from seamless or welded pipe to ASME B16.9 and EN 10253.',
     image: 'assets/img/products/elbow-90.jpg'
   },
