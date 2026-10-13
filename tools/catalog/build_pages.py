@@ -22,7 +22,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261013c'
+ASSET_V = '20261013d'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 FAMILY_TEXT = {
     'elbows':   {'title': 'Elbows',   'one': 'elbow',   'lead': '45° and 90° butt-weld elbows, 1.5D and 3D radius'},
@@ -315,22 +315,27 @@ def catalog_section(fam, items, counts):
         <h2 class="h-2">All %(one)s references</h2>
         <p class="catalog-count" data-catalog-count aria-live="polite"><strong>%(n)d</strong> references</p>
       </div>
-      <div class="catalog-bar">
-        <label class="filter-search">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="search" data-catalog-search placeholder="Reference, size, designation…" aria-label="Search %(title_lower)s" />
-        </label>
-        <label class="filter-sort"><span class="kicker">Sort</span>
-          <select data-catalog-sort aria-label="Sort references">
-            <option value="default">Type, then size</option>
-            <option value="d-asc">Diameter, small first</option>
-            <option value="d-desc">Diameter, large first</option>
-            <option value="code">Reference A to Z</option>
-          </select>
-        </label>
-      </div>
-      <div class="fbar" data-catalog-filters aria-label="Filters"></div>
-      <div class="catalog-results">
+      <div class="catalog-layout">
+        <details class="catalog-filters-wrap" data-catalog-details>
+          <summary class="catalog-filters-toggle">Filters <span data-catalog-filter-count></span></summary>
+          <div class="catalog-filters" data-catalog-filters></div>
+          <button type="button" class="btn btn-ghost btn-sm btn-block" data-catalog-reset hidden>Reset all filters</button>
+        </details>
+        <div class="catalog-results">
+          <div class="catalog-toolbar">
+            <label class="filter-search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="search" data-catalog-search placeholder="Reference, size, designation…" aria-label="Search %(title_lower)s" />
+            </label>
+            <label class="filter-sort"><span class="kicker">Sort</span>
+              <select data-catalog-sort aria-label="Sort references">
+                <option value="default">Type, then size</option>
+                <option value="d-asc">Diameter, small first</option>
+                <option value="d-desc">Diameter, large first</option>
+                <option value="code">Reference A to Z</option>
+              </select>
+            </label>
+          </div>
           <div class="catalog-chips"><div class="chip-row" data-catalog-chips></div><button type="button" class="link-btn" data-catalog-reset hidden>Clear all</button></div>
           <div class="ref-table-wrap" data-catalog-table>
             <table class="ref-table">
@@ -341,6 +346,7 @@ def catalog_section(fam, items, counts):
             </table>
           </div>
           <div class="catalog-more" data-catalog-more></div>
+        </div>
       </div>
     </div>
   </div>
