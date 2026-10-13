@@ -22,7 +22,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261013e'
+ASSET_V = '20261013f'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 FAMILY_TEXT = {
     'elbows':   {'title': 'Elbows',   'one': 'elbow',   'lead': '45° and 90° butt-weld elbows, 1.5D and 3D radius'},
@@ -119,7 +119,9 @@ def spec_rows(it):
     elif d:
         rows.append(('Outside Ø', '%s mm' % num(d['d'])))
         rows.append(('Wall thickness', ('%s mm' % num(d['t'])) if 't' in d else e(d['sch']) + ' (schedule)'))
-    rows += [('Manufacturing', e(it['typeEn']) if it['typeEn'] else 'Not specified in the source data'),
+    if it['typeEn']:
+        rows.append(('Manufacturing', e(it['typeEn'])))
+    rows += [
              ('Steel grade', e(it['nuance'])),
              ('Standard', e(norme_label(it['norme']))),
              ('Finish', e(it['finitionEn']))]
@@ -156,9 +158,10 @@ def row_static(it, prefix=''):
             '<td data-label="Designation" class="ref-desig">%s</td>'
             '<td data-label="Dimensions" class="ref-dims">%s</td>'
             '<td data-label="Standard · grade">%s<span class="ref-sub">%s</span></td>'
-            '<td data-label="Type · finish">%s<span class="ref-sub">%s</span></td></tr>') % (
+            '<td data-label="Type · finish">%s</td></tr>') % (
         prefix, e(it['family']), e(it['slug']), e(it['code']), e(it['designationEn']), e(it['dimsLabel']),
-        e(norme_label(it['norme'])), e(it['nuance']), e(it['typeEn'] or 'Not specified'), e(it['finitionEn']))
+        e(norme_label(it['norme'])), e(it['nuance']),
+        ('%s<span class="ref-sub">%s</span>' % (e(it['typeEn']), e(it['finitionEn']))) if it['typeEn'] else e(it['finitionEn']))
 
 
 def ref_page(it, items, chrome_top, chrome_bottom, head_assets):

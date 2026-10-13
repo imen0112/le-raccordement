@@ -2098,3 +2098,6 @@ h1, h2, h3, h4 {
 }
 .fdrop-panel .facet-opt { gap: var(--s-3); padding: 7px 8px; }
 .catalog-layout.catalog-layout-bar { grid-template-columns: minmax(0, 1fr); margin-top: var(--s-2); }
+/* Filter options: label left, count pushed right with a clear gap */
+.facet-opt .facet-label { min-width: 0; }
+.facet-opt .facet-count { justify-self: end; padding-left: var(--s-4); }
