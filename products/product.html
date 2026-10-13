@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../css/main.css?v=20261013b" />
+<link rel="stylesheet" href="../css/main.css?v=20261013c" />
 <script type="application/ld+json" id="pd-jsonld"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
 <div class="mega-panel" role="menu">
   <div class="mega-grid">
     <a href="elbows.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/elbow-90.jpg" alt=""></div><span class="mega-tile-name">Elbows</span><span class="mega-tile-meta">45° · 90°</span></a>
-    <a href="tees.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/equal-tee.jpg" alt=""></div><span class="mega-tile-name">Tees</span><span class="mega-tile-meta">Equal · Reducing</span></a>
+    <a href="tees.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/equal-tee.jpg" alt=""></div><span class="mega-tile-name">Tees</span><span class="mega-tile-meta">Equal tees</span></a>
     <a href="reducers.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/concentric-reducer.jpg" alt=""></div><span class="mega-tile-name">Reducers</span><span class="mega-tile-meta">Concentric · Eccentric</span></a>
     <a href="caps.html" class="mega-tile"><div class="mega-tile-thumb"><img src="../assets/img/products/cap.jpg" alt=""></div><span class="mega-tile-name">Caps</span><span class="mega-tile-meta">Dished ends</span></a>
   </div>
@@ -49,7 +49,7 @@
     <div class="header-actions">
       <div class="lang-toggle" role="group" aria-label="Language">
         <a href="#" class="active" aria-current="page">EN</a>
-        <span class="lang-soon" title="Version française bientôt disponible">FR</span>
+        <span class="lang-soon" title="French version coming soon">FR</span>
       </div>
       <button class="cart-btn" data-open-cart aria-label="Open quote list">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
@@ -111,63 +111,15 @@
             <!-- Standards quick-pills -->
             <div class="pd-standards-quick" id="pd-standards-quick" aria-label="Manufacturing standards"></div>
 
-            <!-- Configurator -->
-            <div class="configurator">
-              <div class="configurator-head">
-                <h3>Configure</h3>
-                <span class="kicker">Tell us what you need</span>
-              </div>
-              <div class="configurator-grid" data-pd-options>
-                <div class="config-field">
-                  <label for="opt-size">Nominal size (DN)</label>
-                  <select id="opt-size" data-opt="Size"></select>
-                </div>
-                <div class="config-field">
-                  <label for="opt-thickness">Wall thickness</label>
-                  <select id="opt-thickness" data-opt="Thickness"></select>
-                </div>
-                <div class="config-field">
-                  <label for="opt-material">Material grade</label>
-                  <select id="opt-material" data-opt="Material"></select>
-                </div>
-                <div class="config-field">
-                  <label for="opt-coating">Coating / finish</label>
-                  <select id="opt-coating" data-opt="Coating"></select>
-                </div>
-              </div>
-              <!-- Specifically for elbows: angle/radius variant -->
-              <div class="configurator-grid" id="opt-elbow-extra" style="display:none">
-                <div class="config-field">
-                  <label for="opt-radius">Bend radius</label>
-                  <select id="opt-radius" data-opt="Radius"></select>
-                </div>
-                <div class="config-field">
-                  <label for="opt-end">End finish</label>
-                  <select id="opt-end" data-opt="Ends">
-                    <option value="Bevel end">Bevel end (BE)</option>
-                    <option value="Plain end">Plain end (PE)</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <!-- Quantity + add-to-quote (no online prices: quote on request) -->
+            <!-- Real specifications (from the article files) + link to the exact references -->
+            <dl class="pd-facts" id="pd-facts"></dl>
             <div class="atc">
               <div>
                 <div class="kicker">Price on request</div>
-                <div class="atc-meta">Minimum order <span id="pd-moq"></span> · ex-works Sfax</div>
+                <div class="atc-meta">Choose the exact size, standard and finish in the reference list.</div>
               </div>
-              <div class="atc-controls">
-                <div class="qty">
-                  <button data-qty="dec" aria-label="Decrease">−</button>
-                  <input type="text" inputmode="numeric" value="1" data-pd-qty aria-label="Quantity" />
-                  <button data-qty="inc" aria-label="Increase">+</button>
-                </div>
-                <button class="btn btn-primary btn-lg" data-add-to-cart id="pd-add" data-slug="">
-                  Add to quote <span class="arrow">→</span>
-                </button>
-              </div>
-              <p class="atc-note">Prefer exact references? <a href="#references" style="text-decoration:underline">Pick them from the catalog list below</a>. We reply within one business day.</p>
+              <a class="btn btn-primary btn-lg" href="#references" id="pd-see-refs">See the references <span class="arrow">→</span></a>
+              <p class="atc-note">Add the references you need to your quote list. We reply within one business day.</p>
             </div>
 
             <!-- Datasheet & documents -->
@@ -324,33 +276,16 @@
   </div>
 </aside>
 
-<script src="../js/products.js?v=20261013b"></script>
-<script src="../js/cart.js?v=20261013b"></script>
-<script src="../js/main.js?v=20261013b"></script>
+<script src="../js/products.js?v=20261013c"></script>
+<script src="../js/product-specs.js?v=20261013c"></script>
+<script src="../js/cart.js?v=20261013c"></script>
+<script src="../js/main.js?v=20261013c"></script>
 <script>
-  /* Standard pipe sizing table (ASME B16.9 / EN 10253 reference)
-     Sizes are reference values used industry-wide. */
-  const STD_TABLE = [
-    { dn: 15,  in: '½',     od: 21.3,   wall: '2.77 to 7.47',  ce: '38 to 95' },
-    { dn: 20,  in: '¾',     od: 26.7,   wall: '2.87 to 7.82',  ce: '38 to 95' },
-    { dn: 25,  in: '1',     od: 33.4,   wall: '3.38 to 9.09',  ce: '38 to 102' },
-    { dn: 32,  in: '1¼',    od: 42.2,   wall: '3.56 to 9.70',  ce: '48 to 114' },
-    { dn: 40,  in: '1½',    od: 48.3,   wall: '3.68 to 10.16', ce: '57 to 121' },
-    { dn: 50,  in: '2',     od: 60.3,   wall: '3.91 to 11.07', ce: '76 to 152' },
-    { dn: 65,  in: '2½',    od: 73.0,   wall: '5.16 to 14.02', ce: '95 to 178' },
-    { dn: 80,  in: '3',     od: 88.9,   wall: '5.49 to 15.24', ce: '114 to 216' },
-    { dn: 100, in: '4',     od: 114.3,  wall: '6.02 to 17.12', ce: '152 to 305' },
-    { dn: 125, in: '5',     od: 141.3,  wall: '6.55 to 19.05', ce: '190 to 381' },
-    { dn: 150, in: '6',     od: 168.3,  wall: '7.11 to 21.95', ce: '229 to 457' },
-    { dn: 200, in: '8',     od: 219.1,  wall: '8.18 to 23.01', ce: '305 to 610' },
-    { dn: 250, in: '10',    od: 273.0,  wall: '9.27 to 25.40', ce: '381 to 762' },
-    { dn: 300, in: '12',    od: 323.8,  wall: '10.31 to 25.40', ce: '457 to 914' }
-  ];
 
   (function () {
     const slug = new URLSearchParams(window.location.search).get('slug');
     // Product types withdrawn from the range: send old links to their family page
-    const REMOVED = { 'elbow-180': 'elbows.html' };
+    const REMOVED = { 'elbow-180': 'elbows.html', 'reducing-tee': 'tees.html' };
     if (REMOVED[slug]) { window.location.replace(REMOVED[slug]); return; }
     const p = (window.LR_PRODUCTS || []).find(x => x.slug === slug);
     const notFound = document.getElementById('pd-not-found');
@@ -415,27 +350,31 @@
       });
     }
     document.getElementById('pd-description').textContent = p.description;
-    document.getElementById('pd-moq').textContent = p.minOrder;
-    document.getElementById('pd-add').setAttribute('data-slug', p.slug);
 
 
     // Breadcrumb
     document.getElementById('pd-crumb').innerHTML = `<a href="../">Home</a><span class="sep">/</span><a href="./">Products</a><span class="sep">/</span><a href="${p.category}.html">${p.categoryLabel}</a><span class="sep">/</span><span>${p.name}</span>`;
 
-    // Key spec grid
+    // Key spec grid (size, standards, grades, wall, finish from js/product-specs.js)
+    const list = a => (a || []).join(', ');
     const keys = [
       ['Category', p.categoryLabel],
       p.angle ? ['Angle', p.angle] : null,
-      p.radius ? ['Radius', p.radius] : null,
-      p.type ? ['Type', p.type] : null,
-      ['Size range', p.sizeRange],
-      ['Raw material', p.rawMaterial],
+      p.radius ? ['Bend radius', p.radius] : null,
+      p.sizeRange ? ['Size range', p.sizeRange] : null,
+      p.thickness ? ['Wall thickness', list(p.thickness)] : null,
+      p.materials ? ['Steel grade', list(p.materials)] : null,
+      p.standards ? ['Standard', list(p.standards)] : null,
+      p.manufacturing ? ['Manufacturing', list(p.manufacturing)] : null,
+      p.coating ? ['Finish', list(p.coating)] : null,
+      p.refCount ? ['Catalog references', p.refCount] : null,
       ['Marking', p.marking],
       ['Packaging', p.packaging],
       ['Certificate', p.certificate],
       ['Lead time', p.leadTime],
       ['Min. order', p.minOrder]
     ].filter(Boolean);
+    document.getElementById('pd-facts').innerHTML = keys.slice(1, 10).map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
     document.getElementById('pd-keyspec').innerHTML = keys.map(([k, v]) => `<div class="k">${k}</div><div class="v">${v}</div>`).join('');
 
     // Tag rows
@@ -447,34 +386,6 @@
     // Standards quick-pills (top of right column)
     document.getElementById('pd-standards-quick').innerHTML = (p.standards || []).map(s => `<span class="tag">${s}</span>`).join('');
 
-    // Configurator, populate selects
-    const sizes = (function () {
-      // Parse "DN15 to DN300 / ½″ to 12″"  →  sizes between min and max
-      const m = p.sizeRange.match(/DN(\d+)\s*(?:[–-]|to)\s*DN(\d+)/);
-      if (!m) return [];
-      const min = parseInt(m[1], 10), max = parseInt(m[2], 10);
-      return STD_TABLE.filter(r => r.dn >= min && r.dn <= max).map(r => `DN ${r.dn} (${r.in}″)`);
-    })();
-    function fillSelect(id, opts, placeholder) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.innerHTML = (placeholder ? `<option value="">${placeholder}</option>` : '') +
-        opts.map(o => `<option value="${o}">${o}</option>`).join('');
-    }
-    fillSelect('opt-size', sizes, 'Select size…');
-    fillSelect('opt-thickness', p.thickness || []);
-    fillSelect('opt-material', p.materials || []);
-    fillSelect('opt-coating', p.coating || []);
-
-    // Elbow-specific extras
-    if (p.category === 'elbows' && p.angle === '90°') {
-      document.getElementById('opt-elbow-extra').style.display = '';
-      fillSelect('opt-radius', ['1.5D', '3D']);
-    } else if (p.category === 'elbows') {
-      document.getElementById('opt-elbow-extra').style.display = '';
-      fillSelect('opt-radius', p.radius ? [p.radius] : ['1.5D']);
-    }
-
     // Applications, render as 4-card grid
     document.getElementById('pd-app-cards').innerHTML = (p.applications || []).map(app => `
       <div class="card"><h3 class="h-4">${app}</h3></div>`).join('');
@@ -482,12 +393,7 @@
     // Standards, render as detailed cards with descriptions
     const STD_DESC = {
       'ASME B16.9': 'Factory-made wrought butt-welding fittings. North-American reference for dimensions and tolerances.',
-      'EN 10253-1': 'European standard for butt-welding pipe fittings, Part 1, carbon steel without specific inspection requirements.',
-      'EN 10253-2': 'European standard for butt-welding pipe fittings, Part 2, with specific inspection requirements.',
-      'DIN 2605': 'German dimensional standard for steel pipe elbows.',
-      'DIN 2615': 'German dimensional standard for steel pipe tees.',
-      'DIN 2616': 'German dimensional standard for steel pipe reducers.',
-      'DIN 2617': 'German dimensional standard for steel pipe caps.'
+      'EN 10253-1': 'European standard for butt-welding pipe fittings, Part 1, carbon steel without specific inspection requirements.'
     };
     document.getElementById('pd-standard-cards').innerHTML = (p.standards || []).map(s => `
       <div class="cert-card">

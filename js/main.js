@@ -75,3 +75,45 @@
     window.location.href = `mailto:contact@leraccordement.com?subject=${subject}&body=${encodeURIComponent(body)}`;
   });
 })();
+
+/* Lightbox: click (or Enter) on a product or factory photo to see it large */
+(function () {
+  const SEL = '[data-zoom], .mosaic img, .pd-media img, .ref-media img, .family-head-media img, .gallery img, .about-gallery img';
+  let dlg;
+  function ensure() {
+    if (dlg) return dlg;
+    dlg = document.createElement('dialog');
+    dlg.className = 'lightbox';
+    dlg.innerHTML = '<button type="button" class="lightbox-close" aria-label="Close">×</button><img alt="" /><p class="lightbox-caption"></p>';
+    document.body.appendChild(dlg);
+    dlg.addEventListener('click', e => { if (e.target === dlg || e.target.closest('.lightbox-close')) dlg.close(); });
+    return dlg;
+  }
+  function open(img) {
+    const d = ensure();
+    if (typeof d.showModal !== 'function') { window.open(img.currentSrc || img.src, '_blank'); return; }
+    const big = d.querySelector('img');
+    big.src = img.currentSrc || img.src;
+    big.alt = img.alt || '';
+    d.querySelector('.lightbox-caption').textContent = img.alt || '';
+    d.showModal();
+  }
+  function mark() {
+    document.querySelectorAll(SEL).forEach(img => {
+      if (img.closest('a') || img.dataset.zoomReady) return;
+      img.dataset.zoomReady = '1';
+      img.tabIndex = 0;
+      img.setAttribute('role', 'button');
+      img.setAttribute('aria-label', 'Enlarge photo' + (img.alt ? ': ' + img.alt : ''));
+    });
+  }
+  document.addEventListener('click', e => {
+    const img = e.target.closest(SEL);
+    if (img && !img.closest('a') && img.tagName === 'IMG') { e.preventDefault(); open(img); }
+  });
+  document.addEventListener('keydown', e => {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches(SEL) && !e.target.closest('a')) { e.preventDefault(); open(e.target); }
+  });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mark); else mark();
+  window.addEventListener('load', mark);
+})();

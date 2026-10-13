@@ -11,7 +11,6 @@
 
   const els = {
     filters: root.querySelector('[data-catalog-filters]'),
-    details: root.querySelector('[data-catalog-details]'),
     search: root.querySelector('[data-catalog-search]'),
     sort: root.querySelector('[data-catalog-sort]'),
     count: root.querySelector('[data-catalog-count]'),
@@ -45,7 +44,6 @@
     state.sort = p.get('sort') || 'default';
     if (els.search) els.search.value = state.query;
     if (els.sort) els.sort.value = state.sort;
-    if (els.details && window.matchMedia('(min-width: 1024px)').matches) els.details.open = true;
     root.classList.add('is-live');
     render(false);
   }
@@ -87,16 +85,22 @@
     // Filters, keep keyboard focus across re-render
     const focused = document.activeElement && document.activeElement.matches && document.activeElement.matches('[data-facet]')
       ? [document.activeElement.getAttribute('data-facet'), document.activeElement.value] : null;
+    // One dropdown per facet in the horizontal bar; keep the open one open across re-renders
+    const openEl = els.filters.querySelector('details[open]');
+    const openKey = openEl ? openEl.getAttribute('data-key') : null;
     els.filters.innerHTML = facets.map(fc => {
       const opts = fc.options;
-      return `<fieldset class="facet${opts.length > 8 ? ' facet-long' : ''}">
-        <legend>${esc(fc.label)}</legend>
-        <div class="facet-options">${opts.map(o => `
+      const n = (state.selection[fc.key] || []).length;
+      return `<details class="fdrop${n ? ' is-active' : ''}" data-key="${esc(fc.key)}"${fc.key === openKey ? ' open' : ''}>
+        <summary>${esc(fc.label)}${n ? ` <span class="fdrop-n">${n}</span>` : ''}</summary>
+        <fieldset class="fdrop-panel${opts.length > 8 ? ' is-long' : ''}">
+          <legend class="sr-only">${esc(fc.label)}</legend>${opts.map(o => `
           <label class="facet-opt${o.count === 0 ? ' is-empty' : ''}">
             <input type="checkbox" data-facet="${esc(fc.key)}" value="${esc(o.value)}" ${o.selected ? 'checked' : ''}/>
             <span class="facet-label">${esc(o.label)}</span><span class="facet-count">${o.count}</span>
-          </label>`).join('')}</div>
-      </fieldset>`;
+          </label>`).join('')}
+        </fieldset>
+      </details>`;
     }).join('');
     if (focused) {
       const back = Array.from(els.filters.querySelectorAll('[data-facet]')).find(x => x.getAttribute('data-facet') === focused[0] && x.value === focused[1]);
@@ -183,6 +187,21 @@
       return;
     }
     if (e.target.closest('[data-catalog-more-btn]')) { state.shown += PAGE; render(false); }
+  });
+
+  root.addEventListener('toggle', e => {
+    const d = e.target;
+    if (d.matches && d.matches('details.fdrop') && d.open) {
+      els.filters.querySelectorAll('details.fdrop[open]').forEach(x => { if (x !== d) x.open = false; });
+    }
+  }, true);
+  document.addEventListener('click', e => {
+    if (!e.target.closest('details.fdrop')) els.filters.querySelectorAll('details.fdrop[open]').forEach(x => { x.open = false; });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    const d = els.filters.querySelector('details.fdrop[open]');
+    if (d) { d.open = false; d.querySelector('summary').focus(); }
   });
 
   window.addEventListener('popstate', () => {

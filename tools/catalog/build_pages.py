@@ -22,7 +22,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261013b'
+ASSET_V = '20261013c'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 FAMILY_TEXT = {
     'elbows':   {'title': 'Elbows',   'one': 'elbow',   'lead': '45° and 90° butt-weld elbows, 1.5D and 3D radius'},
@@ -315,27 +315,22 @@ def catalog_section(fam, items, counts):
         <h2 class="h-2">All %(one)s references</h2>
         <p class="catalog-count" data-catalog-count aria-live="polite"><strong>%(n)d</strong> references</p>
       </div>
-      <div class="catalog-layout">
-        <details class="catalog-filters-wrap" data-catalog-details>
-          <summary class="catalog-filters-toggle">Filters <span data-catalog-filter-count></span></summary>
-          <div class="catalog-filters" data-catalog-filters></div>
-          <button type="button" class="btn btn-ghost btn-sm btn-block" data-catalog-reset hidden>Reset all filters</button>
-        </details>
-        <div class="catalog-results">
-          <div class="catalog-toolbar">
-            <label class="filter-search">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-              <input type="search" data-catalog-search placeholder="Reference, size, designation…" aria-label="Search %(title_lower)s" />
-            </label>
-            <label class="filter-sort"><span class="kicker">Sort</span>
-              <select data-catalog-sort aria-label="Sort references">
-                <option value="default">Type, then size</option>
-                <option value="d-asc">Diameter ↑</option>
-                <option value="d-desc">Diameter ↓</option>
-                <option value="code">Reference A–Z</option>
-              </select>
-            </label>
-          </div>
+      <div class="catalog-bar">
+        <label class="filter-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="search" data-catalog-search placeholder="Reference, size, designation…" aria-label="Search %(title_lower)s" />
+        </label>
+        <label class="filter-sort"><span class="kicker">Sort</span>
+          <select data-catalog-sort aria-label="Sort references">
+            <option value="default">Type, then size</option>
+            <option value="d-asc">Diameter, small first</option>
+            <option value="d-desc">Diameter, large first</option>
+            <option value="code">Reference A to Z</option>
+          </select>
+        </label>
+      </div>
+      <div class="fbar" data-catalog-filters aria-label="Filters"></div>
+      <div class="catalog-results">
           <div class="catalog-chips"><div class="chip-row" data-catalog-chips></div><button type="button" class="link-btn" data-catalog-reset hidden>Clear all</button></div>
           <div class="ref-table-wrap" data-catalog-table>
             <table class="ref-table">
@@ -346,13 +341,62 @@ def catalog_section(fam, items, counts):
             </table>
           </div>
           <div class="catalog-more" data-catalog-more></div>
-        </div>
       </div>
     </div>
   </div>
 </section>''' % {'mark': GENERATED_MARK, 'tabs': tabs, 'fam': fam, 'one': ft['one'], 'n': len(items),
                  'title_lower': ft['title'].lower(), 'rows': rows}
 
+
+
+FAMILY_LEAD = {
+    'elbows': 'Long-radius butt-weld elbows, cold-formed from seamless or welded pipe. Every reference below is a standard part with its exact size, standard, grade and finish.',
+    'tees': 'Equal butt-weld tees, cold-formed from seamless or welded pipe, to split or merge flow with three identical bores.',
+    'reducers': 'Concentric reducers (EN 10253-1 Form 1 and Form 2, ASME B16.9) and eccentric reducers (ASME B16.9) between two pipe diameters.',
+    'caps': 'Butt-weld caps and dished ends to close a pipe run, to EN 10253-1 and ASME B16.9.',
+}
+
+
+def family_head(fam, items):
+    ft = FAMILY_TEXT[fam]
+    uniq = lambda xs: sorted(set(x for x in xs if x))
+    if 'd1' in items[0]['dims']:
+        d1 = [i['dims']['d1'] for i in items]; d2 = [i['dims']['d2'] for i in items]
+        size = 'Ø %s to %s mm (large end), Ø %s to %s mm (small end)' % (num(min(d1)), num(max(d1)), num(min(d2)), num(max(d2)))
+        walls = [t for i in items for t in (i['dims'].get('t1'), i['dims'].get('t2')) if t]
+    else:
+        ds = [i['dims']['d'] for i in items]
+        size = 'Ø %s to %s mm' % (num(min(ds)), num(max(ds)))
+        walls = [i['dims']['t'] for i in items if 't' in i['dims']]
+    wall = ', '.join((['%s to %s mm' % (num(min(walls)), num(max(walls)))] if walls else []) + uniq(i['dims'].get('sch') for i in items))
+    facts = [('References', str(len(items))), ('Product types', ', '.join(uniq(i['articleEn'] for i in items))),
+             ('Outside diameter', size), ('Wall thickness', wall),
+             ('Standards', ', '.join(uniq(i['f']['norme'] for i in items))), ('Steel grades', ', '.join(uniq(i['nuance'] for i in items)))]
+    mf = uniq(i['typeEn'] for i in items)
+    if mf:
+        facts.append(('Manufacturing', ', '.join(mf)))
+    facts.append(('Finishes', ', '.join(uniq(i['finitionEn'] for i in items))))
+    return '''%(mark)s
+<section class="family-head">
+  <div class="container-wide">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="../">Home</a><span class="sep">/</span><a href="./">Products</a><span class="sep">/</span><span aria-current="page">%(title)s</span></nav>
+    <div class="family-head-grid">
+      <figure class="family-head-media">
+        <img src="../assets/img/products/%(img)s" alt="%(title)s by Le Raccordement" width="800" height="800" data-zoom />
+      </figure>
+      <div class="family-head-body">
+        <h1>Pipe %(lower)s</h1>
+        <p class="lead">%(lead)s</p>
+        <dl class="family-specs">
+%(facts)s
+        </dl>
+        <a class="btn btn-primary" href="#references">Browse the %(n)d references <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>''' % {'mark': GENERATED_MARK, 'title': ft['title'], 'lower': ft['title'].lower(), 'img': FAMILY_IMAGES[fam],
+                    'lead': e(FAMILY_LEAD[fam]), 'n': len(items),
+                    'facts': '\n'.join('          <div><dt>%s</dt><dd>%s</dd></div>' % (k, e(v)) for k, v in facts)}
 
 def family_jsonld(fam, items):
     ft = FAMILY_TEXT[fam]
@@ -390,6 +434,45 @@ def family_tiles(data, counts):
     return '    <div class="family-grid">\n%s\n    </div>' % '\n'.join(out)
 
 
+
+def product_specs(data):
+    """Real specifications of each product type (js/products.js), computed from the
+    catalog references its `articles` prefixes select. Written to js/product-specs.js."""
+    src = read('js/products.js')
+    out = {}
+    for m in re.finditer(r"slug: '([^']+)',\s*articles: \[([^\]]*)\][\s\S]*?category: '([^']+)'", src):
+        slug, arts, cat = m.group(1), re.findall(r"'([^']+)'", m.group(2)), m.group(3)
+        refs = [it for it in data.get(cat, []) if any(it['article'].startswith(a) for a in arts)]
+        if not refs:
+            continue
+        uniq = lambda xs: sorted(set(x for x in xs if x))
+        if 'd1' in refs[0]['dims']:
+            d1 = [r['dims']['d1'] for r in refs]; d2 = [r['dims']['d2'] for r in refs]
+            size = 'Large end Ø %s to %s mm, small end Ø %s to %s mm' % (num(min(d1)), num(max(d1)), num(min(d2)), num(max(d2)))
+            walls = [t for r in refs for t in (r['dims'].get('t1'), r['dims'].get('t2')) if t]
+        else:
+            ds = [r['dims']['d'] for r in refs]
+            size = 'Ø %s to %s mm' % (num(min(ds)), num(max(ds)))
+            walls = [r['dims']['t'] for r in refs if 't' in r['dims']]
+        thickness = (['%s to %s mm' % (num(min(walls)), num(max(walls)))] if walls else []) + uniq(r['dims'].get('sch') for r in refs)
+        out[slug] = {
+            'refCount': len(refs),
+            'sizeRange': size,
+            'standards': uniq(r['f']['norme'] for r in refs),
+            'materials': uniq(r['nuance'] for r in refs),
+            'thickness': thickness,
+            'coating': uniq(r['finitionEn'] for r in refs),
+            'manufacturing': uniq(r['typeEn'] for r in refs),
+            'radius': ' / '.join(uniq(re.search(r'(\d(?:\.\d)?D)$', r['articleEn']).group(1) for r in refs if re.search(r'\dD$', r['articleEn']))) or None,
+        }
+    js = ('/* generated by tools/catalog/build_pages.py from data/catalog, do not edit by hand.\n'
+          '   Real specifications of each product type, applied over js/products.js. */\n'
+          'window.LR_SPECS = %s;\n'
+          '(window.LR_PRODUCTS || []).forEach(function (p) { if (window.LR_SPECS[p.slug]) Object.assign(p, window.LR_SPECS[p.slug]); });\n'
+          % json.dumps(out, ensure_ascii=False, indent=1))
+    write('js/product-specs.js', js)
+    return out
+
 def main():
     data, counts = {}, {}
     for fam in FAMILIES:
@@ -404,6 +487,7 @@ def main():
         page = read(path)
         page = replace_block(page, 'CATALOG', catalog_section(fam, data[fam], counts), path)
         page = replace_block(page, 'JSONLD', family_jsonld(fam, data[fam]), path)
+        page = replace_block(page, 'FAMILYHEAD', family_head(fam, data[fam]), path)
         write(path, page)
 
         # Chrome of the family page, re-based one level deeper
@@ -426,6 +510,7 @@ def main():
             write('products/%s/%s.html' % (fam, it['slug']), ref_page(it, data[fam], top, bottom, head_assets))
             sitemap_urls.append('%s/products/%s/%s.html' % (SITE, fam, it['slug']))
 
+    product_specs(data)
     idx = read('products/index.html')
     write('products/index.html', replace_block(idx, 'FAMILIES', family_tiles(data, counts), 'products/index.html'))
 
