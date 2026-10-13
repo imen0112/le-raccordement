@@ -1538,7 +1538,11 @@ h1, h2, h3, h4 {
   font-weight: 600;
   color: var(--c-ink);
 }
+.field { min-width: 0; }
 .field input, .field select, .field textarea {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   padding: 0.875rem 1rem;
   border: 1px solid var(--c-line-strong);
   border-radius: 10px;
@@ -1558,7 +1562,7 @@ h1, h2, h3, h4 {
   gap: var(--s-4);
   grid-template-columns: 1fr;
 }
-@media (min-width: 720px) { .field-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 720px) { .field-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* ---------- 16. TIMELINE / NUMBERED ---------- */
 .steps {
@@ -1660,8 +1664,6 @@ h1, h2, h3, h4 {
 
 /* Quote summary on cart page */
 .summary {
-  position: sticky;
-  top: 100px;
   background: var(--c-bg-soft);
   border: 1px solid var(--c-line);
   border-radius: var(--radius-lg);
