@@ -316,6 +316,10 @@ h1, h2, h3, h4 {
   width: auto;
 }
 @media (min-width: 900px) { .brand img { height: 64px; } }
+/* Never distort the logo: keep its ratio and let it shrink as a whole */
+.brand { flex-shrink: 0; }
+.brand img { width: auto; object-fit: contain; }
+@media (min-width: 1024px) and (max-width: 1279px) { .brand img { height: 44px; } }
 .nav { display: none; }
 @media (min-width: 1024px) {
   .nav {
@@ -1859,11 +1863,15 @@ h1, h2, h3, h4 {
 @media (min-width: 720px) { .family-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 1100px) { .family-grid { grid-template-columns: repeat(4, 1fr); } }
 .family-tile {
-  display: flex; flex-direction: column; gap: var(--s-2);
-  padding: var(--s-6); background: #fff; border: 1px solid var(--c-line); border-radius: var(--radius);
+  display: flex; flex-direction: column; overflow: hidden;
+  background: #fff; border: 1px solid var(--c-line); border-radius: var(--radius);
   color: var(--c-text); transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
 }
 .family-tile:hover { border-color: var(--c-navy-600); box-shadow: var(--shadow-sm); }
+.family-tile-media { display: block; aspect-ratio: 4 / 3; background: #fff; border-bottom: 1px solid var(--c-line); }
+.family-tile-media img { width: 100%; height: 100%; object-fit: contain; padding: var(--s-6); transition: transform var(--t) var(--ease); }
+.family-tile:hover .family-tile-media img { transform: scale(1.04); }
+.family-tile-body { display: flex; flex-direction: column; gap: var(--s-2); padding: var(--s-6); flex: 1; }
 .family-tile-name { font-family: var(--ff-display); font-size: var(--fs-24); font-weight: 600; color: var(--c-ink); letter-spacing: -0.015em; }
 .family-tile-count { font-size: var(--fs-14); color: var(--c-muted); }
 .family-tile-count strong { color: var(--c-ink); font-family: var(--ff-mono); }
@@ -1993,7 +2001,8 @@ h1, h2, h3, h4 {
 /* Phones: keep the logo visible, the quote button stays in the mobile menu */
 @media (max-width: 539px) {
   .header-actions > .btn-primary { display: none; }
-  .brand { flex-shrink: 0; }
+  .brand img { height: 36px; }
+  .header-actions { gap: var(--s-2); }
 }
 
 /* Home: spec line, proof list, industries (replace metric row and icon-card grids) */
