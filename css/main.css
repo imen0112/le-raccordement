@@ -1957,9 +1957,12 @@ h1, h2, h3, h4 {
 .ref-buy-text { font-size: var(--fs-14); color: var(--c-muted); }
 .ref-buy-qty { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); font-size: var(--fs-14); font-weight: 500; color: var(--c-ink); }
 .ref-related { border-top: 1px solid var(--c-line); }
-.ref-links { display: grid; gap: 2px var(--s-6); grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); margin-top: var(--s-3); font-size: var(--fs-14); }
-.ref-links a { display: block; padding: 6px 0; border-bottom: 1px solid var(--c-line); color: var(--c-text); }
+.ref-links { display: grid; gap: 0 var(--s-8); grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); margin-top: var(--s-3); font-size: var(--fs-14); }
+.ref-links li { display: flex; align-items: center; gap: var(--s-3); padding: 8px 0; border-bottom: 1px solid var(--c-line); }
+.ref-links a { flex: 1; min-width: 0; color: var(--c-text); }
 .ref-links a:hover { color: var(--c-navy-700); }
+.ref-links-actions { display: flex; align-items: center; gap: var(--s-2); flex-shrink: 0; }
+@media (max-width: 539px) { .ref-links li { flex-wrap: wrap; } .ref-links-actions { width: 100%; justify-content: flex-end; } }
 .ref-links .mono { color: var(--c-navy-700); font-weight: 600; margin-right: 6px; }
 
 /* Cart & quote form */
@@ -2266,3 +2269,15 @@ a[href^="mailto:"] { overflow-wrap: anywhere; }
 /* Clients: logos link to the client's website */
 .client-card { transition: border-color var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
 .client-card:hover { border-color: var(--c-line-strong); box-shadow: var(--shadow); transform: translateY(-2px); }
+
+/* Small laptops (1024–1279 px): menu, FR/EN, search, quote list and contact button on one line */
+.nav a { white-space: nowrap; }
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .header-inner { gap: var(--s-4); }
+  .nav { gap: 0; }
+  .nav a { padding: 8px 9px; font-size: var(--fs-14); }
+  .header-actions { gap: 6px; }
+  .header-actions .search-btn, .header-actions .cart-btn { width: 40px; height: 40px; }
+  .lang-toggle a { padding: 5px 8px; }
+  .header-actions > .btn-primary { padding-inline: 0.875rem; }
+}

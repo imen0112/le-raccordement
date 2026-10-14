@@ -10,6 +10,7 @@ Modern, SEO-ready static website for **Le Raccordement** — manufacturer of sea
 - Catalog: 558 references imported from the official Excel article files, one static page per reference, interdependent filters on each family page
 - Quote list: localStorage-backed, no prices; requests are emailed to commande@leraccordement.com by the quote API in [`server/quote-api`](server/quote-api/README.md) (Railway + Resend)
 - Contact form: still opens the visitor's mail client
+- First visit: French or English chosen from the browser language ([`js/lang.js`](js/lang.js), French for fr/ar browsers); the FR/EN switch is remembered
 - Reference search in the header of every page ([`js/search.js`](js/search.js), magnifier button or `/` key)
 - Two languages: **French at the site root** (main language, product wording taken from the Excel files) and **English under `/en/`**, same tree, linked by the FR/EN switch and `hreflang`
 

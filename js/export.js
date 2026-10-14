@@ -85,7 +85,7 @@
       <table><thead><tr>${headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>
       ${rows.map(r => `<tr>${r.map((v, i) => `<td class="${i === 0 ? 'code' : typeof v === 'number' ? 'num' : ''}">${esc(v)}</td>`).join('')}</tr>`).join('')}
       </tbody></table>
-      <footer>${T('Prices on request. Data from the Le Raccordement article files. Dimensions in millimetres.', 'Prix sur demande. Données issues des fichiers articles Le Raccordement. Dimensions en millimètres.')}</footer>
+      <footer>${T('Prices on request.', 'Prix sur demande.')}</footer>
       <script>window.onload = () => { setTimeout(() => window.print(), 300); };<\/script>
     </body></html>`);
     w.document.close();

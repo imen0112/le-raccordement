@@ -49,6 +49,12 @@ window.LR_T = window.LR_T || ((en) => en);
     });
   }
 
+  // FR/EN switch: remember the visitor's choice (js/lang.js no longer redirects them)
+  document.addEventListener('click', e => {
+    const a = e.target.closest('[data-lang-toggle] a[hreflang]');
+    if (a) { try { localStorage.setItem('lr_lang', a.getAttribute('hreflang')); } catch (err) { /* storage blocked */ } }
+  });
+
   // Year
   document.querySelectorAll('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
 

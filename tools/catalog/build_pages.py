@@ -26,7 +26,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261014o'
+ASSET_V = '20261014p'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 LANGS = ['fr', 'en']    # French first (site root), English under en/
 LG = 'fr'               # language being generated, set in main()
@@ -279,7 +279,7 @@ def compat_section(it, compat):
       <tbody>%s</tbody>
     </table></div>
   </div>
-</section>''' % (t('Compatible fittings for the same pipe', 'Raccords compatibles pour le même tube'),
+</section>''' % (t('Compatible fittings for the same pipe', 'Raccords compatibles sur le même tube'),
                  e(t('Same pipe (%s), same standard, grade and finish: %s, %s, %s. %d references.',
                      'Même tube (%s), même norme, même nuance et même finition : %s, %s, %s. %d références.') % (
                      size, norme_label(it['norme']), it['nuance'], tx(it, 'finish').lower(), len(compat))),
@@ -309,11 +309,20 @@ def ref_page(it, items, chrome_top, chrome_bottom, head_assets, all_items=()):
         same_size = [x for x in items if x['id'] != it['id'] and x['dims'].get('d') == d['d'] and x not in same_series]
 
     compat = compatible(it, all_items)
-    compat_public = {x['id']: {k: x[k] for k in PUBLIC_KEYS} for x in compat}
+    # every reference that can be added from this page (compatible fittings, other sizes, other versions)
+    compat_public = {x['id']: {k: x[k] for k in PUBLIC_KEYS} for x in compat + same_series + same_size}
 
     def ref_links(lst, label_fn):
-        return ''.join('<li><a href="%s.html"><span class="mono">%s</span> <span>%s</span></a></li>' % (
-            e(x['slug']), e(x['code']), e(label_fn(x))) for x in lst)
+        return ''.join(
+            '<li data-ref-row><a href="%(slug)s.html"><span class="mono">%(code)s</span> <span>%(label)s</span></a>'
+            '<span class="ref-links-actions"><span class="qty qty-sm"><button type="button" data-qty="dec" aria-label="%(dec)s">−</button>'
+            '<input type="text" inputmode="numeric" value="50" data-row-qty aria-label="%(qfor)s %(code)s"/>'
+            '<button type="button" data-qty="inc" aria-label="%(inc)s">+</button></span>'
+            '<button type="button" class="btn btn-dark btn-sm" data-add-ref="%(id)s">%(add)s<span class="sr-only"> %(code)s %(tolist)s</span></button></span></li>' % {
+                'slug': e(x['slug']), 'code': e(x['code']), 'label': e(label_fn(x)), 'id': e(x['id']),
+                'dec': t('Decrease', 'Diminuer'), 'inc': t('Increase', 'Augmenter'), 'qfor': t('Quantity for', 'Quantité pour'),
+                'add': t('Add', 'Ajouter'), 'tolist': t('to quote list', 'à la liste de devis')}
+            for x in lst)
 
     article_q = 'article=' + e(quote_plus((it['ffr'] if LG == 'fr' else it['f'])['article']))
     jsonld = {
@@ -352,6 +361,7 @@ def ref_page(it, items, chrome_top, chrome_bottom, head_assets, all_items=()):
 <meta property="og:locale" content="%(locale)s" />
 %(head_assets)s
 <script type="application/ld+json">%(jsonld)s</script>
+<script src="%(up)sjs/lang.js?v=%(v)s"></script>
 </head>
 <body class="ref-page">
 %(top)s
@@ -397,7 +407,6 @@ def ref_page(it, items, chrome_top, chrome_bottom, head_assets, all_items=()):
 %(specrows)s
       </tbody>
     </table>
-    <p class="catalog-note mt-4">%(t_note)s</p>
   </div>
 </section>
 
@@ -435,8 +444,6 @@ def ref_page(it, items, chrome_top, chrome_bottom, head_assets, all_items=()):
         't_add': t('Add to quote list', 'Ajouter à la liste de devis'), 't_quote': t('Request a quote', 'Demander un devis'),
         't_reply': t('We reply by email within one business day.', 'Nous répondons par e-mail sous un jour ouvré.'),
         't_tech': t('Technical data', 'Données techniques'),
-        't_note': t('Data from the Le Raccordement article file. Dimensions in millimetres. Certificates (EN 10204 3.1 / 2.2) and packaging on request.',
-                    'Données issues du fichier articles Le Raccordement. Dimensions en millimètres. Certificats (EN 10204 3.1 / 2.2) et emballage sur demande.'),
         'keyspecs': '\n'.join('          <div><dt>%s</dt><dd>%s</dd></div>' % r for r in key_specs(it)),
         'specrows': '\n'.join('          <tr><th scope="row">%s</th><td>%s</td></tr>' % r for r in spec_rows(it)),
         'series': ('    <h2 class="h-3">%s</h2>\n    <ul class="ref-links">%s</ul>' % (
