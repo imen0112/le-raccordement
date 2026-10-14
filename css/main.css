@@ -2186,3 +2186,12 @@ button.cert-feature-media { width: 100%; padding: 0; border: 0; border-bottom: 1
 .range-empty { color: var(--c-line-strong); }
 .catalog-export { display: inline-flex; align-items: center; gap: var(--s-2); }
 .catalog-export .kicker { font-size: 11px; color: var(--c-muted); }
+
+/* Gallery navigation */
+.lightbox-nav { position: fixed; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border-radius: 999px; background: rgba(255,255,255,0.92); color: var(--c-ink); font-size: 32px; line-height: 1; box-shadow: var(--shadow-md); z-index: 2; }
+.lightbox-nav:hover { background: #fff; }
+.lightbox-prev { left: 16px; }
+.lightbox-next { right: 16px; }
+.lightbox-count { margin-top: var(--s-3); color: rgba(255,255,255,0.85); font-family: var(--ff-mono); font-size: var(--fs-13); text-align: center; }
+.lightbox-count:empty { display: none; }
+@media (max-width: 599px) { .lightbox-nav { width: 42px; height: 42px; font-size: 26px; } .lightbox-prev { left: 6px; } .lightbox-next { right: 6px; } }

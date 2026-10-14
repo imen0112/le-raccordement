@@ -81,47 +81,65 @@
   });
 })();
 
-/* Lightbox: click (or Enter) on a product or factory photo to see it large */
+/* Lightbox for the factory gallery: click a photo to see it large, arrows to browse them all */
 (function () {
-  // Only the factory gallery enlarges; product photos stay as they are
   const SEL = '.mosaic img';
-  let dlg;
+  let dlg, list = [], idx = 0;
   function ensure() {
     if (dlg) return dlg;
     dlg = document.createElement('dialog');
     dlg.className = 'lightbox';
-    dlg.innerHTML = '<button type="button" class="lightbox-close" aria-label="Close">×</button><img alt="" /><p class="lightbox-caption"></p>';
+    dlg.setAttribute('aria-label', 'Photo gallery');
+    dlg.innerHTML = '<button type="button" class="lightbox-close" aria-label="Close">×</button>' +
+      '<button type="button" class="lightbox-nav lightbox-prev" data-dir="-1" aria-label="Previous photo">‹</button>' +
+      '<img alt="" draggable="false" />' +
+      '<button type="button" class="lightbox-nav lightbox-next" data-dir="1" aria-label="Next photo">›</button>' +
+      '<p class="lightbox-count" aria-live="polite"></p>';
     document.body.appendChild(dlg);
-    dlg.addEventListener('click', e => { if (e.target === dlg || e.target.closest('.lightbox-close')) dlg.close(); });
+    dlg.addEventListener('click', e => {
+      if (e.target === dlg || e.target.closest('.lightbox-close')) { dlg.close(); return; }
+      const nav = e.target.closest('.lightbox-nav');
+      if (nav) go(+nav.dataset.dir);
+    });
+    dlg.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') go(1);
+      if (e.key === 'ArrowLeft') go(-1);
+    });
     return dlg;
   }
-  function open(img) {
-    const d = ensure();
-    if (typeof d.showModal !== 'function') { window.open(img.currentSrc || img.src, '_blank'); return; }
-    const big = d.querySelector('img');
+  function show() {
+    const img = list[idx], big = dlg.querySelector('img');
     big.src = img.currentSrc || img.src;
     big.alt = img.alt || '';
-    d.querySelector('.lightbox-caption').textContent = img.alt || '';
-    d.showModal();
+    dlg.querySelector('.lightbox-count').textContent = list.length > 1 ? (idx + 1) + ' / ' + list.length : '';
+    dlg.querySelectorAll('.lightbox-nav').forEach(b => { b.hidden = list.length < 2; });
+    const next = list[(idx + 1) % list.length]; if (next) { const p = new Image(); p.src = next.currentSrc || next.src; }
+  }
+  function go(d) { idx = (idx + d + list.length) % list.length; show(); }
+  function open(img) {
+    ensure();
+    list = Array.from(document.querySelectorAll(SEL));
+    idx = Math.max(0, list.indexOf(img));
+    show();
+    if (typeof dlg.showModal === 'function') dlg.showModal();
   }
   function mark() {
     document.querySelectorAll(SEL).forEach(img => {
-      if (img.closest('a') || img.dataset.zoomReady) return;
+      if (img.dataset.zoomReady) return;
       img.dataset.zoomReady = '1';
       img.tabIndex = 0;
       img.setAttribute('role', 'button');
-      img.setAttribute('aria-label', 'Enlarge photo' + (img.alt ? ': ' + img.alt : ''));
+      img.setAttribute('aria-label', 'Open the photo gallery');
     });
   }
   document.addEventListener('click', e => {
     const img = e.target.closest(SEL);
-    if (img && !img.closest('a') && img.tagName === 'IMG') { e.preventDefault(); open(img); }
+    if (img && img.tagName === 'IMG') { e.preventDefault(); open(img); }
   });
   document.addEventListener('keydown', e => {
-    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches(SEL) && !e.target.closest('a')) { e.preventDefault(); open(e.target); }
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches(SEL)) { e.preventDefault(); open(e.target); }
   });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mark); else mark();
-  window.addEventListener('load', mark);
 })();
 
 /* Background videos: loaded only on large screens, without data saver or reduced motion,
@@ -192,7 +210,7 @@
       stage.className = 'cert-viewer-stage is-grid';
       stage.innerHTML = doc.pages.map((src, i) =>
         `<button type="button" class="cert-page" data-page="${i}" aria-label="Page ${i + 1}, view alone"><img src="${src}" alt="${doc.title}, page ${i + 1}" draggable="false" /><span>${i + 1}</span></button>`).join('');
-      bar.innerHTML = `<span>${doc.title} · ${doc.pages.length} pages · click a page to see it alone</span>`;
+      bar.innerHTML = '';
     } else {
       const i = Math.max(0, idx);
       stage.className = 'cert-viewer-stage is-single';
@@ -202,7 +220,7 @@
           `<span>Page ${i + 1} / ${doc.pages.length}</span>` +
           `<button type="button" class="cert-nav" data-dir="1" aria-label="Next page"${i === doc.pages.length - 1 ? ' disabled' : ''}>›</button>` +
           `<button type="button" class="cert-all" data-all>All pages</button>`
-        : `<span>${doc.title}</span>`;
+        : '';
     }
   }
   document.addEventListener('click', e => {

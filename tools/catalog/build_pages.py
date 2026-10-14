@@ -22,7 +22,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261014h'
+ASSET_V = '20261014i'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 FAMILY_TEXT = {
     'elbows':   {'title': 'Elbows',   'one': 'elbow',   'lead': '45° and 90° butt-weld elbows, 1.5D and 3D radius'},
@@ -302,7 +302,6 @@ def ref_page(it, items, chrome_top, chrome_bottom, head_assets, all_items=()):
     <div class="ref-product">
       <figure class="ref-media">
         <img src="../../assets/img/products/%(img)s" alt="%(imgalt)s" width="800" height="800" fetchpriority="high" />
-        <figcaption>Photo of the product type. Dimensions and finish as per the reference.</figcaption>
       </figure>
       <div class="ref-info">
         <span class="eyebrow">%(article)s</span>
