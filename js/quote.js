@@ -144,3 +144,21 @@
     }
   });
 })();
+
+/* Quote list export (Excel / printable page) for the buyer's internal approval */
+(function () {
+  document.addEventListener('click', function (e) {
+    const b = e.target.closest('[data-cart-export]');
+    if (!b || !window.LR_EXPORT || !window.LR_CART) return;
+    const lines = window.LR_CART.lines();
+    if (!lines.length) return;
+    const headers = ['Reference', 'Designation', 'Dimensions (mm)', 'Standard', 'Steel grade', 'Manufacturing', 'Finish', 'Quantity (pcs)'];
+    const rows = lines.map(l => [l.code, l.designation, (l.detail && l.detail.dims) || '', (l.detail && l.detail.norme) || '',
+      (l.detail && l.detail.nuance) || '', (l.detail && l.detail.type) || '', (l.detail && l.detail.finition) || '', l.qty]);
+    const units = lines.reduce((s, l) => s + l.qty, 0);
+    const subtitle = lines.length + ' references · ' + units + ' pieces · prices on request';
+    const stamp = new Date().toISOString().slice(0, 10);
+    if (b.getAttribute('data-cart-export') === 'xlsx') window.LR_EXPORT.excel('le-raccordement-quote-list-' + stamp + '.xlsx', 'Quote list', headers, rows, 'Le Raccordement · Quote list · ' + subtitle);
+    else window.LR_EXPORT.print('Quote list', subtitle, headers, rows);
+  });
+})();

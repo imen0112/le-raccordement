@@ -156,46 +156,60 @@
   document.querySelectorAll('video').forEach(v => { v.setAttribute('controlslist', 'nodownload'); v.disablePictureInPicture = true; });
 })();
 
-/* Certificate viewer: read the certificates large, page by page, without a download link */
+/* Certificate viewer: whole pages fit on screen, multi-page reports shown all at once
+   (click a page to see it alone). No download link; saving is blocked site-wide. */
 (function () {
   const certs = window.LR_CERTS;
   if (!certs) return;
-  let dlg, list = [], idx = 0;
+  let dlg, doc = null, idx = -1;
   function build() {
     dlg = document.createElement('dialog');
     dlg.className = 'lightbox cert-viewer';
     dlg.setAttribute('aria-label', 'Certificate viewer');
     dlg.innerHTML = '<button type="button" class="lightbox-close" aria-label="Close">×</button>' +
-      '<div class="cert-viewer-stage"><img alt="" draggable="false" /></div>' +
-      '<div class="cert-viewer-bar"><button type="button" class="cert-nav" data-dir="-1" aria-label="Previous page">‹</button>' +
-      '<span class="cert-viewer-count" aria-live="polite"></span>' +
-      '<button type="button" class="cert-nav" data-dir="1" aria-label="Next page">›</button></div>';
+      '<div class="cert-viewer-stage"></div>' +
+      '<div class="cert-viewer-bar"></div>';
     document.body.appendChild(dlg);
     dlg.addEventListener('click', e => {
-      if (e.target === dlg || e.target.closest('.lightbox-close')) dlg.close();
-      const nav = e.target.closest('.cert-nav');
-      if (nav) go(+nav.dataset.dir);
+      if (e.target === dlg || e.target.closest('.lightbox-close')) { dlg.close(); return; }
+      const page = e.target.closest('[data-page]');
+      if (page) { idx = +page.dataset.page; render(); return; }
+      const nav = e.target.closest('[data-dir]');
+      if (nav) { idx = Math.min(doc.pages.length - 1, Math.max(0, idx + +nav.dataset.dir)); render(); return; }
+      if (e.target.closest('[data-all]')) { idx = -1; render(); }
     });
     dlg.addEventListener('keydown', e => {
-      if (e.key === 'ArrowRight') go(1);
-      if (e.key === 'ArrowLeft') go(-1);
+      if (idx < 0 || doc.pages.length < 2) return;
+      if (e.key === 'ArrowRight') { idx = Math.min(doc.pages.length - 1, idx + 1); render(); }
+      if (e.key === 'ArrowLeft') { idx = Math.max(0, idx - 1); render(); }
     });
   }
-  function show() {
-    const img = dlg.querySelector('img');
-    img.src = list.pages[idx];
-    img.alt = list.title + (list.pages.length > 1 ? ', page ' + (idx + 1) : '');
-    dlg.querySelector('.cert-viewer-count').textContent = list.pages.length > 1 ? (idx + 1) + ' / ' + list.pages.length : list.title;
-    dlg.querySelectorAll('.cert-nav').forEach(b => { b.hidden = list.pages.length < 2; });
-    dlg.querySelector('.cert-viewer-stage').scrollTop = 0;
-    if (list.pages[idx + 1]) { const pre = new Image(); pre.src = list.pages[idx + 1]; }
+  function render() {
+    const stage = dlg.querySelector('.cert-viewer-stage');
+    const bar = dlg.querySelector('.cert-viewer-bar');
+    const multi = doc.pages.length > 1;
+    if (multi && idx < 0) {
+      stage.className = 'cert-viewer-stage is-grid';
+      stage.innerHTML = doc.pages.map((src, i) =>
+        `<button type="button" class="cert-page" data-page="${i}" aria-label="Page ${i + 1}, view alone"><img src="${src}" alt="${doc.title}, page ${i + 1}" draggable="false" /><span>${i + 1}</span></button>`).join('');
+      bar.innerHTML = `<span>${doc.title} · ${doc.pages.length} pages · click a page to see it alone</span>`;
+    } else {
+      const i = Math.max(0, idx);
+      stage.className = 'cert-viewer-stage is-single';
+      stage.innerHTML = `<img src="${doc.pages[i]}" alt="${doc.title}${multi ? ', page ' + (i + 1) : ''}" draggable="false" />`;
+      bar.innerHTML = multi
+        ? `<button type="button" class="cert-nav" data-dir="-1" aria-label="Previous page"${i === 0 ? ' disabled' : ''}>‹</button>` +
+          `<span>Page ${i + 1} / ${doc.pages.length}</span>` +
+          `<button type="button" class="cert-nav" data-dir="1" aria-label="Next page"${i === doc.pages.length - 1 ? ' disabled' : ''}>›</button>` +
+          `<button type="button" class="cert-all" data-all>All pages</button>`
+        : `<span>${doc.title}</span>`;
+    }
   }
-  function go(d) { idx = Math.min(list.pages.length - 1, Math.max(0, idx + d)); show(); }
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-cert-viewer]');
     if (!b || !certs[b.dataset.certViewer]) return;
     if (!dlg) build();
-    list = certs[b.dataset.certViewer]; idx = 0; show();
+    doc = certs[b.dataset.certViewer]; idx = -1; render();
     dlg.showModal();
   });
 })();

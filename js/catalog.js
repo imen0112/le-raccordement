@@ -149,6 +149,20 @@
     syncUrl(pushUrl);
   }
 
+  function exportList(kind) {
+    const list = sorted(F.filter(items, state.selection, state.query));
+    const base = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
+    const headers = ['Reference', 'Designation', 'Dimensions (mm)', 'Standard', 'Steel grade', 'Manufacturing', 'Finish', 'Web page'];
+    const rows = list.map(it => [it.code, it.designationEn, it.dimsLabel, it.f.norme, it.nuance, it.typeEn || '', it.finitionEn, base + family + '/' + it.slug + '.html']);
+    const famName = family.charAt(0).toUpperCase() + family.slice(1);
+    const filters = Object.keys(state.selection).map(k => F.LABELS[k] + ': ' + state.selection[k].map(v => F.valueLabel(k, v)).join(', '));
+    if (state.query) filters.push('Search: ' + state.query);
+    const subtitle = list.length + ' references' + (filters.length ? ' · ' + filters.join(' · ') : ' · no filter');
+    const stamp = new Date().toISOString().slice(0, 10);
+    if (kind === 'xlsx') window.LR_EXPORT.excel(`le-raccordement-${family}-${stamp}.xlsx`, famName, headers, rows, `Le Raccordement · ${famName} · ${subtitle}`);
+    else window.LR_EXPORT.print(`${famName}: reference list`, subtitle, headers.slice(0, 7), rows.map(r => r.slice(0, 7)));
+  }
+
   function syncUrl(push) {
     const p = F.toParams(state.selection, state.query);
     if (state.sort !== 'default') p.set('sort', state.sort);
@@ -202,6 +216,8 @@
       return;
     }
     if (e.target.closest('[data-catalog-more-btn]')) { state.shown += PAGE; render(false); }
+    const ex = e.target.closest('[data-export]');
+    if (ex && window.LR_EXPORT && items.length) exportList(ex.getAttribute('data-export'));
   });
 
   if (BAR) {
