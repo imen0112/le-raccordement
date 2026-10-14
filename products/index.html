@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../css/main.css?v=20261014n" />
+<link rel="stylesheet" href="../css/main.css?v=20261014o" />
 
 <script type="application/ld+json">
 {
@@ -77,7 +77,6 @@
   </div>
   <div class="mega-foot">
     <a href="./">Voir tout le catalogue →</a>
-    <a href="all.html">Devis rapide multi-produits →</a>
   </div>
 </div></span>
       <a href="../certifications.html">Qualité</a>
@@ -86,6 +85,7 @@
     </nav>
     <div class="header-actions">
       <div class="lang-toggle" role="group" aria-label="Langue" data-lang-toggle><a href="./" class="active" aria-current="true" lang="fr">FR</a><a href="../en/products/" hreflang="en" lang="en" title="English version">EN</a></div>
+      <button class="search-btn" type="button" data-open-search aria-label="Rechercher une référence" title="Rechercher une référence"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
       <button class="cart-btn" data-open-cart aria-label="Ouvrir la liste de devis">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         <span class="cart-badge" aria-live="polite">0</span>
@@ -122,7 +122,11 @@
   <div class="container-wide">
     <nav class="breadcrumb" aria-label="Fil d’Ariane"><a href="../">Accueil</a><span class="sep">/</span><span aria-current="page">Produits</span></nav>
     <h1>Le catalogue complet.</h1>
-    <p class="lead">Quatre familles de raccords à souder bout à bout, chaque référence avec sa désignation complète, filtrable par dimension, norme, nuance et finition. Choisissez vos références, indiquez les quantités et demandez un devis en une seule fois.</p>
+    <p class="lead">Quatre familles de raccords à souder bout à bout. Chaque référence figure avec sa désignation complète et se filtre par dimension, norme, nuance et finition. Sélectionnez, indiquez vos quantités, et demandez votre devis en une seule fois.</p>
+    <button type="button" class="search-trigger" data-open-search>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <span>Rechercher une référence, une dimension, un produit…</span><span class="search-trigger-hint">ex. C3S21N, 60,3, RC à souder 88,9, galvanisé</span>
+    </button>
   </div>
 </section>
 
@@ -174,14 +178,6 @@
     </div>
 <!-- FAMILIES:END -->
 
-    <div class="ref-finder" id="ref-finder">
-      <label class="ref-finder-label" for="ref-finder-input">Vous connaissez déjà la référence ou la dimension ?</label>
-      <div class="filter-search ref-finder-search">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        <input type="search" id="ref-finder-input" placeholder="ex. C3S21N, 60,3, RC 88,9, galvanisé…" autocomplete="off" />
-      </div>
-      <div id="ref-finder-results" aria-live="polite"></div>
-    </div>
   </div>
 </section>
 
@@ -266,7 +262,7 @@
   <div class="container-wide">
     <div class="footer-grid footer">
       <div class="footer-brand">
-        <img src="../assets/img/logo/logo.png" alt="Le Raccordement" />
+        <a href="../" class="footer-logo" aria-label="Accueil Le Raccordement"><img src="../assets/img/logo/logo.png" alt="" /></a>
         <p style="font-size:var(--fs-14); color:rgba(255,255,255,0.65); max-width:36ch">Premier fabricant d’Afrique du Nord de raccords à souder bout à bout, sans soudure et soudés. Certifié ISO 9001 et Bureau Veritas.</p>
       </div>
       <div><h4>Produits</h4><ul>
@@ -316,10 +312,10 @@
   </div>
 </aside>
 
-<script src="../js/i18n.js?v=20261014n"></script>
-<script src="../js/products.js?v=20261014n"></script>
-<script src="../js/cart.js?v=20261014n"></script>
-<script src="../js/main.js?v=20261014n"></script>
+<script src="../js/i18n.js?v=20261014o"></script>
+<script src="../js/products.js?v=20261014o"></script>
+<script src="../js/cart.js?v=20261014o"></script>
+<script src="../js/main.js?v=20261014o"></script><script src="../js/search.js?v=20261014o"></script>
 <script>
   /* Range table tabs (EN / ASME) */
   document.addEventListener('click', function (e) {
@@ -328,41 +324,6 @@
     document.querySelectorAll('[data-range-tab]').forEach(b => b.setAttribute('aria-selected', b === t ? 'true' : 'false'));
     document.querySelectorAll('.range-panel').forEach(p => { p.hidden = p.id !== 'range-panel-' + t.dataset.rangeTab; });
   });
-</script>
-<script src="../js/facets.js?v=20261014n"></script>
-<script>
-  /* Reference finder across the four families (loads the JSON on first use) */
-  (function () {
-    const input = document.getElementById('ref-finder-input');
-    const out = document.getElementById('ref-finder-results');
-    const F = window.LR_FACETS;
-    const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    let all = null, loading = null, t;
-    function load() {
-      if (!loading) loading = Promise.all(['elbows', 'tees', 'reducers', 'caps'].map(f => fetch(`../data/catalog/${f}.json?v=${window.LR_DATA_V || ''}`).then(r => r.json())))
-        .then(list => { all = [].concat(...list.map(d => d.items)); window.LR_REF_INDEX = window.LR_REF_INDEX || {}; all.forEach(it => { window.LR_REF_INDEX[it.id] = it; }); });
-      return loading;
-    }
-    function run() {
-      const q = input.value.trim();
-      if (q.length < 2) { out.innerHTML = ''; return; }
-      load().then(() => {
-        const hits = all.filter(it => F.matchesQuery(it, q));
-        if (!hits.length) { out.innerHTML = `<p class="catalog-note">Aucune référence ne correspond à « ${esc(q)} ».</p>`; return; }
-        const shown = hits.slice(0, 25);
-        out.innerHTML = `<p class="catalog-note"><strong>${hits.length}</strong> référence${hits.length > 1 ? 's correspondent' : ' correspond'}${hits.length > 25 ? ' (les 25 premières sont affichées, affinez votre recherche)' : ''}.</p>
-          <div class="ref-table-wrap"><table class="ref-table"><thead><tr><th scope="col">Référence</th><th scope="col">Désignation</th><th scope="col">Famille</th><th scope="col">Quantité (min. 50)</th></tr></thead><tbody>
-          ${shown.map(it => `<tr data-ref-row><td data-label="Référence" class="ref-code"><a href="${it.family}/${it.slug}.html">${esc(it.code)}</a></td>
-            <td data-label="Désignation" class="ref-desig"><a class="ref-desig-link" href="${it.family}/${it.slug}.html">${esc(it.designationDisplay)}</a></td>
-            <td data-label="Famille"><a href="${it.family}.html">${esc(window.LR_FAMILY(it.family))}</a></td>
-            <td data-label="Quantité" class="ref-actions"><div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="Diminuer">−</button><input type="text" inputmode="numeric" value="50" data-row-qty aria-label="Quantité pour ${esc(it.code)}"/><button type="button" data-qty="inc" aria-label="Augmenter">+</button></div>
-            <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(it.id)}">Ajouter<span class="sr-only"> ${esc(it.code)}</span></button>
-            <a class="btn btn-ghost btn-sm ref-details" href="${it.family}/${it.slug}.html">Détails<span class="sr-only"> et raccords compatibles</span></a></td></tr>`).join('')}
-          </tbody></table></div>`;
-      }).catch(() => { out.innerHTML = '<p class="catalog-note">La recherche est momentanément indisponible, ouvrez une famille ci-dessus.</p>'; });
-    }
-    input.addEventListener('input', () => { clearTimeout(t); t = setTimeout(run, 180); });
-  })();
 </script>
 </body>
 </html>

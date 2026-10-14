@@ -10,6 +10,7 @@ Modern, SEO-ready static website for **Le Raccordement** — manufacturer of sea
 - Catalog: 558 references imported from the official Excel article files, one static page per reference, interdependent filters on each family page
 - Quote list: localStorage-backed, no prices; requests are emailed to commande@leraccordement.com by the quote API in [`server/quote-api`](server/quote-api/README.md) (Railway + Resend)
 - Contact form: still opens the visitor's mail client
+- Reference search in the header of every page ([`js/search.js`](js/search.js), magnifier button or `/` key)
 - Two languages: **French at the site root** (main language, product wording taken from the Excel files) and **English under `/en/`**, same tree, linked by the FR/EN switch and `hreflang`
 
 ## Pages
@@ -20,7 +21,7 @@ French pages are at the root; each English page is the same path under `/en/` (e
 | --- | --- |
 | `/` | Home — aerial hero video, product categories, factory mosaic, capabilities, industries, certifications strip, CTA |
 | `/about.html` | Inside the plant — mission, numbers, 8-step process, factory gallery |
-| `/products/` | The four families, reference finder, product-type overview |
+| `/products/` | The four families, range table, search entry point |
 | `/products/elbows.html` (tees, reducers, caps) | Family page — every reference, filters, search, add to quote list |
 | `/products/<family>/<code>.html` | One technical page per reference (generated) |
 | `/products/product.html?slug=…` | Product-type page (geometry, materials, applications + its catalog references) |

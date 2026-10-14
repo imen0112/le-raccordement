@@ -26,7 +26,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261014n'
+ASSET_V = '20261014o'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 LANGS = ['fr', 'en']    # French first (site root), English under en/
 LG = 'fr'               # language being generated, set in main()
@@ -416,6 +416,7 @@ def ref_page(it, items, chrome_top, chrome_bottom, head_assets, all_items=()):
 <script src="%(up)sjs/products.js?v=%(v)s"></script>
 <script src="%(up)sjs/cart.js?v=%(v)s"></script>
 <script src="%(up)sjs/main.js?v=%(v)s"></script>
+<script src="%(up)sjs/search.js?v=%(v)s"></script>
 </body>
 </html>
 ''' % {

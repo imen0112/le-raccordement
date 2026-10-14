@@ -203,18 +203,18 @@ window.LR_byCategory = function(catSlug) {
   const FR = {
     'elbow-90-1-5d': {
       name: 'Coude à souder 90° 1.5D', categoryLabel: 'Coudes',
-      short: 'Coude 90° grand rayon, rayon de cintrage 1.5D, sans soudure, selon ASME B16.9 en A234 WPB.',
+      short: 'Coude 90° grand rayon 1.5D, sans soudure, selon ASME B16.9 en A234 WPB.',
       description: 'Coude 90° grand rayon (LR) 1.5D pour réseaux de tuyauterie soudés bout à bout. Formé à froid à partir de tube sans soudure en A234 WPB selon ASME B16.9, épaisseur STD ou XS, finition peinte.'
     },
     'elbow-90-3d': {
       name: 'Coude à souder 90° 3D', categoryLabel: 'Coudes',
       short: 'Coude 90° de rayon 3D, sans soudure ou soudé, selon EN 10253-1 en S235.',
-      description: 'Coude 90° très grand rayon 3D pour les lignes qui demandent moins de turbulences et de pertes de charge. Formé à froid à partir de tube sans soudure ou soudé en S235 selon EN 10253-1, noir ou galvanisé.'
+      description: 'Coude 90° à très grand rayon 3D, pour les lignes où turbulences et pertes de charge doivent rester minimales. Formé à froid à partir de tube sans soudure ou soudé en S235 selon EN 10253-1, noir ou galvanisé.'
     },
     'elbow-45': {
       name: 'Coude à souder 45°', categoryLabel: 'Coudes',
       short: 'Coude 45°, rayon 1.5D (ASME B16.9) ou 3D (EN 10253-1).',
-      description: 'Coude 45° à souder bout à bout pour dévier le flux en douceur. Disponible en rayon 1.5D selon ASME B16.9 (A234 WPB, STD ou XS, peint) et en rayon 3D selon EN 10253-1 (S235, sans soudure ou soudé, noir ou galvanisé).'
+      description: 'Coude 45° à souder bout à bout, pour dévier le flux en douceur. Disponible en rayon 1.5D selon ASME B16.9 (A234 WPB, STD ou XS, peint) et en rayon 3D selon EN 10253-1 (S235, sans soudure ou soudé, noir ou galvanisé).'
     },
     'equal-tee': {
       name: 'Té égal à souder', categoryLabel: 'Tés',
@@ -222,13 +222,13 @@ window.LR_byCategory = function(catSlug) {
       description: 'Té égal à souder bout à bout, avec trois sorties identiques, pour diviser ou réunir un flux. Fabriqué à partir de tube sans soudure ou soudé, selon ASME B16.9 (A234 WPB) et EN 10253-1 (S235).'
     },
     'concentric-reducer': {
-      name: 'Réduction concentrique à souder', categoryLabel: 'Réductions',
-      short: 'Réduction concentrique (forme 1, forme 2 et ASME B16.9) pour les transitions coaxiales.',
+      name: 'RC à souder', categoryLabel: 'Réductions',
+      short: 'Réduction concentrique (RC), en forme 1, forme 2 et ASME B16.9, pour passer d’un diamètre à l’autre sur un même axe.',
       description: 'Réduction concentrique à souder bout à bout reliant deux tubes de diamètres différents sur un même axe. EN 10253-1 forme 1 et forme 2 en S235 (sans soudure ou soudée, noire ou galvanisée), et ASME B16.9 en A234 WPB (STD ou XS, peinte).'
     },
     'eccentric-reducer': {
-      name: 'Réduction excentrique à souder', categoryLabel: 'Réductions',
-      short: 'Réduction excentrique qui garde un côté plat, selon ASME B16.9 en A234 WPB.',
+      name: 'RE à souder', categoryLabel: 'Réductions',
+      short: 'Réduction excentrique (RE) qui garde une génératrice droite, selon ASME B16.9 en A234 WPB.',
       description: 'Réduction excentrique à souder bout à bout, aux axes décalés, qui garde une génératrice alignée. Utilisée à l’aspiration des pompes sur les lignes horizontales pour éviter les poches d’air. Sans soudure, A234 WPB selon ASME B16.9, STD ou XS, peinte.'
     },
     'cap': {
