@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          fetch-depth: 0   # full history: IndexNow lists the pages changed by this push
 
       - name: Check catalog pages and quote API
         run: |
@@ -53,3 +55,7 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+      - name: Notify search engines of changed pages (IndexNow, free)
+        continue-on-error: true
+        run: python3 tools/seo/indexnow.py "${{ github.event.before }}" "${{ github.sha }}"
