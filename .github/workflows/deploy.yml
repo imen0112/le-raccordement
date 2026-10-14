@@ -38,7 +38,7 @@ jobs:
         run: |
           mkdir _site
           rsync -a --exclude '.git' --exclude '.github' --exclude '_site' --exclude 'tools' \
-            --exclude 'server' --exclude 'tests' --exclude 'README.md' --exclude '.DS_Store' --exclude '.gitignore' --exclude 'CNAME.example' \
+            --exclude 'server' --exclude 'tests' --exclude 'README.md' --exclude '.DS_Store' --exclude '.gitignore' --exclude 'CNAME.example' --exclude '.claude' --exclude '.vscode' --exclude '.env*' \
             --exclude 'assets/certifications' ./ _site/
 
       - name: Setup Pages
@@ -48,6 +48,7 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: '_site'
+          include-hidden-files: true   # publishes .well-known/security.txt (hidden repo files are excluded above)
 
       - name: Deploy to GitHub Pages
         id: deployment
