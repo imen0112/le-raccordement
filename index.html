@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Le Raccordement" />
 <meta property="og:title" content="Le Raccordement: Seamless Pipe Fittings, Made in Tunisia" />
 <meta property="og:description" content="Elbows, tees, reducers and caps to ASME B16.9 & EN 10253. ISO 9001 certified. North Africa's first pipe-fittings plant." />
-<meta property="og:image" content="assets/img/factory/factory-hero.jpg" />
+<meta property="og:image" content="https://leraccordement.com/assets/img/og/factory.jpg" />
 <meta property="og:url" content="https://leraccordement.com/" />
 <meta property="og:locale" content="en_US" />
 <meta property="og:locale:alternate" content="fr_FR" />
@@ -26,7 +26,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-<link rel="stylesheet" href="css/main.css?v=20261013h" />
+<link rel="preload" as="image" href="assets/img/factory/factory-hero.webp" fetchpriority="high" />
+<link rel="stylesheet" href="css/main.css?v=20261014c" />
 
 <!-- JSON-LD: Organization + LocalBusiness + WebSite -->
 <script type="application/ld+json">
@@ -45,7 +46,7 @@
         "width": 512,
         "height": 512
       },
-      "image": "https://leraccordement.com/assets/img/factory/factory-hero.jpg",
+      "image": "https://leraccordement.com/assets/img/factory/factory-hero.webp",
       "description": "North Africa's first manufacturer of seamless and welded butt-weld pipe fittings, elbows, tees, reducers and caps, produced to ASME B16.9 and EN 10253-1. ISO 9001 and Bureau Veritas certified.",
       "foundingLocation": "Sfax, Tunisia",
       "address": {
@@ -124,10 +125,10 @@
       <span class="nav-item-mega"><a href="products/" class="nav-item-mega-trigger">Products</a>
 <div class="mega-panel" role="menu">
   <div class="mega-grid">
-    <a href="products/elbows.html" class="mega-tile"><div class="mega-tile-thumb"><img src="assets/img/products/elbow-90.jpg" alt=""></div><span class="mega-tile-name">Elbows</span><span class="mega-tile-meta">45° · 90°</span></a>
-    <a href="products/tees.html" class="mega-tile"><div class="mega-tile-thumb"><img src="assets/img/products/equal-tee.jpg" alt=""></div><span class="mega-tile-name">Tees</span><span class="mega-tile-meta">Equal tees</span></a>
-    <a href="products/reducers.html" class="mega-tile"><div class="mega-tile-thumb"><img src="assets/img/products/concentric-reducer.jpg" alt=""></div><span class="mega-tile-name">Reducers</span><span class="mega-tile-meta">Concentric · Eccentric</span></a>
-    <a href="products/caps.html" class="mega-tile"><div class="mega-tile-thumb"><img src="assets/img/products/cap.jpg" alt=""></div><span class="mega-tile-name">Caps</span><span class="mega-tile-meta">Dished ends</span></a>
+    <a href="products/elbows.html" class="mega-tile"><div class="mega-tile-thumb"><img src="assets/img/products/elbow-90.webp" alt="" loading="lazy" decoding="async"></div><span class="mega-tile-name">Elbows</span><span class="mega-tile-meta">45° · 90°</span></a>
+    <a href="products/tees.html" class="mega-tile"><div class="mega-tile-thumb"><img src="assets/img/products/equal-tee.webp" alt="" loading="lazy" decoding="async"></div><span class="mega-tile-name">Tees</span><span class="mega-tile-meta">Equal tees</span></a>
+    <a href="products/reducers.html" class="mega-tile"><div class="mega-tile-thumb"><img src="assets/img/products/concentric-reducer.webp" alt="" loading="lazy" decoding="async"></div><span class="mega-tile-name">Reducers</span><span class="mega-tile-meta">Concentric · Eccentric</span></a>
+    <a href="products/caps.html" class="mega-tile"><div class="mega-tile-thumb"><img src="assets/img/products/cap.webp" alt="" loading="lazy" decoding="async"></div><span class="mega-tile-name">Caps</span><span class="mega-tile-meta">Dished ends</span></a>
   </div>
   <div class="mega-foot">
     <a href="products/">View full catalog →</a>
@@ -179,8 +180,8 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-media">
-    <video autoplay muted loop playsinline poster="assets/img/factory/factory-hero.jpg">
-      <source src="assets/video/aerial.mp4" type="video/mp4" />
+    <video muted loop playsinline preload="none" data-lazy-video poster="assets/img/factory/factory-hero.webp">
+      <source data-src="assets/video/aerial.mp4" type="video/mp4" />
     </video>
   </div>
   <div class="container-wide">
@@ -229,7 +230,7 @@
       <a href="products/elbows.html" class="cat-card reveal">
         <div class="cat-card-media">
           <span class="cat-card-tag">168 references</span>
-          <img src="assets/img/products/elbow-90.jpg" alt="" />
+          <img src="assets/img/products/elbow-90.webp" alt="" />
         </div>
         <div class="cat-card-body">
           <h3>Elbows</h3>
@@ -243,7 +244,7 @@
       <a href="products/tees.html" class="cat-card reveal reveal-delay-1">
         <div class="cat-card-media">
           <span class="cat-card-tag">42 references</span>
-          <img src="assets/img/products/equal-tee.jpg" alt="" />
+          <img src="assets/img/products/equal-tee.webp" alt="" />
         </div>
         <div class="cat-card-body">
           <h3>Equal tees</h3>
@@ -257,7 +258,7 @@
       <a href="products/reducers.html" class="cat-card reveal reveal-delay-2">
         <div class="cat-card-media">
           <span class="cat-card-tag">276 references</span>
-          <img src="assets/img/products/concentric-reducer.jpg" alt="" />
+          <img src="assets/img/products/concentric-reducer.webp" alt="" />
         </div>
         <div class="cat-card-body">
           <h3>Reducers</h3>
@@ -271,7 +272,7 @@
       <a href="products/caps.html" class="cat-card reveal reveal-delay-3">
         <div class="cat-card-media">
           <span class="cat-card-tag">72 references</span>
-          <img src="assets/img/products/cap.jpg" alt="" />
+          <img src="assets/img/products/cap.webp" alt="" />
         </div>
         <div class="cat-card-body">
           <h3>Caps and dished ends</h3>
@@ -302,12 +303,12 @@
         <a href="about.html" class="btn btn-dark mt-8">Visit the factory <span class="arrow">→</span></a>
       </div>
       <div class="mosaic reveal reveal-delay-2">
-        <div class="m m-1"><img src="assets/img/factory/factory-1.jpg" alt="Forming machine and finished reducers" loading="lazy" /></div>
-        <div class="m m-2"><img src="assets/img/factory/factory-3.jpg" alt="Hydraulic press" loading="lazy" /></div>
-        <div class="m m-3"><img src="assets/img/factory/factory-5.jpg" alt="Pipe stock" loading="lazy" /></div>
-        <div class="m m-6"><img src="assets/img/factory/factory-9.jpg" alt="Production line" loading="lazy" /></div>
-        <div class="m m-7"><img src="assets/img/factory/factory-12.jpg" alt="Finished caps" loading="lazy" /></div>
-        <div class="m m-8"><img src="assets/img/factory/factory-13.jpg" alt="Quality inspection" loading="lazy" /></div>
+        <div class="m m-1"><img src="assets/img/factory/factory-1.webp" alt="Forming machine and finished reducers" loading="lazy" /></div>
+        <div class="m m-2"><img src="assets/img/factory/factory-3.webp" alt="Hydraulic press" loading="lazy" /></div>
+        <div class="m m-3"><img src="assets/img/factory/factory-5.webp" alt="Pipe stock" loading="lazy" /></div>
+        <div class="m m-6"><img src="assets/img/factory/factory-9.webp" alt="Production line" loading="lazy" /></div>
+        <div class="m m-7"><img src="assets/img/factory/factory-12.webp" alt="Finished caps" loading="lazy" /></div>
+        <div class="m m-8"><img src="assets/img/factory/factory-13.webp" alt="Quality inspection" loading="lazy" /></div>
       </div>
     </div>
   </div>
@@ -354,7 +355,7 @@
 <section class="section-tight section-soft">
   <div class="container">
     <div style="display:flex; flex-wrap:wrap; gap:var(--s-8) var(--s-12); align-items:center; justify-content:center;">
-      <img src="assets/img/certifications/iso-9001.jpg" alt="ISO 9001:2015 Certified by MQA UK" style="height:120px; border:1px solid var(--c-line); border-radius:8px; background:#fff;" loading="lazy" />
+      <img src="assets/img/certifications/iso-9001.webp" alt="ISO 9001:2015 Certified by MQA UK" style="height:120px; border:1px solid var(--c-line); border-radius:8px; background:#fff;" loading="lazy" />
       <div style="display:flex; flex-direction:column;">
         <span class="kicker">Quality certifications</span>
         <strong style="font-family:var(--ff-display); font-size:var(--fs-20); color:var(--c-ink); margin-top:4px">ISO 9001 · Bureau Veritas · EN 10204 3.1</strong>
@@ -445,8 +446,8 @@
   </div>
 </aside>
 
-<script src="js/products.js?v=20261013h"></script>
-<script src="js/cart.js?v=20261013h"></script>
-<script src="js/main.js?v=20261013h"></script>
+<script src="js/products.js?v=20261014c"></script>
+<script src="js/cart.js?v=20261014c"></script>
+<script src="js/main.js?v=20261014c"></script>
 </body>
 </html>

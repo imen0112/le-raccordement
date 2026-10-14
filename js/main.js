@@ -17,7 +17,12 @@
   });
 
   // Reveal-on-scroll
-  if ('IntersectionObserver' in window) {
+  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    // Only elements below the fold get the entrance; anything already on screen stays visible
+    document.querySelectorAll('.reveal').forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('is-visible');
+    });
+    document.documentElement.classList.add('js-reveal');
     const io = new IntersectionObserver((entries) => {
       entries.forEach(en => {
         if (en.isIntersecting) {
@@ -25,7 +30,7 @@
           io.unobserve(en.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.01, rootMargin: '0px 0px 80px 0px' });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   } else {
     document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
@@ -116,4 +121,27 @@
   });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mark); else mark();
   window.addEventListener('load', mark);
+})();
+
+/* Background videos: loaded only on large screens, without data saver or reduced motion,
+   and only when they come into view. Otherwise the poster photo stays. */
+(function () {
+  const vids = document.querySelectorAll('video[data-lazy-video]');
+  if (!vids.length) return;
+  const conn = navigator.connection || {};
+  const ok = window.matchMedia('(min-width: 900px)').matches &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches && !conn.saveData;
+  if (!ok) return;
+  function start(v) {
+    v.querySelectorAll('source[data-src]').forEach(s => { s.src = s.dataset.src; s.removeAttribute('data-src'); });
+    v.load();
+    const p = v.play(); if (p && p.catch) p.catch(() => {});
+  }
+  const near = v => v.getBoundingClientRect().top < window.innerHeight + 200;
+  if (!('IntersectionObserver' in window)) { vids.forEach(start); return; }
+  const io = new IntersectionObserver(entries => entries.forEach(en => {
+    if (en.isIntersecting) { start(en.target); io.unobserve(en.target); }
+  }), { rootMargin: '200px' });
+  // Already on screen at load: start right away; the others when scrolled into view
+  vids.forEach(v => { if (near(v)) start(v); else io.observe(v); });
 })();
