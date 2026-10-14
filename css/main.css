@@ -2060,6 +2060,8 @@ a[href^="mailto:"] { overflow-wrap: anywhere; }
 
 /* Small laptops (1024–1279 px): menu, FR/EN, search, quote list and contact button on one line */
 .nav a { white-space: nowrap; }
+.nav .mega-panel a { white-space: normal; }   /* product tiles: labels wrap inside their tile */
+.mega-tile-meta { overflow-wrap: anywhere; }
 @media (min-width: 1024px) and (max-width: 1279px) {
   .header-inner { gap: var(--s-4); }
   .nav { gap: 0; }
