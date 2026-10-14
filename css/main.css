@@ -2002,19 +2002,13 @@ a[href^="mailto:"] { overflow-wrap: anywhere; }
 /* Footer logo links to the home page */
 .footer-logo { position: relative; display: inline-block; margin-bottom: var(--s-4); line-height: 0; }
 .footer-logo img { margin-bottom: 0; }
-/* Green sheen gliding across the logo while it is hovered (masked to the logo shape) + soft green glow */
-.footer-logo img { transition: filter .45s var(--ease); }
-.footer-logo:hover img, .footer-logo:focus-visible img { filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(124,194,66,.55)); }
+/* Logo hover: same smooth colour change as the footer links (white → light green), no sheen */
 .footer-logo::after {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(100deg, transparent 25%, rgba(124,194,66,.0) 32%, rgba(124,194,66,.9) 44%, #e6f8d4 50%, rgba(124,194,66,.9) 56%, rgba(124,194,66,0) 68%, transparent 75%) no-repeat;
-  background-size: 220% 100%; background-position: 160% 0;
+  content: ''; position: absolute; inset: 0; pointer-events: none; background: var(--c-green-400);
   -webkit-mask: url(../assets/img/logo/logo.png) left center / contain no-repeat; mask: url(../assets/img/logo/logo.png) left center / contain no-repeat;
-  opacity: 0; transition: opacity .4s var(--ease);
+  opacity: 0; transition: opacity var(--t-fast) var(--ease);
 }
-.footer-logo:hover::after, .footer-logo:focus-visible::after { opacity: 1; animation: logo-sheen 2.2s cubic-bezier(.45, .05, .25, 1) infinite; }
-@keyframes logo-sheen { 0% { background-position: 160% 0; } 70%, 100% { background-position: -60% 0; } }
-@media (prefers-reduced-motion: reduce) { .footer-logo:hover::after { animation: none; background-position: 50% 0; } }
+.footer-logo:hover::after, .footer-logo:focus-visible::after { opacity: 1; }
 
 /* Reference search: header button, catalog entry point and dialog (js/search.js) */
 .header-actions .search-btn {
@@ -2234,3 +2228,8 @@ a[href^="mailto:"] { overflow-wrap: anywhere; }
 
 /* Phones: the "Filters" panel sits under the search bar on pages built with the dropdown bar (elbows) */
 .catalog > .catalog-filters-wrap { margin-top: var(--s-4); }
+
+/* Stainless steel range: announcement on product pages */
+.inox-soon { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 8px 10px; margin: var(--s-4) 0; padding: 10px 14px; border: 1px dashed var(--c-line-strong); border-radius: var(--radius-sm); background: #fff; font-size: var(--fs-14); color: var(--c-text); }
+.inox-soon strong { color: var(--c-ink); }
+.inox-soon-badge { display: inline-block; padding: 2px 9px; border-radius: 999px; background: var(--c-green-100); color: var(--c-navy-900); font-family: var(--ff-mono); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }

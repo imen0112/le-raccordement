@@ -140,7 +140,7 @@
         refs.forEach(it => { window.LR_REF_INDEX[it.id] = it; });
         const articles = Array.from(new Set(refs.map(it => (FR ? it.article : it.articleEn))));
         const qs = articles.map(a => 'article=' + encodeURIComponent(a)).join('&');
-        document.getElementById('pd-refs-title').textContent = `${refs.length} ${T('available references.', 'références disponibles.')}`;
+        document.getElementById('pd-refs-title').textContent = `${refs.length} ${T('available references.', 'références disponibles')}`;
         box.innerHTML = `<div class="ref-table-wrap"><table class="ref-table">
           <thead><tr><th scope="col">${T('Reference', 'Référence')}</th><th scope="col">${T('Designation', 'Désignation')}</th><th scope="col">Dimensions (mm)</th><th scope="col">${T('Standard · grade', 'Norme · nuance')}</th><th scope="col">${T('Type · finish', 'Type · finition')}</th><th scope="col">${T('Quantity (min. 50)', 'Quantité (min. 50)')}</th></tr></thead>
           <tbody>${refs.map(it => { const x = window.LR_REFTXT(it); return `<tr data-ref-row>

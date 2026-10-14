@@ -26,7 +26,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261014u'
+ASSET_V = '20261014v'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 LANGS = ['fr', 'en']    # French first (site root), English under en/
 LG = 'fr'               # language being generated, set in main()
@@ -382,6 +382,7 @@ def ref_page(it, items, chrome_top, chrome_bottom, head_assets, all_items=()):
         <dl class="ref-keyspecs">
 %(keyspecs)s
         </dl>
+        %(inox)s
         <div class="ref-buy" data-ref-row>
           <div class="kicker">%(t_price)s</div>
           <label class="ref-buy-qty"><span>%(t_qty)s</span>
@@ -429,7 +430,7 @@ def ref_page(it, items, chrome_top, chrome_bottom, head_assets, all_items=()):
 </html>
 ''' % {
         'mark': GENERATED_MARK, 'title': e(title), 'desc': e(desc), 'url': url, 'site': SITE, 'up': up,
-        'lang': LG, 'locale': t('en_GB', 'fr_FR'),
+        'lang': LG, 'locale': t('en_GB', 'fr_FR'), 'inox': inox_note(),
         'ogtitle': e('%s, %s' % (it['code'], designation)), 'head_assets': head_assets,
         'jsonld': json.dumps(jsonld, ensure_ascii=False).replace('</', '<\\/'),
         'top': chrome_top, 'bottom': chrome_bottom, 'fam': fam, 'famtitle': ft['title'], 'famall': ft['all'],
@@ -591,6 +592,12 @@ def size_range(items, ends=False):
     return size, thickness
 
 
+def inox_note():
+    """Announcement shown on every product page: stainless steel range on its way."""
+    return t('<p class="inox-soon"><span class="inox-soon-badge">Coming soon</span> <strong>Stainless steel</strong> fittings: coming soon.</p>',
+             '<p class="inox-soon"><span class="inox-soon-badge">Bientôt</span> Raccords en <strong>acier inoxydable</strong> : bientôt disponibles.</p>')
+
+
 def family_head(fam, items):
     ft = FAMILY_TEXT[fam]
     uniq = lambda xs: sorted(set(x for x in xs if x))
@@ -618,6 +625,7 @@ def family_head(fam, items):
         <dl class="family-specs">
 %(facts)s
         </dl>
+        %(inox)s
         <a class="btn btn-primary" href="#references">%(browse)s <span class="arrow">→</span></a>
       </div>
     </div>
@@ -627,6 +635,7 @@ def family_head(fam, items):
                     'alt': e(t('%s by Le Raccordement', '%s Le Raccordement') % ft['title']),
                     'lead': e(FAMILY_LEAD[LG][fam]), 'browse': t('Browse the %d references', 'Voir les %d références') % len(items),
                     't_crumb': t('Breadcrumb', 'Fil d’Ariane'), 't_home': t('Home', 'Accueil'), 't_products': t('Products', 'Produits'),
+                    'inox': inox_note(),
                     'facts': '\n'.join('          <div><dt>%s</dt><dd>%s</dd></div>' % (k, e(v)) for k, v in facts)}
 
 def family_jsonld(fam, items):
