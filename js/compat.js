@@ -6,7 +6,7 @@
   if (!box || !window.LR_CART) return;
   const ROOT = window.LR_CART.ROOT;
   const FAMILIES = ['elbows', 'tees', 'reducers', 'caps'];
-  const PER_GROUP = 8;
+  const PER_GROUP = window.matchMedia('(max-width: 599px)').matches ? 3 : 8;   // phones: short list, link to the rest
   const T = window.LR_T || ((en) => en);
   const TXT = it => (window.LR_REFTXT ? window.LR_REFTXT(it) : { designation: it.designationEn });
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));

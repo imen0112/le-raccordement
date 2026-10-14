@@ -7,7 +7,9 @@
   const F = window.LR_FACETS;
   const family = root.getAttribute('data-catalog');
   const PAGE = 50;
-  const BAR = root.getAttribute('data-filter-style') === 'bar';
+  // Phones: every family uses the dropdown bar of the elbows page (sidebar checkboxes only on larger screens)
+  const PHONE = window.matchMedia('(max-width: 899px)').matches;
+  const BAR = root.getAttribute('data-filter-style') === 'bar' || PHONE;
   const T = window.LR_T, RT = window.LR_REFTXT;
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -23,6 +25,19 @@
     details: root.querySelector('[data-catalog-details]'),
     filterCount: root.querySelector('[data-catalog-filter-count]')
   };
+
+  if (BAR && els.details) {
+    const bar = document.createElement('div');
+    bar.className = 'fbar';
+    bar.setAttribute('aria-label', T('Filters', 'Filtres'));
+    const chips = root.querySelector('.catalog-chips');
+    chips.parentNode.insertBefore(bar, chips);
+    els.details.hidden = true;
+    els.details = null;
+    els.filters = bar;
+    const layout = root.querySelector('.catalog-layout');
+    if (layout) layout.classList.add('catalog-layout-bar');
+  }
 
   let items = [], keys = [], state = { selection: {}, query: '', sort: 'default', shown: PAGE };
 

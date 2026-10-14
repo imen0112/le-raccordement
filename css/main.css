@@ -2281,3 +2281,145 @@ a[href^="mailto:"] { overflow-wrap: anywhere; }
   .lang-toggle a { padding: 5px 8px; }
   .header-actions > .btn-primary { padding-inline: 0.875rem; }
 }
+
+/* ---------- Phones: comfortable reading and tapping ---------- */
+@media (max-width: 899px) {
+  /* 16 px fields: iPhone does not zoom in when a field is tapped */
+  input, select, textarea { font-size: 16px !important; }
+  .qty button, .qty-sm button { min-width: 38px; min-height: 40px; }
+  .qty-sm input { height: 40px; }
+  .lang-toggle a { display: inline-flex; align-items: center; justify-content: center; min-width: 34px; min-height: 34px; }
+  .catalog-more .btn, .cart-strip-actions .btn { min-height: 44px; }
+  .ref-compat-link, main a[href^="https://www.google.com/maps"]:not(.btn), main a[href$="certifications.html"]:not(.btn) { display: inline-block; padding-block: 10px; }
+}
+
+/* ---------- Phones (≤ 599 px): shorter pages, denser layouts ---------- */
+@media (max-width: 599px) {
+  /* rhythm and type */
+  .section { padding-block: var(--s-12); }
+  .section-sm { padding-block: var(--s-8); }
+  .section-tight { padding-block: var(--s-8); }
+  .h-display { font-size: 2rem; }
+  .h-1, .page-head h1 { font-size: 1.75rem; }
+  .h-2 { font-size: 1.5rem; }
+  .h-3 { font-size: 1.25rem; }
+  .lead { font-size: 1rem; }
+  .eyebrow { font-size: 11px; letter-spacing: .1em; }
+  .page-head { padding-top: var(--s-8); padding-bottom: var(--s-6); }
+  .mt-12 { margin-top: var(--s-8); }
+
+  /* home hero: title and buttons visible without scrolling */
+  .hero-content { padding-block: var(--s-12) var(--s-10); }
+  .hero-title { font-size: 2.05rem; line-height: 1.08; }
+  .hero-sub { font-size: 1rem; margin-top: var(--s-4); }
+  .hero-actions { margin-top: var(--s-6); gap: var(--s-3); }
+  .hero-actions .btn { flex: 1 1 auto; justify-content: center; padding-inline: 1rem; }
+  .hero-spec { font-size: 13px; margin-top: var(--s-8); }
+
+  /* client logos: compact grid instead of one per line */
+  .logo-strip { grid-template-columns: repeat(3, 1fr); gap: var(--s-5) var(--s-4); }
+  .logo-strip img { height: 30px; }
+
+  /* family cards: two per row */
+  #products .grid-4 { grid-template-columns: repeat(2, 1fr); gap: var(--s-3); }
+  #products .cat-card-media { aspect-ratio: 1 / 1; }
+  #products .cat-card-tag { top: 8px; left: 8px; font-size: 10px; padding: 2px 7px; }
+  #products .cat-card-body { padding: var(--s-3) var(--s-3) var(--s-4); gap: var(--s-2); }
+  #products .cat-card h3 { font-size: 1.05rem; }
+  #products .cat-card p { font-size: 13px; line-height: 1.4; }
+  #products .cat-card-foot .kicker { display: none; }
+
+  /* clients page: logo wall two per row */
+  .grid-4:has(> .client-card) { grid-template-columns: repeat(2, 1fr); gap: var(--s-3) !important; }
+  .grid-4:has(> .client-card) > .card { padding: var(--s-4) !important; }
+
+  /* footer: products and company side by side */
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: var(--s-8) var(--s-4); }
+  .footer-grid > :first-child, .footer-grid > :last-child { grid-column: 1 / -1; }
+  .site-footer { padding-block: var(--s-12) var(--s-6); }
+  .footer-brand img { height: 48px; }
+  .footer-bottom { flex-direction: column; gap: var(--s-2); }
+
+  /* call-to-action blocks */
+  .cta-strip { padding: var(--s-8) var(--s-5); }
+  .cta-strip-actions .btn { width: 100%; justify-content: center; }
+}
+
+/* Phones: compact reference cards (catalog, quote list, search, compatible fittings).
+   Code + designation on top, specs on one line, quantity and Add on one row. */
+@media (max-width: 599px) {
+  .ref-table tr { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; row-gap: 4px; padding: 12px 14px; position: relative; }
+  .ref-table td { flex: 0 1 auto; width: auto; padding: 0; display: block; font-size: 13px; color: var(--c-muted); }
+  .ref-table td::before { display: none; }
+  .ref-table td.ref-code { font-size: 14px; }
+  .ref-table td.ref-desig, .ref-table td:has(> .ref-desig-link) { flex-basis: 100%; font-size: 14px; color: var(--c-ink); line-height: 1.35; }
+  .ref-table td.ref-dims ~ td:not(.ref-actions):not(.ref-remove)::before { content: '·'; display: inline; margin-right: 6px; font: inherit; letter-spacing: 0; text-transform: none; color: var(--c-muted); }
+  .ref-table td.ref-specs { flex-basis: 100%; }
+  .ref-table td.ref-actions, .ref-table td:has(> .qty) { flex-basis: 100%; display: flex; align-items: center; gap: 8px; margin-top: 6px; padding: 0; }
+  .ref-table .ref-details { display: none; }
+  .ref-table td.ref-remove { position: absolute; top: 6px; right: 6px; }
+  .cart-table td.ref-code { padding-right: 40px; }
+}
+
+/* Phones: slimmer header, no empty band above family and reference pages, smaller photos */
+@media (max-width: 899px) {
+  .header-inner { min-height: 64px; padding-block: var(--s-2); }
+  .pd-nav { top: 64px; }
+  .family-head, .ref-hero { padding-top: var(--s-6); }
+  .family-head { padding-bottom: var(--s-8); }
+  .family-head-grid, .ref-product { margin-top: var(--s-4); gap: var(--s-5); }
+  .family-head-media, .ref-media { width: min(220px, 60%); padding: var(--s-4); margin-inline: auto; }
+  .family-head-body h1 { font-size: 1.85rem; }
+  .family-specs { grid-template-columns: 1fr 1fr; gap: var(--s-3) var(--s-4); margin: var(--s-5) 0 var(--s-6); }
+  .family-specs dd { font-size: 14px; }
+  .ref-keyspecs { grid-template-columns: 1fr 1fr; }
+  .ref-title { font-size: 1.4rem; }
+  .ref-buy { padding: var(--s-5); }
+  .spec-table { font-size: 14px; }
+  .spec-table th { width: 45%; }
+}
+
+/* Phones, quote list page: list, then the request form, then compatible fittings */
+@media (max-width: 1199px) {
+  #cart-layout { display: flex !important; flex-direction: column; gap: var(--s-6) !important; }
+  #cart-layout > div:first-child { display: contents; }
+  #cart-layout > div:first-child > :not(#cart-compat) { order: 1; }
+  #quote-form-wrap { order: 2; }
+  #cart-compat { order: 3; }
+}
+
+/* Phone menu: logo at its size, visible close button, centred call to action */
+.mobile-nav-head img { height: 32px; width: auto; max-width: 70%; }
+.mobile-nav-head [data-close-nav] { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; background: var(--c-bg-soft); color: var(--c-ink); flex-shrink: 0; }
+.mobile-nav a.btn { display: flex; justify-content: center; border-bottom: 0; padding: 0.95rem 1.5rem; font-size: var(--fs-16); }
+
+/* Phones: about page banner and process steps */
+@media (max-width: 599px) {
+  .steps { grid-template-columns: 1fr 1fr; gap: var(--s-6) var(--s-4); }
+  .step { padding-top: var(--s-2); }
+  .step h3 { margin-top: var(--s-5); font-size: 1rem; }
+  .step p { font-size: 13px; }
+  div[style*="aspect-ratio: 21 / 9"] { aspect-ratio: 4 / 3 !important; }
+  div[style*="aspect-ratio: 21 / 9"] h2 { font-size: 1.25rem !important; }
+  div[style*="aspect-ratio: 21 / 9"] > div[style*="padding"] { padding: var(--s-5) !important; }
+  .split-img img { border-radius: var(--radius); }
+}
+
+/* Phones: catalogue overview */
+@media (max-width: 599px) {
+  .family-grid { grid-template-columns: repeat(2, 1fr) !important; gap: var(--s-3) !important; }
+  .family-tile-media { aspect-ratio: 1 / 1; }
+  .family-tile-media img { height: 100%; object-fit: contain; }
+  .family-tile-body { padding: var(--s-3) var(--s-3) var(--s-4) !important; gap: 4px !important; }
+  .family-tile-name { font-size: 1.05rem !important; }
+  .family-tile-meta, .family-tile-std { display: none !important; }
+  .family-tile-cta { font-size: 13px; }
+  .range-table th[scope="row"], .range-table .range-corner { position: sticky; left: 0; z-index: 1; background: #fff; }
+}
+
+/* Certificate viewer: page boxes keep their shape while loading; phones get 3 columns and an inside close button */
+.cert-page img { aspect-ratio: 1240 / 1752; object-fit: contain; background: #fff; }
+@media (max-width: 599px) {
+  .cert-viewer-stage.is-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: 96vw; }
+  .lightbox-close { top: 8px; right: 8px; z-index: 2; }
+}
