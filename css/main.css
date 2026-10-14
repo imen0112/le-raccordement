@@ -2023,7 +2023,7 @@ h1, h2, h3, h4 {
 .ref-tech .spec-table { max-width: 900px; }
 
 /* Lightbox */
-.mosaic img, .pd-media img, .ref-media img, .family-head-media img, [data-zoom] { cursor: zoom-in; }
+.mosaic img { cursor: zoom-in; }
 .lightbox { margin: auto; inset: 0; border: 0; padding: 0; background: transparent; max-width: min(96vw, 1400px); max-height: 94vh; overflow: visible; }
 .lightbox::backdrop { background: rgba(7,20,42,0.86); }
 .lightbox img { display: block; max-width: min(96vw, 1400px); max-height: 86vh; width: auto; height: auto; border-radius: var(--radius); background: #fff; }
@@ -2100,3 +2100,6 @@ h1, h2, h3, h4 {
 /* Filter options: label left, count pushed right with a clear gap */
 .facet-opt .facet-label { min-width: 0; }
 .facet-opt .facet-count { justify-self: end; padding-left: var(--s-4); }
+
+/* Photos cannot be dragged, selected or long-press saved */
+img, video { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }

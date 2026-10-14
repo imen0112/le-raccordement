@@ -83,7 +83,8 @@
 
 /* Lightbox: click (or Enter) on a product or factory photo to see it large */
 (function () {
-  const SEL = '[data-zoom], .mosaic img, .pd-media img, .ref-media img, .family-head-media img, .gallery img, .about-gallery img';
+  // Only the factory gallery enlarges; product photos stay as they are
+  const SEL = '.mosaic img';
   let dlg;
   function ensure() {
     if (dlg) return dlg;
@@ -144,4 +145,13 @@
   }), { rootMargin: '200px' });
   // Already on screen at load: start right away; the others when scrolled into view
   vids.forEach(v => { if (near(v)) start(v); else io.observe(v); });
+})();
+
+/* Photos and videos: no right-click menu, no drag-and-drop, no long-press save on phones.
+   (A deterrent: nothing on the web can stop a screenshot.) */
+(function () {
+  const media = t => t && t.closest && t.closest('img, video, picture, .hero-media, .mosaic, .lightbox');
+  document.addEventListener('contextmenu', e => { if (media(e.target)) e.preventDefault(); });
+  document.addEventListener('dragstart', e => { if (media(e.target)) e.preventDefault(); });
+  document.querySelectorAll('video').forEach(v => { v.setAttribute('controlslist', 'nodownload'); v.disablePictureInPicture = true; });
 })();

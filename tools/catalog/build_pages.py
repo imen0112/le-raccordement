@@ -22,7 +22,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261014d'
+ASSET_V = '20261014e'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 FAMILY_TEXT = {
     'elbows':   {'title': 'Elbows',   'one': 'elbow',   'lead': '45° and 90° butt-weld elbows, 1.5D and 3D radius'},
@@ -416,7 +416,7 @@ def family_head(fam, items):
     <nav class="breadcrumb" aria-label="Breadcrumb"><a href="../">Home</a><span class="sep">/</span><a href="./">Products</a><span class="sep">/</span><span aria-current="page">%(title)s</span></nav>
     <div class="family-head-grid">
       <figure class="family-head-media">
-        <img src="../assets/img/products/%(img)s" alt="%(title)s by Le Raccordement" width="800" height="800" fetchpriority="high" data-zoom />
+        <img src="../assets/img/products/%(img)s" alt="%(title)s by Le Raccordement" width="800" height="800" fetchpriority="high" />
       </figure>
       <div class="family-head-body">
         <h1>Pipe %(lower)s</h1>
