@@ -18,8 +18,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/main.css?v=20261014z" />
-<script src="js/lang.js?v=20261014z"></script>
+<link rel="stylesheet" href="css/main.css?v=20261015a" />
+<script src="js/lang.js?v=20261015a"></script>
 </head>
 <body>
 
@@ -82,7 +82,7 @@
           <div class="row"><span>Références</span><strong id="summary-count">0</strong></div>
           <div class="row"><span>Quantité totale (pièces)</span><strong id="summary-units">0</strong></div>
           <p style="font-size:var(--fs-12); color:var(--c-muted); margin-top:var(--s-3);">
-            Pas de prix en ligne : nous chiffrons chaque demande selon vos références, quantités, certificats et Incoterms exacts.
+            Pas de prix en ligne : nous chiffrons chaque demande selon vos références, quantités et certificats.
           </p>
         </div>
         <div class="card" style="margin-top:var(--s-6)">
@@ -95,20 +95,10 @@
             </div>
             <div class="field-grid">
               <div class="field"><label for="q-email">E-mail professionnel *</label><input id="q-email" name="email" type="email" autocomplete="email" required maxlength="200" /></div>
-              <div class="field"><label for="q-phone">Téléphone *</label><input id="q-phone" name="phone" type="tel" autocomplete="tel" required maxlength="40" placeholder="+216 …" /></div>
+              <div class="field"><label for="q-country">Pays</label><select id="q-country" name="country" autocomplete="country-name" data-country-select></select></div>
             </div>
-            <div class="field-grid">
-              <div class="field"><label for="q-country">Pays</label><input id="q-country" name="country" autocomplete="country-name" maxlength="80" placeholder="Tunisie, France, Italie…" /></div>
-              <div class="field"><label for="q-incoterm">Incoterm souhaité</label>
-                <select id="q-incoterm" name="incoterm">
-                  <option value="">Choisir…</option>
-                  <option>EXW · À l’usine (Ex Works)</option>
-                  <option>FOB · Franco à bord (Free On Board)</option>
-                  <option>CIF · Coût, assurance et fret</option>
-                  <option>DAP · Rendu au lieu de destination</option>
-                  <option>Autre / à discuter</option>
-                </select>
-              </div>
+            <div class="field"><label for="q-phone">Téléphone *</label>
+              <div class="phone-field"><select name="dial" aria-label="Indicatif du pays" data-dial-select></select><input id="q-phone" name="phone" type="tel" autocomplete="tel-national" required maxlength="30" placeholder="Numéro de téléphone" /></div>
             </div>
             <div class="field"><label for="q-message">Message</label><textarea id="q-message" name="message" maxlength="4000" placeholder="Projet, échéance, certificats demandés (EN 10204 3.1…), emballage, adresse de livraison…"></textarea></div>
             <!-- Anti-spam honeypot: leave empty -->
@@ -131,13 +121,14 @@
 
 <aside class="cart-drawer" id="cart-drawer"><div class="overlay" data-close-cart></div><div class="panel"><div class="cart-head"><h3>Votre liste de devis</h3><button data-close-cart><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><div class="cart-list" id="cart-drawer-list"></div><div class="cart-foot"><div class="meta"><span>Dans votre liste</span><strong id="cart-drawer-subtotal">0 réf.</strong></div><a href="cart.html" class="btn btn-primary btn-block">Vérifier et demander un devis <span class="arrow">→</span></a></div></div></aside>
 
-<script src="js/i18n.js?v=20261014z"></script>
-<script src="js/config.js?v=20261014z"></script>
-<script src="js/cart.js?v=20261014z"></script>
-<script src="js/main.js?v=20261014z"></script><script src="js/search.js?v=20261014z"></script>
-<script src="js/export.js?v=20261014z"></script>
-<script src="js/compat.js?v=20261014z"></script>
-<script src="js/quote.js?v=20261014z"></script>
+<script src="js/i18n.js?v=20261015a"></script>
+<script src="js/config.js?v=20261015a"></script>
+<script src="js/cart.js?v=20261015a"></script>
+<script src="js/main.js?v=20261015a"></script><script src="js/search.js?v=20261015a"></script>
+<script src="js/export.js?v=20261015a"></script>
+<script src="js/compat.js?v=20261015a"></script>
+<script src="js/countries.js?v=20261015a"></script>
+<script src="js/quote.js?v=20261015a"></script>
 <style>
   /* Larger screens: 2-column cart layout */
   @media (min-width: 1200px) {

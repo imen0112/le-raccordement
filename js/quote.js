@@ -79,7 +79,7 @@
       requestKey,
       elapsedMs: Date.now() - startedAt,
       website: v('website'),
-      customer: { name: v('name'), company: v('company'), email: v('email'), phone: v('phone'), country: v('country'), incoterm: v('incoterm'), message: v('message') },
+      customer: { name: v('name'), company: v('company'), email: v('email'), phone: window.LR_PHONE ? window.LR_PHONE(v('phone')) : v('phone'), country: v('country'), message: v('message') },
       items: window.LR_CART.lines().map(l => Object.assign({ kind: l.kind, code: l.code, designation: l.designation, qty: l.qty, url: l.url }, l.detail)),
       page: window.location.href,
       lang: window.LR_LANG || 'en'
@@ -89,8 +89,8 @@
   function mailtoFallback(p) {
     const lines = p.items.map(i => `${i.code}\t${i.qty} ${T('pcs', 'pièces')}\t${i.designation}`).join('\n');
     const na = T('not provided', 'non renseigné');
-    const body = T(`Quote request from the website\n\nName: ${p.customer.name}\nCompany: ${p.customer.company}\nEmail: ${p.customer.email}\nPhone: ${p.customer.phone}\nCountry: ${p.customer.country || na}\nIncoterm: ${p.customer.incoterm || na}\n\nMessage:\n${p.customer.message || na}\n\nReference\tQty\tDesignation\n${lines}\n`,
-                   `Demande de devis depuis le site\n\nNom : ${p.customer.name}\nSociété : ${p.customer.company}\nE-mail : ${p.customer.email}\nTéléphone : ${p.customer.phone}\nPays : ${p.customer.country || na}\nIncoterm : ${p.customer.incoterm || na}\n\nMessage :\n${p.customer.message || na}\n\nRéférence\tQté\tDésignation\n${lines}\n`);
+    const body = T(`Quote request from the website\n\nName: ${p.customer.name}\nCompany: ${p.customer.company}\nEmail: ${p.customer.email}\nPhone: ${p.customer.phone}\nCountry: ${p.customer.country || na}\n\nMessage:\n${p.customer.message || na}\n\nReference\tQty\tDesignation\n${lines}\n`,
+                   `Demande de devis depuis le site\n\nNom : ${p.customer.name}\nSociété : ${p.customer.company}\nE-mail : ${p.customer.email}\nTéléphone : ${p.customer.phone}\nPays : ${p.customer.country || na}\n\nMessage :\n${p.customer.message || na}\n\nRéférence\tQté\tDésignation\n${lines}\n`);
     return `mailto:${cfg.quoteEmail}?subject=${encodeURIComponent('Demande de devis, site Le Raccordement')}&body=${encodeURIComponent(body)}`;
   }
 

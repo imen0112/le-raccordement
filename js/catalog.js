@@ -7,9 +7,6 @@
   const F = window.LR_FACETS;
   const family = root.getAttribute('data-catalog');
   const PAGE = 50;
-  // Phones: every family uses the "Filters" panel with checkboxes; the dropdown bar (elbows) is for larger screens
-  const PHONE = window.matchMedia('(max-width: 899px)').matches;
-  const BAR = root.getAttribute('data-filter-style') === 'bar' && !PHONE;
   const T = window.LR_T, RT = window.LR_REFTXT;
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -25,20 +22,6 @@
     details: root.querySelector('[data-catalog-details]'),
     filterCount: root.querySelector('[data-catalog-filter-count]')
   };
-
-  if (!BAR && !els.details && els.filters) {
-    // page built with the dropdown bar, shown on a phone: swap it for the collapsible checkbox panel
-    const d = document.createElement('details');
-    d.className = 'catalog-filters-wrap';
-    d.innerHTML = `<summary class="catalog-filters-toggle">${T('Filters', 'Filtres')} <span data-catalog-filter-count></span></summary>
-      <div class="catalog-filters"></div>
-      <button type="button" class="btn btn-ghost btn-sm btn-block" data-catalog-reset hidden>${T('Reset all filters', 'Réinitialiser tous les filtres')}</button>`;
-    els.filters.replaceWith(d);
-    els.details = d;
-    els.filters = d.querySelector('.catalog-filters');
-    els.filterCount = d.querySelector('[data-catalog-filter-count]');
-    els.reset = root.querySelectorAll('[data-catalog-reset]');
-  }
 
   let items = [], keys = [], state = { selection: {}, query: '', sort: 'default', shown: PAGE };
 
@@ -115,27 +98,11 @@
     // Filters, keep keyboard focus across re-render
     const focused = document.activeElement && document.activeElement.matches && document.activeElement.matches('[data-facet]')
       ? [document.activeElement.getAttribute('data-facet'), document.activeElement.value] : null;
-    if (BAR) {
-      // Horizontal bar: one dropdown per facet; keep the open one open across re-renders
-      const openEl = els.filters.querySelector('details[open]');
-      const openKey = openEl ? openEl.getAttribute('data-key') : null;
-      els.filters.innerHTML = facets.map(fc => {
-        const opts = fc.options;
-        const n = (state.selection[fc.key] || []).length;
-        return `<details class="fdrop${n ? ' is-active' : ''}" data-key="${esc(fc.key)}"${fc.key === openKey ? ' open' : ''}>
-          <summary>${esc(fc.label)}${n ? ` <span class="fdrop-n">${n}</span>` : ''}</summary>
-          <fieldset class="fdrop-panel${opts.length > 8 ? ' is-long' : ''}">
-            <legend class="sr-only">${esc(fc.label)}</legend>${opts.map(o => optionHtml(fc, o)).join('')}
-          </fieldset>
-        </details>`;
-      }).join('');
-    } else {
-      // Sidebar: checkbox groups
-      els.filters.innerHTML = facets.map(fc => `<fieldset class="facet${fc.options.length > 8 ? ' facet-long' : ''}">
-        <legend>${esc(fc.label)}</legend>
-        <div class="facet-options">${fc.options.map(o => optionHtml(fc, o)).join('')}</div>
-      </fieldset>`).join('');
-    }
+    // Checkbox groups, one per facet
+    els.filters.innerHTML = facets.map(fc => `<fieldset class="facet${fc.options.length > 8 ? ' facet-long' : ''}">
+      <legend>${esc(fc.label)}</legend>
+      <div class="facet-options">${fc.options.map(o => optionHtml(fc, o)).join('')}</div>
+    </fieldset>`).join('');
     if (focused) {
       const back = Array.from(els.filters.querySelectorAll('[data-facet]')).find(x => x.getAttribute('data-facet') === focused[0] && x.value === focused[1]);
       if (back) back.focus();
@@ -241,24 +208,6 @@
     const ex = e.target.closest('[data-export]');
     if (ex && window.LR_EXPORT && items.length) exportList(ex.getAttribute('data-export'));
   });
-
-  if (BAR) {
-    // Dropdowns: one open at a time; outside click or Escape closes
-    root.addEventListener('toggle', e => {
-      const d = e.target;
-      if (d.matches && d.matches('details.fdrop') && d.open) {
-        els.filters.querySelectorAll('details.fdrop[open]').forEach(x => { if (x !== d) x.open = false; });
-      }
-    }, true);
-    document.addEventListener('click', e => {
-      if (!e.target.closest('details.fdrop')) els.filters.querySelectorAll('details.fdrop[open]').forEach(x => { x.open = false; });
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key !== 'Escape') return;
-      const d = els.filters.querySelector('details.fdrop[open]');
-      if (d) { d.open = false; d.querySelector('summary').focus(); }
-    });
-  }
 
   window.addEventListener('popstate', () => {
     if (!items.length) return;

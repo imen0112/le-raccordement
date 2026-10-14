@@ -182,7 +182,7 @@ def build_email(req_id, received, cust, items, page):
     contact = ''.join('<tr><td style="padding:4px 12px 4px 0;color:#57606a">%s</td><td style="padding:4px 0"><strong>%s</strong></td></tr>' % (e(k), v) for k, v in [
         ('Nom', e(cust['name'])), ('Société', e(cust['company'])),
         ('E-mail', '<a href="mailto:%s">%s</a>' % (e(cust['email']), e(cust['email']))),
-        ('Téléphone', e(cust['phone'])), ('Pays', e(cust['country'] or 'non renseigné')), ('Incoterm souhaité', e(cust['incoterm'] or 'non renseigné'))])
+        ('Téléphone', e(cust['phone'])), ('Pays', e(cust['country'] or 'non renseigné'))])
     body_html = '''<!doctype html><html><head><meta charset="utf-8"></head><body style="font-family:Arial,Helvetica,sans-serif;color:#1f2328;max-width:900px">
 <p style="font-size:13px;color:#57606a;margin:0 0 12px">Demande de devis reçue via le site Internet de Le Raccordement (leraccordement.com).</p>
 <h2 style="margin:0 0 4px;font-size:20px">Demande de devis %(id)s</h2>
@@ -205,7 +205,7 @@ def build_email(req_id, received, cust, items, page):
         'Demande de devis reçue via le site Internet de Le Raccordement.', '',
         'Demande : %s' % req_id, 'Date : %s' % when, '',
         'Nom : %s' % cust['name'], 'Société : %s' % cust['company'], 'E-mail : %s' % cust['email'],
-        'Téléphone : %s' % cust['phone'], 'Pays : %s' % (cust['country'] or 'non renseigné'), 'Incoterm : %s' % (cust['incoterm'] or 'non renseigné'), '',
+        'Téléphone : %s' % cust['phone'], 'Pays : %s' % (cust['country'] or 'non renseigné'), '',
         'Message :', cust['message'] or 'non renseigné', '',
         'Produits demandés (%d références, %d pièces) :' % (len(items), total)] + lines + ['', 'Origine : %s' % (page or 'leraccordement.com')])
     return subject, body_html, body_text

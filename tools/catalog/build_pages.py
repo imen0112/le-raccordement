@@ -26,7 +26,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261014z'
+ASSET_V = '20261015a'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 LANGS = ['fr', 'en']    # French first (site root), English under en/
 LG = 'fr'               # language being generated, set in main()
@@ -79,8 +79,8 @@ def tx(it, key):
                 'finish': it['finitionFr'], 'dims': it['dimsLabelFr']}[key]
     return {'designation': it['designationEn'], 'article': it['articleEn'], 'type': it['typeEn'],
             'finish': it['finitionEn'], 'dims': it['dimsLabel']}[key]
-# Filter layout per family page, to compare both: 'bar' = horizontal dropdowns, 'sidebar' = checkboxes on the left
-FILTER_STYLE = {'elbows': 'bar', 'tees': 'sidebar', 'reducers': 'sidebar', 'caps': 'sidebar'}
+# Filter layout: checkboxes in a side panel (collapsible on phones), the same on every family page
+FILTER_STYLE = {'elbows': 'sidebar', 'tees': 'sidebar', 'reducers': 'sidebar', 'caps': 'sidebar'}
 # Trial features limited to some families (printable reference sheet, list export)
 PRINT_FAMILIES = {'elbows'}
 EXPORT_FAMILIES = {'elbows'}
@@ -501,13 +501,6 @@ SIDEBAR_CONTROLS = '''      <div class="catalog-layout">
             %(search_sort)s
           </div>
 '''
-BAR_CONTROLS = '''      <div class="catalog-bar">
-        %(search_sort)s
-      </div>
-      <div class="fbar" data-catalog-filters aria-label="%(filters)s"></div>
-      <div class="catalog-layout catalog-layout-bar">
-        <div class="catalog-results">
-'''
 
 
 def catalog_section(fam, items, counts):
@@ -521,7 +514,7 @@ def catalog_section(fam, items, counts):
         'sort': t('Sort', 'Trier'), 'sortaria': t('Sort references', 'Trier les références'),
         'o1': t('Type, then size', 'Type, puis dimension'), 'o2': t('Diameter, small first', 'Diamètre croissant'),
         'o3': t('Diameter, large first', 'Diamètre décroissant'), 'o4': t('Reference A to Z', 'Référence de A à Z')}
-    controls = (BAR_CONTROLS if FILTER_STYLE.get(fam) == 'bar' else SIDEBAR_CONTROLS) % {
+    controls = SIDEBAR_CONTROLS % {
         'search_sort': search_sort, 'filters': t('Filters', 'Filtres'), 'reset': t('Reset all filters', 'Réinitialiser tous les filtres')}
     return '''%(mark)s
 <section class="section-tight catalog-section" id="references">
@@ -595,7 +588,7 @@ def size_range(items, ends=False):
 def inox_note():
     """Announcement shown on every product page: stainless steel range on its way."""
     return t('<p class="inox-soon"><span class="inox-soon-badge">New</span><span><strong>Stainless steel</strong> fittings coming soon.</span></p>',
-             '<p class="inox-soon"><span class="inox-soon-badge">Nouveauté</span><span>Raccords en <strong>acier inoxydable</strong> bientôt disponibles.</span></p>')
+             '<p class="inox-soon"><span class="inox-soon-badge">Nouveauté</span><span>Raccords en <strong>inox</strong> bientôt disponibles.</span></p>')
 
 
 def family_head(fam, items):
