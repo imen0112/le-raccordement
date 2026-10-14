@@ -32,6 +32,7 @@
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(state.items)); } catch (e) { /* private mode: list lives for this page only */ }
     paint();
+    document.dispatchEvent(new CustomEvent('lr:cart-change'));
   }
   function clampQty(q) { return Math.min(MAX_QTY, Math.max(MIN_QTY, parseInt(q, 10) || MIN_QTY)); }
 
@@ -48,7 +49,10 @@
       norme: rec.f ? rec.f.norme : rec.norme, nuance: rec.nuance, finition: rec.finitionEn, type: rec.typeEn, qty
     });
     save();
-    toast(`Added <strong>${esc(rec.code)}</strong> × ${qty} to your quote list · <a href="${ROOT}cart.html">View list (${count()})</a>`);
+    const onRefPage = window.location.pathname.indexOf('/' + rec.slug + '.html') !== -1;
+    const compatLink = `${ROOT}products/${rec.family}/${rec.slug}.html#compatible`;
+    toast(`Added <strong>${esc(rec.code)}</strong> × ${qty} · <a href="${ROOT}cart.html">View list (${count()})</a>` +
+      (onRefPage ? '' : ` · <a href="${compatLink}">Compatible fittings</a>`));
   }
   function add(slug, qty, options) {   // product-type pages (configurator)
     const product = (window.LR_PRODUCTS || []).find(p => p.slug === slug);
