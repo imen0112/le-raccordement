@@ -2213,18 +2213,18 @@ a[href^="mailto:"] { overflow-wrap: anywhere; }
 }
 
 /* Footer: social networks */
-.footer-social { display: flex; gap: var(--s-3); margin-top: var(--s-6); }
-.footer-social a { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; background: rgba(255,255,255,0.12); color: #fff; transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
-.footer-social a svg { width: 20px; height: 20px; }
-.footer-social a:hover { transform: translateY(-2px); }
-.footer-social a[href*="linkedin"]:hover { background: #0A66C2; }
-.footer-social a[href*="facebook"]:hover { background: #1877F2; }
+.footer-follow { display: flex; gap: var(--s-3); margin-top: var(--s-6); }
+.footer-follow a { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; background: rgba(255,255,255,0.12); color: #fff; transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
+.footer-follow a svg { width: 20px; height: 20px; }
+.footer-follow a:hover { transform: translateY(-2px); }
+.footer-follow a[href*="linkedin"]:hover { background: #0A66C2; }
+.footer-follow a[href*="facebook"]:hover { background: #1877F2; }
 /* Contact page: same links, on a light background */
-.contact-social { display: flex; gap: var(--s-3); margin-top: var(--s-3); }
-.contact-social a { display: inline-flex; align-items: center; gap: 8px; padding: 0.6rem 1rem; border: 1px solid var(--c-line-strong); border-radius: 999px; font-weight: 600; font-size: var(--fs-14); color: var(--c-ink); transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
-.contact-social a[href*="linkedin"] svg { color: #0A66C2; }
-.contact-social a[href*="facebook"] svg { color: #1877F2; }
-.contact-social a:hover { border-color: var(--c-navy-700); }
+.contact-follow { display: flex; gap: var(--s-3); margin-top: var(--s-3); }
+.contact-follow a { display: inline-flex; align-items: center; gap: 8px; padding: 0.6rem 1rem; border: 1px solid var(--c-line-strong); border-radius: 999px; font-weight: 600; font-size: var(--fs-14); color: var(--c-ink); transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
+.contact-follow a[href*="linkedin"] svg { color: #0A66C2; }
+.contact-follow a[href*="facebook"] svg { color: #1877F2; }
+.contact-follow a:hover { border-color: var(--c-navy-700); }
 
 /* Phones: the "Filters" panel sits under the search bar on pages built with the dropdown bar (elbows) */
 .catalog > .catalog-filters-wrap { margin-top: var(--s-4); }
