@@ -1,9 +1,7 @@
 /* Quote list (cart), localStorage backed, runs on every page.
    No prices: the site collects quote requests, it does not sell online.
 
-   Two kinds of lines:
-   - kind 'ref'   : a catalog reference (code + snapshot of its specs)
-   - kind 'model' : a product-type page configuration (slug + chosen options) */
+   Each line is a catalog reference (code + snapshot of its specs in both languages). */
 (function () {
   // References that can be added from this page (reference pages ship them as JSON data)
   try {
@@ -12,7 +10,6 @@
   } catch (e) { /* malformed data: adding from this page is unavailable */ }
 
   const KEY = 'lr_cart_v2';
-  const OLD_KEY = 'lr_cart_v1';
   const T = window.LR_T || ((en) => en);
   const ROOT = window.LR_PAGE_ROOT || new URL('..', (document.currentScript && document.currentScript.src) || window.location.href).href;
   const FR = window.LR_LANG === 'fr';
@@ -27,18 +24,9 @@
       const v2 = JSON.parse(localStorage.getItem(KEY));
       // Stored data is not trusted: keep only well-formed lines (codes and slugs are plain identifiers)
       const ID = /^[A-Za-z0-9._:|\/-]{1,80}$/;
-      if (Array.isArray(v2)) return v2.filter(i => i && typeof i === 'object' && ID.test(String(i.key || '')) &&
-          (i.kind === 'ref' ? ID.test(String(i.code || '')) && /^[a-z]+$/.test(String(i.family || '')) && /^[a-z0-9-]+$/.test(String(i.slug || ''))
-                            : i.kind === 'model' && /^[a-z0-9-]+$/.test(String(i.slug || ''))))
+      if (Array.isArray(v2)) return v2.filter(i => i && typeof i === 'object' && i.kind === 'ref' && ID.test(String(i.key || '')) &&
+          ID.test(String(i.code || '')) && /^[a-z]+$/.test(String(i.family || '')) && /^[a-z0-9-]+$/.test(String(i.slug || '')))
         .slice(0, 200).map(i => Object.assign(i, { qty: clampQty(i.qty) }));
-      // Migrate the previous format (slug/variant/options)
-      const v1 = JSON.parse(localStorage.getItem(OLD_KEY));
-      if (Array.isArray(v1)) {
-        const items = v1.map(i => ({ key: 'model:' + i.slug + '|' + (i.variant || ''), kind: 'model', slug: i.slug, options: i.options || null, qty: clampQty(i.qty) }));
-        localStorage.setItem(KEY, JSON.stringify(items));
-        localStorage.removeItem(OLD_KEY);
-        return items;
-      }
     } catch (e) { /* storage unavailable or corrupt → empty list */ }
     return [];
   }
@@ -69,18 +57,6 @@
     toast(T('Added', 'Ajouté') + ` <strong>${esc(rec.code)}</strong> × ${qty} · <a href="${ROOT}cart.html">${T('View list', 'Voir la liste')} (${count()})</a>` +
       (onRefPage ? '' : ` · <a href="${compatLink}">${T('Compatible fittings', 'Raccords compatibles')}</a>`));
   }
-  function add(slug, qty, options) {   // product-type pages (configurator)
-    const product = (window.LR_PRODUCTS || []).find(p => p.slug === slug);
-    if (!product) return;
-    qty = clampQty(qty);
-    const variant = options ? JSON.stringify(options) : '';
-    const key = 'model:' + slug + '|' + variant;
-    const existing = state.items.find(i => i.key === key);
-    if (existing) existing.qty = clampQty(existing.qty + qty);
-    else state.items.push({ key, kind: 'model', slug, options: options || null, qty });
-    save();
-    toast(T('Added', 'Ajouté') + ` <strong>${esc(window.LR_PNAME ? window.LR_PNAME(product) : product.name)}</strong> × ${qty}`);
-  }
   function setQty(key, qty) {
     const it = state.items.find(i => i.key === key);
     if (!it) return;
@@ -94,26 +70,15 @@
 
   /* Uniform description of a line, used by the drawer, the cart page and the quote request. */
   function describe(i) {
-    if (i.kind === 'ref') {
-      const des = FR ? (i.designationFr || i.designation) : i.designation;
-      const dims = FR ? (i.dimsFr || i.dims) : i.dims;
-      const type = FR ? (i.typeFr || i.type) : i.type;
-      const fin = FR ? (i.finitionFr || i.finition) : i.finition;
-      return {
-        key: i.key, kind: 'ref', code: i.code, designation: des,
-        specs: [dims && ('Ø ' + dims), i.norme, i.nuance, type, fin].filter(Boolean),
-        url: `${ROOT}products/${i.family}/${i.slug}.html`, qty: i.qty,
-        detail: { family: i.family, dims: dims, norme: i.norme, nuance: i.nuance, type: type, finition: fin, designationFr: i.designationFr, designationEn: i.designation }
-      };
-    }
-    const p = (window.LR_PRODUCTS || []).find(x => x.slug === i.slug);
-    const pname = p ? (window.LR_PNAME ? window.LR_PNAME(p) : p.name) : i.slug;
-    const opts = i.options ? Object.entries(i.options).map(([k, v]) => `${k}: ${v}`) : [];
+    const des = FR ? (i.designationFr || i.designation) : i.designation;
+    const dims = FR ? (i.dimsFr || i.dims) : i.dims;
+    const type = FR ? (i.typeFr || i.type) : i.type;
+    const fin = FR ? (i.finitionFr || i.finition) : i.finition;
     return {
-      key: i.key, kind: 'model', code: T('No code', 'Sans code'), designation: pname,
-      specs: opts.length ? opts : [T('Configuration to be specified', 'Configuration à préciser')],
-      url: `${ROOT}products/product.html?slug=${encodeURIComponent(i.slug)}`, qty: i.qty,
-      detail: { productType: pname, options: i.options || null }
+      key: i.key, kind: 'ref', code: i.code, designation: des,
+      specs: [dims && ('Ø ' + dims), i.norme, i.nuance, type, fin].filter(Boolean),
+      url: `${ROOT}products/${i.family}/${i.slug}.html`, qty: i.qty,
+      detail: { family: i.family, dims: dims, norme: i.norme, nuance: i.nuance, type: type, finition: fin, designationFr: i.designationFr, designationEn: i.designation }
     };
   }
   function lines() { return state.items.map(describe); }
@@ -237,22 +202,15 @@
       if (refBtn.hasAttribute('data-then-cart')) window.location.href = ROOT + 'cart.html';
       return;
     }
-    const addBtn = e.target.closest('[data-add-to-cart]');
-    if (addBtn) {
-      const qtyInput = document.querySelector('[data-pd-qty]');
-      add(addBtn.getAttribute('data-slug'), qtyInput ? qtyInput.value : 1, collectOptions());
-      openDrawer();
-      return;
-    }
     if (e.target.closest('[data-open-cart]')) { e.preventDefault(); openDrawer(); return; }
     if (e.target.closest('[data-close-cart]')) { closeDrawer(); return; }
     const qtyBtn = e.target.closest('[data-qty]');
     if (qtyBtn) {
       const dir = qtyBtn.getAttribute('data-qty');
       const key = qtyBtn.getAttribute('data-key');
-      if (!key) {   // standalone quantity steppers (product pages, catalog rows)
+      if (!key) {   // standalone quantity steppers (catalog rows, reference pages)
         const wrap = qtyBtn.closest('.qty');
-        const inp = (wrap && wrap.querySelector('input')) || document.querySelector('[data-pd-qty]');
+        const inp = wrap && wrap.querySelector('input');
         if (inp) inp.value = clampQty((parseInt(inp.value, 10) || MIN_QTY) + (dir === 'inc' ? 1 : -1));
         return;
       }
@@ -271,7 +229,7 @@
   document.addEventListener('change', function (e) {
     const inp = e.target.closest('[data-qty-input]');
     if (inp) { setQty(inp.getAttribute('data-key'), inp.value); return; }
-    const row = e.target.closest('[data-row-qty], [data-pd-qty]');
+    const row = e.target.closest('[data-row-qty]');
     if (row) row.value = clampQty(row.value);
   });
   document.addEventListener('keydown', function (e) {
@@ -282,16 +240,8 @@
     if (e.key === KEY) { state.items = load(); paint(); }
   });
 
-  function collectOptions() {
-    const wrap = document.querySelector('[data-pd-options]');
-    if (!wrap) return null;
-    const out = {};
-    wrap.querySelectorAll('select').forEach(s => { if (s.value) out[s.dataset.opt] = s.value; });
-    return Object.keys(out).length ? out : null;
-  }
-
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paint);
   else paint();
 
-  window.LR_CART = { MIN_QTY, addRef, add, remove, setQty, clear, count, units, lines, openDrawer, closeDrawer, toast, ROOT };
+  window.LR_CART = { MIN_QTY, addRef, remove, setQty, clear, count, units, lines, openDrawer, closeDrawer, toast, ROOT };
 })();

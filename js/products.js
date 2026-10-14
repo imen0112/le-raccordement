@@ -147,44 +147,6 @@ window.LR_PRODUCTS = [
   }
 ];
 
-window.LR_CATEGORIES = [
-  {
-    slug: 'elbows',
-    name: 'Elbows',
-    tagline: 'Long-radius bends, 45° · 90°',
-    description: '45° and 90° elbows, 1.5D and 3D radius, Ø 21.3 to 323.8 mm, to ASME B16.9 and EN 10253-1.',
-    image: 'assets/img/products/elbow-90.webp'
-  },
-  {
-    slug: 'tees',
-    name: 'Tees',
-    tagline: 'Equal tees',
-    description: 'Equal butt-weld tees, Ø 60.3 to 219.1 mm, seamless or welded.',
-    image: 'assets/img/products/equal-tee.webp'
-  },
-  {
-    slug: 'reducers',
-    name: 'Reducers',
-    tagline: 'Concentric & eccentric',
-    description: 'Concentric (Form 1, Form 2, ASME) and eccentric reducers.',
-    image: 'assets/img/products/concentric-reducer.webp'
-  },
-  {
-    slug: 'caps',
-    name: 'Caps',
-    tagline: 'Pipe terminations',
-    description: 'Butt-weld caps and dished ends, Ø 21.3 to 219.1 mm.',
-    image: 'assets/img/products/cap.webp'
-  }
-];
-
-window.LR_findProduct = function(slug) {
-  return (window.LR_PRODUCTS || []).find(p => p.slug === slug);
-};
-window.LR_byCategory = function(catSlug) {
-  return (window.LR_PRODUCTS || []).filter(p => p.category === catSlug);
-};
-
 /* ---------------------------------------------------------------
    French texts (French site, see js/i18n.js). Product-type names use the
    wording of the Excel article files. Applied over the English texts above.
@@ -237,18 +199,8 @@ window.LR_byCategory = function(catSlug) {
       description: 'Caps et fonds à souder bout à bout pour fermer une ligne de tuyauterie. EN 10253-1 en S235 (noir ou galvanisé) et ASME B16.9 en A234 WPB (STD ou XS, peint).'
     }
   };
-  const CAT = {
-    elbows: { name: 'Coudes', tagline: 'Coudes grand rayon, 45° · 90°', description: 'Coudes 45° et 90°, rayon 1.5D et 3D, Ø 21,3 à 323,8 mm, selon ASME B16.9 et EN 10253-1.' },
-    tees: { name: 'Tés', tagline: 'Tés égaux', description: 'Tés égaux à souder, Ø 60,3 à 219,1 mm, sans soudure ou soudés.' },
-    reducers: { name: 'Réductions', tagline: 'Concentriques et excentriques', description: 'Réductions concentriques (forme 1, forme 2, ASME) et excentriques.' },
-    caps: { name: 'Caps et fonds', tagline: 'Fermeture de ligne', description: 'Caps et fonds à souder, Ø 21,3 à 219,1 mm.' }
-  };
   (window.LR_PRODUCTS || []).forEach(p => { if (FR[p.slug]) Object.assign(p, common, FR[p.slug]); });
-  (window.LR_CATEGORIES || []).forEach(c => { if (CAT[c.slug]) Object.assign(c, CAT[c.slug]); });
 })();
-
-/* Name of a product type in the page language (quote list) */
-window.LR_PNAME = p => p.name;
 
 /* ---------------------------------------------------------------
    Path resolver: image paths are stored relative to the site root
@@ -274,8 +226,5 @@ window.LR_PNAME = p => p.name;
     pr.image = fix(pr.image);
     pr.technical = fix(pr.technical);
     if (Array.isArray(pr.gallery)) pr.gallery = pr.gallery.map(fix);
-  });
-  (window.LR_CATEGORIES || []).forEach(c => {
-    c.image = fix(c.image);
   });
 })();

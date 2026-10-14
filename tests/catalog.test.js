@@ -143,9 +143,13 @@
     C.remove(l[0].key);
     ok('Cart: remove line', C.lines().length === 1 && C.lines()[0].code === 'R2W219114G');
     ok('Cart: count = references, units = pieces', C.count() === 1 && C.units() === 50);
-    C.add('elbow-90-3d', 4, { Size: 'DN 50' });
-    ok('Cart: product-type lines still supported (min. 50)', C.lines().some(x => x.kind === 'model' && x.qty === 50));
-    ok('Cart: persisted in localStorage', JSON.parse(localStorage.getItem('lr_cart_v2')).length === 2);
+    ok('Cart: persisted in localStorage', JSON.parse(localStorage.getItem('lr_cart_v2')).length === 1);
+    // Tampered storage: lines that are not well-formed references are ignored on load (security)
+    localStorage.setItem('lr_cart_v2', JSON.stringify([
+      { key: 'ref:x', kind: 'ref', code: '<img src=x onerror=alert(1)>', family: 'elbows', slug: 'x', qty: 50 },
+      { key: 'ref:en:C3S21N', kind: 'ref', code: 'C3S21N', family: 'elbows', slug: 'c3s21n', qty: '"><b>' }]));
+    window.dispatchEvent(new StorageEvent('storage', { key: 'lr_cart_v2' }));
+    ok('Cart: tampered stored lines are dropped, quantities sanitised', C.lines().length === 1 && C.lines()[0].qty === 50);
     C.clear();
     if (saved) localStorage.setItem('lr_cart_v2', saved); else localStorage.removeItem('lr_cart_v2');
   }

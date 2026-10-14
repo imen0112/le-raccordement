@@ -7,9 +7,9 @@
   const F = window.LR_FACETS;
   const family = root.getAttribute('data-catalog');
   const PAGE = 50;
-  // Phones: every family uses the dropdown bar of the elbows page (sidebar checkboxes only on larger screens)
+  // Phones: every family uses the "Filters" panel with checkboxes; the dropdown bar (elbows) is for larger screens
   const PHONE = window.matchMedia('(max-width: 899px)').matches;
-  const BAR = root.getAttribute('data-filter-style') === 'bar' || PHONE;
+  const BAR = root.getAttribute('data-filter-style') === 'bar' && !PHONE;
   const T = window.LR_T, RT = window.LR_REFTXT;
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -26,17 +26,18 @@
     filterCount: root.querySelector('[data-catalog-filter-count]')
   };
 
-  if (BAR && els.details) {
-    const bar = document.createElement('div');
-    bar.className = 'fbar';
-    bar.setAttribute('aria-label', T('Filters', 'Filtres'));
-    const chips = root.querySelector('.catalog-chips');
-    chips.parentNode.insertBefore(bar, chips);
-    els.details.hidden = true;
-    els.details = null;
-    els.filters = bar;
-    const layout = root.querySelector('.catalog-layout');
-    if (layout) layout.classList.add('catalog-layout-bar');
+  if (!BAR && !els.details && els.filters) {
+    // page built with the dropdown bar, shown on a phone: swap it for the collapsible checkbox panel
+    const d = document.createElement('details');
+    d.className = 'catalog-filters-wrap';
+    d.innerHTML = `<summary class="catalog-filters-toggle">${T('Filters', 'Filtres')} <span data-catalog-filter-count></span></summary>
+      <div class="catalog-filters"></div>
+      <button type="button" class="btn btn-ghost btn-sm btn-block" data-catalog-reset hidden>${T('Reset all filters', 'Réinitialiser tous les filtres')}</button>`;
+    els.filters.replaceWith(d);
+    els.details = d;
+    els.filters = d.querySelector('.catalog-filters');
+    els.filterCount = d.querySelector('[data-catalog-filter-count]');
+    els.reset = root.querySelectorAll('[data-catalog-reset]');
   }
 
   let items = [], keys = [], state = { selection: {}, query: '', sort: 'default', shown: PAGE };

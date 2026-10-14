@@ -49,7 +49,7 @@
   }
 
   function render() {
-    const lines = window.LR_CART.lines().filter(l => l.kind === 'ref');
+    const lines = window.LR_CART.lines();
     if (!lines.length) { box.innerHTML = ''; return; }
     load().then(() => {
       const inCart = new Set(window.LR_CART.lines().map(l => l.code));
