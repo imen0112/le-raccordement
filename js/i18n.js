@@ -6,7 +6,7 @@
   const lang = (document.documentElement.lang || 'fr').slice(0, 2) === 'en' ? 'en' : 'fr';
   const site = new URL('..', (document.currentScript && document.currentScript.src) || window.location.href).href;
   window.LR_LANG = lang;
-  window.LR_DATA_V = '20261014p';   // version of data/catalog/*.json (bumped with the assets)
+  window.LR_DATA_V = '20261014q';   // version of data/catalog/*.json (bumped with the assets)
   window.LR_SITE_ROOT = site;
   window.LR_PAGE_ROOT = site + (lang === 'en' ? 'en/' : '');
   window.LR_T = (en, fr) => (lang === 'fr' ? fr : en);

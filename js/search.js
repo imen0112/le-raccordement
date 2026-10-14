@@ -57,7 +57,7 @@
 
   function run() {
     const q = input.value.trim();
-    if (q.length < 2) { out.innerHTML = `<p class="search-hint">${T('Type at least two characters: a reference, a diameter, a product type, a grade…', 'Saisissez au moins deux caractères : une référence, un diamètre, un type de produit, une nuance…')}</p>`; return; }
+    if (q.length < 2) { out.innerHTML = `<p class="search-hint">${T('Example: C3S21N or 60.3', 'Exemple : C3S21N ou 60,3')}</p>`; return; }
     out.innerHTML = `<p class="search-hint">${T('Searching…', 'Recherche…')}</p>`;
     load().then(() => {
       if (input.value.trim() !== q) return;
@@ -83,7 +83,7 @@
       <div class="search-head">
         <label class="filter-search search-field">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-          <input type="search" autocomplete="off" placeholder="${T('Reference, size, product… e.g. C3S21N, 60.3, eccentric', 'Référence, dimension, produit… ex. C3S21N, 60,3, RE à souder')}" aria-label="${T('Search a reference', 'Rechercher une référence')}" />
+          <input type="search" autocomplete="off" placeholder="${T('Reference, size or product', 'Référence, dimension ou produit')}" aria-label="${T('Search a reference', 'Rechercher une référence')}" />
         </label>
         <button type="button" class="search-close" data-close-search aria-label="${T('Close', 'Fermer')}">×</button>
       </div>
