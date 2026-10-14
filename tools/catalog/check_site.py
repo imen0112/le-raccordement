@@ -82,9 +82,10 @@ def main():
         if not p.title:
             errors.append('%s: no <title>' % rel)
         titles.setdefault((p.title or '').strip(), []).append(rel)
-        if rel not in ('404.html',) and not p.desc:
+        redirect = rel.startswith('go/')   # forwarding pages to the social networks (noindex)
+        if rel not in ('404.html',) and not redirect and not p.desc:
             errors.append('%s: no meta description' % rel)
-        if p.h1 != 1 and not rel.endswith('products/product.html'):
+        if p.h1 != 1 and not rel.endswith('products/product.html') and not redirect:
             warnings.append('%s: %d <h1>' % (rel, p.h1))
         for block in p.jsonld:
             if not block.strip():
@@ -114,7 +115,7 @@ def main():
             for w in ENGLISH_ON_FR:
                 if w in text_only:
                     errors.append('%s: English text on a French page: %r' % (rel, w))
-        if rel != '404.html':
+        if rel != '404.html' and not redirect:
             other = rel[3:] if lang == 'en' else 'en/' + rel
             if not os.path.exists(os.path.join(ROOT, other)):
                 errors.append('%s: no %s counterpart %s' % (rel, 'French' if lang == 'en' else 'English', other))
