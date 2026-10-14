@@ -22,7 +22,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261014i'
+ASSET_V = '20261014j'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 FAMILY_TEXT = {
     'elbows':   {'title': 'Elbows',   'one': 'elbow',   'lead': '45° and 90° butt-weld elbows, 1.5D and 3D radius'},
@@ -215,9 +215,9 @@ def compat_section(it, compat):
         for x in compat)
     d = it['dims']
     size = ('Ø %s mm' % num(d['d'])) if 'd' in d else ('Ø %s or %s mm' % (num(d['d1']), num(d['d2'])))
-    return '''<section class="section-tight ref-compat">
+    return '''<section class="section-tight ref-compat" id="compatible">
   <div class="container-wide">
-    <h2 class="h-3">Compatible with this reference</h2>
+    <h2 class="h-3">Compatible fittings for the same pipe</h2>
     <p class="catalog-note mt-2">Same pipe (%s), same standard, grade and finish: %s, %s, %s. %d references.</p>
     <div class="ref-table-wrap mt-4"><table class="ref-table">
       <thead><tr><th scope="col">Reference</th><th scope="col">Designation</th><th scope="col">Quantity (min. 50)</th></tr></thead>
@@ -319,13 +319,14 @@ def ref_page(it, items, chrome_top, chrome_bottom, head_assets, all_items=()):
             <button type="button" class="btn btn-dark" data-add-ref="%(id)s">Add to quote list</button>
             <button type="button" class="btn btn-primary" data-add-ref="%(id)s" data-then-cart>Request a quote <span class="arrow">→</span></button>
           </div>
-          <p class="ref-buy-text">We reply by email within one business day.</p>%(printbtn)s
+          <p class="ref-buy-text">We reply by email within one business day.</p>%(compatlink)s%(printbtn)s
         </div>
       </div>
     </div>
   </div>
 </section>
 
+%(compat)s
 <section class="section-tight ref-tech">
   <div class="container-wide">
     <h2 class="h-3">Technical data</h2>
@@ -338,7 +339,6 @@ def ref_page(it, items, chrome_top, chrome_bottom, head_assets, all_items=()):
   </div>
 </section>
 
-%(compat)s
 <section class="section-tight ref-related">
   <div class="container-wide">
 %(series)s
@@ -370,7 +370,8 @@ def ref_page(it, items, chrome_top, chrome_bottom, head_assets, all_items=()):
         'sizes': ('    <h2 class="h-3 mt-8">Same size, other versions</h2>\n    <ul class="ref-links">%s</ul>' %
                   ref_links(same_size, lambda x: x['designationEn'])) if same_size else '',
         'articleq': article_q, 'idjson': json.dumps(it['id']),
-        'compat': compat_section(it, compat), 'compatjson': json.dumps(compat_public, ensure_ascii=False).replace('</', '<\\/'),
+        'compat': compat_section(it, compat),
+        'compatlink': ('\n          <a class="ref-compat-link" href="#compatible">See the %d compatible fittings for this pipe →</a>' % len(compat)) if compat else '', 'compatjson': json.dumps(compat_public, ensure_ascii=False).replace('</', '<\\/'),
         'printbtn': ('\n          <button type="button" class="btn btn-ghost btn-sm ref-print-btn" onclick="window.print()">'
                      'Print or save as PDF</button>') if fam in PRINT_FAMILIES else '',
         'printhead': ('<div class="print-head" aria-hidden="true"><img src="../../assets/img/logo/logo.png" alt="" />'
@@ -545,60 +546,65 @@ RANGE_COLUMNS = [
 
 
 def range_table(data):
-    """Diameter x product type grid of the catalog (reducers by their large end)."""
+    """One availability grid per standard: diameters x product types, a tick where references exist."""
     od = lambda it: it['dims'].get('d', it['dims'].get('d1'))
-    cells = {}
-    for fam in FAMILIES:
-        for it in data[fam]:
-            cells.setdefault((it['articleEn'], od(it)), []).append(it)
+    STDS = [('en', 'EN 10253-1', 'S235', 'EN/1'), ('asme', 'ASME B16.9', 'A234 WPB', 'ASME B16.9')]
     known = set(c[1] for c in RANGE_COLUMNS)
-    extra = sorted(set(k[0] for k in cells) - known)
-    if extra:
-        raise SystemExit('Range table: add a column for %s' % extra)
-    diameters = sorted(set(k[1] for k in cells))
-    head_fam = ''.join('<th scope="colgroup" colspan="%d" class="range-fam">%s</th>' % (
-        sum(1 for c in RANGE_COLUMNS if c[0] == fam), FAMILY_TEXT[fam]['title']) for fam in FAMILIES)
-    head_cols = ''.join('<th scope="col">%s</th>' % e(c[2]) for c in RANGE_COLUMNS)
-    body = []
-    for dval in diameters:
-        tds = []
-        for fam, art, short in RANGE_COLUMNS:
-            refs = cells.get((art, dval), [])
-            if not refs:
-                tds.append('<td class="range-empty"><span aria-label="Not available">·</span></td>')
-                continue
-            stds = sorted(set(r['f']['norme'] for r in refs))
-            key = 'd1' if fam == 'reducers' else 'd'
-            href = '%s.html?article=%s&amp;%s=%s#references' % (fam, quote_plus(art), key, num(dval))
-            label = '%d %s reference%s, Ø %s mm, %s' % (len(refs), short, 's' if len(refs) > 1 else '', num(dval), ' and '.join(stds))
-            cls = 'both' if len(stds) > 1 else ('asme' if stds[0].startswith('ASME') else 'en')
-            tds.append('<td><a class="range-cell range-%s" href="%s" title="%s" aria-label="%s">%d</a></td>' % (
-                cls, href, e(label), e(label), len(refs)))
-        body.append('<tr><th scope="row">%s</th>%s</tr>' % (num(dval), ''.join(tds)))
-    total = sum(len(v) for v in cells.values())
+    tabs, panels = [], []
+    for i, (key, label, grade, raw) in enumerate(STDS):
+        cells = {}
+        for fam in FAMILIES:
+            for it in data[fam]:
+                if it['norme'] == raw:
+                    cells.setdefault((it['articleEn'], od(it)), []).append(it)
+        extra = sorted(set(k[0] for k in cells) - known)
+        if extra:
+            raise SystemExit('Range table: add a column for %s' % extra)
+        cols = [c for c in RANGE_COLUMNS if any(k[0] == c[1] for k in cells)]
+        diameters = sorted(set(k[1] for k in cells))
+        fams = [f for f in FAMILIES if any(c[0] == f for c in cols)]
+        head_fam = ''.join('<th scope="colgroup" colspan="%d" class="range-fam">%s</th>' % (
+            sum(1 for c in cols if c[0] == f), FAMILY_TEXT[f]['title']) for f in fams)
+        head_cols = ''.join('<th scope="col"%s>%s</th>' % (
+            ' class="range-first"' if j == 0 or cols[j - 1][0] != c[0] else '', e(c[2])) for j, c in enumerate(cols))
+        rows = []
+        for dval in diameters:
+            tds = []
+            for j, (fam, art, short) in enumerate(cols):
+                first = ' class="range-first"' if j == 0 or cols[j - 1][0] != fam else ''
+                refs = cells.get((art, dval), [])
+                if not refs:
+                    tds.append('<td%s></td>' % first)
+                    continue
+                k = 'd1' if fam == 'reducers' else 'd'
+                href = '%s.html?norme=%s&amp;article=%s&amp;%s=%s#references' % (fam, quote_plus(label), quote_plus(art), k, num(dval))   # facet values are the English labels
+                tip = '%s, Ø %s mm, %s: %d reference%s' % (short, num(dval), label, len(refs), 's' if len(refs) > 1 else '')
+                tds.append('<td%s><a class="range-tick" href="%s" title="%s" aria-label="%s">✓</a></td>' % (first, href, e(tip), e(tip)))
+            rows.append('<tr><th scope="row">%s</th>%s</tr>' % (num(dval), ''.join(tds)))
+        n = sum(len(v) for v in cells.values())
+        tabs.append('<button type="button" role="tab" class="range-tab" id="range-tab-%s" aria-controls="range-panel-%s" aria-selected="%s" data-range-tab="%s"><strong>%s</strong><span>%s · %d references</span></button>' % (
+            key, key, 'true' if i == 0 else 'false', key, label, grade, n))
+        panels.append('''      <div class="range-panel" role="tabpanel" id="range-panel-%s" aria-labelledby="range-tab-%s"%s>
+        <div class="range-scroll" tabindex="0" role="region" aria-label="%s range, scroll horizontally">
+          <table class="range-table">
+            <caption class="sr-only">%s: outside diameters by product type</caption>
+            <thead><tr><th scope="col" rowspan="2" class="range-corner">Outside Ø<br>(mm)</th>%s</tr><tr>%s</tr></thead>
+            <tbody>
+%s
+            </tbody>
+          </table>
+        </div>
+      </div>''' % (key, key, '' if i == 0 else ' hidden', label, label, head_fam, head_cols,
+                    '\n'.join('              ' + r for r in rows)))
     return '''%(mark)s
     <div class="range-head">
       <h2 class="h-2" id="range-title">The range at a glance</h2>
-      <p class="text-muted">Every outside diameter we make, by product type. Each number is the count of references; click it to see them. Reducers are listed by their large end.</p>
-      <ul class="range-legend">
-        <li><span class="range-swatch range-en"></span>EN 10253-1 (S235)</li>
-        <li><span class="range-swatch range-asme"></span>ASME B16.9 (A234 WPB)</li>
-        <li><span class="range-swatch range-both"></span>Both standards</li>
-      </ul>
+      <p class="text-muted">Pick a standard: a tick means we make that fitting for that outside diameter. Click a tick to see the references. Reducers are listed by their large end.</p>
     </div>
-    <div class="range-scroll" tabindex="0" role="region" aria-label="Range table, scroll horizontally">
-      <table class="range-table">
-        <caption class="sr-only">%(total)d references by outside diameter and product type</caption>
-        <thead>
-          <tr><th scope="col" rowspan="2" class="range-corner">Ø (mm)</th>%(headfam)s</tr>
-          <tr>%(headcols)s</tr>
-        </thead>
-        <tbody>
-%(body)s
-        </tbody>
-      </table>
-    </div>''' % {'mark': GENERATED_MARK, 'total': total, 'headfam': head_fam, 'headcols': head_cols,
-                   'body': '\n'.join('          ' + r for r in body)}
+    <div class="range-tabs" role="tablist" aria-label="Standard">%(tabs)s</div>
+%(panels)s''' % {'mark': GENERATED_MARK, 'tabs': ''.join(tabs), 'panels': '\n'.join(panels)}
+
+
 
 def family_tiles(data, counts):
     out = []
