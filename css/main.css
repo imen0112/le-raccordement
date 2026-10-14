@@ -2002,16 +2002,19 @@ a[href^="mailto:"] { overflow-wrap: anywhere; }
 /* Footer logo links to the home page */
 .footer-logo { position: relative; display: inline-block; margin-bottom: var(--s-4); line-height: 0; }
 .footer-logo img { margin-bottom: 0; }
-/* Green sheen sweeping across the logo on hover (masked to the logo shape) */
+/* Green sheen gliding across the logo while it is hovered (masked to the logo shape) + soft green glow */
+.footer-logo img { transition: filter .45s var(--ease); }
+.footer-logo:hover img, .footer-logo:focus-visible img { filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(124,194,66,.55)); }
 .footer-logo::after {
   content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(105deg, transparent 35%, var(--c-green-400) 47%, #d9f2c4 50%, var(--c-green-400) 53%, transparent 65%) no-repeat;
-  background-size: 250% 100%; background-position: 120% 0;
+  background: linear-gradient(100deg, transparent 25%, rgba(124,194,66,.0) 32%, rgba(124,194,66,.9) 44%, #e6f8d4 50%, rgba(124,194,66,.9) 56%, rgba(124,194,66,0) 68%, transparent 75%) no-repeat;
+  background-size: 220% 100%; background-position: 160% 0;
   -webkit-mask: url(../assets/img/logo/logo.png) left center / contain no-repeat; mask: url(../assets/img/logo/logo.png) left center / contain no-repeat;
-  opacity: 0; transition: background-position .9s var(--ease), opacity .3s var(--ease);
+  opacity: 0; transition: opacity .4s var(--ease);
 }
-.footer-logo:hover::after, .footer-logo:focus-visible::after { opacity: 1; background-position: -20% 0; }
-@media (prefers-reduced-motion: reduce) { .footer-logo::after { transition: opacity .3s; } }
+.footer-logo:hover::after, .footer-logo:focus-visible::after { opacity: 1; animation: logo-sheen 2.2s cubic-bezier(.45, .05, .25, 1) infinite; }
+@keyframes logo-sheen { 0% { background-position: 160% 0; } 70%, 100% { background-position: -60% 0; } }
+@media (prefers-reduced-motion: reduce) { .footer-logo:hover::after { animation: none; background-position: 50% 0; } }
 
 /* Reference search: header button, catalog entry point and dialog (js/search.js) */
 .header-actions .search-btn {
@@ -2216,9 +2219,18 @@ a[href^="mailto:"] { overflow-wrap: anywhere; }
 }
 
 /* Footer: social networks */
-.footer-social { display: flex; gap: var(--s-3); margin-top: var(--s-5); }
-.footer-social a { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
-.footer-social a:hover { background: var(--c-green-500); color: var(--c-navy-900); }
+.footer-social { display: flex; gap: var(--s-3); margin-top: var(--s-6); }
+.footer-social a { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 999px; background: rgba(255,255,255,0.12); color: #fff; transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease); }
+.footer-social a svg { width: 20px; height: 20px; }
+.footer-social a:hover { transform: translateY(-2px); }
+.footer-social a[href*="linkedin"]:hover { background: #0A66C2; }
+.footer-social a[href*="facebook"]:hover { background: #1877F2; }
+/* Contact page: same links, on a light background */
+.contact-social { display: flex; gap: var(--s-3); margin-top: var(--s-3); }
+.contact-social a { display: inline-flex; align-items: center; gap: 8px; padding: 0.6rem 1rem; border: 1px solid var(--c-line-strong); border-radius: 999px; font-weight: 600; font-size: var(--fs-14); color: var(--c-ink); transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
+.contact-social a[href*="linkedin"] svg { color: #0A66C2; }
+.contact-social a[href*="facebook"] svg { color: #1877F2; }
+.contact-social a:hover { border-color: var(--c-navy-700); }
 
 /* Phones: the "Filters" panel sits under the search bar on pages built with the dropdown bar (elbows) */
 .catalog > .catalog-filters-wrap { margin-top: var(--s-4); }
