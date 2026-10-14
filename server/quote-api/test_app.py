@@ -181,6 +181,26 @@ class QuoteApiTest(unittest.TestCase):
             self.assertEqual(r.status, 204)
             self.assertEqual(r.headers['Access-Control-Allow-Origin'], 'https://leraccordement.com')
 
+    def test_security_headers_and_form_posts(self):
+        req = urllib.request.Request(URL + '/health')
+        with urllib.request.urlopen(req) as r:
+            self.assertEqual(r.headers['X-Frame-Options'], 'DENY')
+            self.assertIn("default-src 'none'", r.headers['Content-Security-Policy'])
+            self.assertEqual(r.headers['X-Content-Type-Options'], 'nosniff')
+            self.assertNotIn('Python', r.headers.get('Server', ''))
+        # a plain HTML form post (no JSON) from another site is refused
+        req = urllib.request.Request(URL + '/api/quote', data=b'name=x', method='POST',
+                                     headers={'Content-Type': 'application/x-www-form-urlencoded', 'Origin': 'https://leraccordement.com'})
+        try:
+            urllib.request.urlopen(req); code = 200
+        except urllib.error.HTTPError as err:
+            code = err.code
+        self.assertEqual(code, 415)
+
+    def test_unknown_origin_refused(self):
+        status, data, _ = post(payload(), origin='https://evil.example')
+        self.assertEqual(status, 403)
+
     def test_not_configured_returns_503(self):
         old = app.CFG['api_key']; app.CFG['api_key'] = ''
         try:

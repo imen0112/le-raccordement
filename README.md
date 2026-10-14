@@ -76,7 +76,6 @@ plainly that online sending is not configured and offers a pre-filled email inst
 
 - [ ] Deploy `server/quote-api` (Railway + Resend) and set `quoteEndpoint` in `js/config.js`
 - [ ] Confirm that "EN/1" in the article files means EN 10253-1 (shown as "EN 10253-1 (EN/1)")
-- [ ] Replace placeholder phone number `+216 74 000 000` with the real plant number (footer + `contact.html` + `index.html` JSON-LD)
 - [ ] Upload tech-sheet PDFs to `assets/datasheets/{slug}.pdf` and enable the "Download datasheet" button in `products/product.html`
 
 ## SEO

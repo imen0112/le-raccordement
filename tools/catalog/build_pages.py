@@ -26,7 +26,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261014r'
+ASSET_V = '20261014s'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 LANGS = ['fr', 'en']    # French first (site root), English under en/
 LG = 'fr'               # language being generated, set in main()
@@ -420,7 +420,7 @@ def ref_page(it, items, chrome_top, chrome_bottom, head_assets, all_items=()):
 
 </main>
 %(bottom)s
-<script>window.LR_REF_INDEX = Object.assign({ %(idjson)s: %(public)s }, %(compatjson)s);</script>
+<script type="application/json" id="lr-ref-data">%(refdata)s</script>
 <script src="%(up)sjs/i18n.js?v=%(v)s"></script>
 <script src="%(up)sjs/products.js?v=%(v)s"></script>
 <script src="%(up)sjs/cart.js?v=%(v)s"></script>
@@ -457,12 +457,13 @@ def ref_page(it, items, chrome_top, chrome_bottom, head_assets, all_items=()):
         'compatlink': ('\n          <a class="ref-compat-link" href="#compatible">%s</a>' % (
                        t('See the %d compatible fittings for this pipe →', 'Voir les %d raccords compatibles avec ce tube →') % len(compat))) if compat else '',
         'compatjson': json.dumps(compat_public, ensure_ascii=False).replace('</', '<\\/'),
-        'printbtn': ('\n          <button type="button" class="btn btn-ghost btn-sm ref-print-btn" onclick="window.print()">%s</button>' %
+        'printbtn': ('\n          <button type="button" class="btn btn-ghost btn-sm ref-print-btn" data-print>%s</button>' %
                      t('Print or save as PDF', 'Imprimer ou enregistrer en PDF')) if fam in PRINT_FAMILIES else '',
         'printhead': ('<div class="print-head" aria-hidden="true"><img src="%sassets/img/logo/logo.png" alt="" />'
                       '<span>Le Raccordement · Zone Industrielle de Doukhane, El Hencha, 3043 Sfax, %s · '
                       'commande@leraccordement.com · leraccordement.com</span></div>' % (up, t('Tunisia', 'Tunisie'))) if fam in PRINT_FAMILIES else '',
-        'public': json.dumps(public, ensure_ascii=False).replace('</', '<\\/'), 'v': ASSET_V,
+        'refdata': json.dumps(dict(compat_public, **{it['id']: public}), ensure_ascii=False).replace('</', '<\\/'),
+        'v': ASSET_V,
     }
 
 
@@ -794,6 +795,29 @@ def product_specs(data):
     return out
 
 
+# Security headers that a static host lets us set from the page itself.
+# Only the site's own scripts run (no inline script, no third-party script); styles from the site and Google Fonts;
+# the quote API on Railway; the OpenStreetMap frame on the contact page. Keep in sync with js/config.js.
+CSP = ("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+       "font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self'; "
+       "connect-src 'self' https://*.up.railway.app; frame-src https://www.openstreetmap.org; "
+       "object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'")
+SECURITY_META = ('<meta http-equiv="Content-Security-Policy" content="%s" />\n'
+                 '<meta name="referrer" content="strict-origin-when-cross-origin" />') % CSP
+
+
+def security_meta(rel, text):
+    """Content-Security-Policy and referrer policy right after <meta charset>, on every page."""
+    text = re.sub(r'<meta http-equiv="Content-Security-Policy"[^>]*/>\n?', '', text)
+    text = re.sub(r'<meta name="referrer"[^>]*/>\n?', '', text)
+    text, n = re.subn(r'(<meta charset="utf-8" />\n)', lambda m: m.group(1) + SECURITY_META + '\n', text, count=1)
+    if not n:
+        raise SystemExit('No <meta charset> in %s' % rel)
+    if re.search(r'<script>|\son[a-z]+="', text):
+        raise SystemExit('Inline script or event handler in %s (blocked by the Content-Security-Policy)' % rel)
+    return text
+
+
 def counterpart(rel):
     """French page <-> English page (same path under en/)."""
     return rel[3:] if rel.startswith('en/') else 'en/' + rel
@@ -893,8 +917,9 @@ def main():
                 if not name.endswith('.html') or name == '404.html':
                     continue
                 rel = os.path.normpath(os.path.join(rel_dir, name))
-                write(rel, lang_links(rel, read(rel)))
+                write(rel, security_meta(rel, lang_links(rel, read(rel))))
                 pages += 1
+    write('404.html', security_meta('404.html', read('404.html')))
 
     sm = read('sitemap.xml')
     block = '\n'.join('  <url><loc>%s</loc><lastmod>%s</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>' % (u, generated)

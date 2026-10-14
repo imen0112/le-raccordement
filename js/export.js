@@ -86,9 +86,11 @@
       ${rows.map(r => `<tr>${r.map((v, i) => `<td class="${i === 0 ? 'code' : typeof v === 'number' ? 'num' : ''}">${esc(v)}</td>`).join('')}</tr>`).join('')}
       </tbody></table>
       <footer>${T('Prices on request.', 'Prix sur demande.')}</footer>
-      <script>window.onload = () => { setTimeout(() => window.print(), 300); };<\/script>
     </body></html>`);
     w.document.close();
+    // Print from this page: the new window runs no script of its own (Content-Security-Policy)
+    const go = () => { try { w.focus(); w.print(); } catch (e) { /* window closed */ } };
+    if (w.document.readyState === 'complete') setTimeout(go, 300); else w.addEventListener('load', () => setTimeout(go, 300));
   }
 
   const ROOT = new URL('..', (document.currentScript && document.currentScript.src) || window.location.href).href;

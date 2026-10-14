@@ -5,6 +5,12 @@
    - kind 'ref'   : a catalog reference (code + snapshot of its specs)
    - kind 'model' : a product-type page configuration (slug + chosen options) */
 (function () {
+  // References that can be added from this page (reference pages ship them as JSON data)
+  try {
+    const el = document.getElementById('lr-ref-data');
+    if (el) window.LR_REF_INDEX = Object.assign(window.LR_REF_INDEX || {}, JSON.parse(el.textContent));
+  } catch (e) { /* malformed data: adding from this page is unavailable */ }
+
   const KEY = 'lr_cart_v2';
   const OLD_KEY = 'lr_cart_v1';
   const T = window.LR_T || ((en) => en);
@@ -19,7 +25,12 @@
   function load() {
     try {
       const v2 = JSON.parse(localStorage.getItem(KEY));
-      if (Array.isArray(v2)) return v2.map(i => Object.assign(i, { qty: clampQty(i.qty) }));
+      // Stored data is not trusted: keep only well-formed lines (codes and slugs are plain identifiers)
+      const ID = /^[A-Za-z0-9._:|\/-]{1,80}$/;
+      if (Array.isArray(v2)) return v2.filter(i => i && typeof i === 'object' && ID.test(String(i.key || '')) &&
+          (i.kind === 'ref' ? ID.test(String(i.code || '')) && /^[a-z]+$/.test(String(i.family || '')) && /^[a-z0-9-]+$/.test(String(i.slug || ''))
+                            : i.kind === 'model' && /^[a-z0-9-]+$/.test(String(i.slug || ''))))
+        .slice(0, 200).map(i => Object.assign(i, { qty: clampQty(i.qty) }));
       // Migrate the previous format (slug/variant/options)
       const v1 = JSON.parse(localStorage.getItem(OLD_KEY));
       if (Array.isArray(v1)) {

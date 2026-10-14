@@ -55,6 +55,27 @@ window.LR_T = window.LR_T || ((en) => en);
     if (a) { try { localStorage.setItem('lr_lang', a.getAttribute('hreflang')); } catch (err) { /* storage blocked */ } }
   });
 
+  // Range table tabs (products overview: EN 10253-1 / ASME B16.9)
+  document.addEventListener('click', function (e) {
+    const t = e.target.closest('[data-range-tab]');
+    if (!t) return;
+    document.querySelectorAll('[data-range-tab]').forEach(b => b.setAttribute('aria-selected', b === t ? 'true' : 'false'));
+    document.querySelectorAll('.range-panel').forEach(p => { p.hidden = p.id !== 'range-panel-' + t.dataset.rangeTab; });
+  });
+
+  // Print buttons (reference sheets)
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-print]')) window.print();
+  });
+
+  // Contact map: click to enable interaction so the scroll wheel is not hijacked
+  const mapWrap = document.getElementById('contact-map');
+  if (mapWrap) {
+    const unlock = mapWrap.querySelector('.map-unlock');
+    if (unlock) unlock.addEventListener('click', () => mapWrap.classList.add('is-active'));
+    document.addEventListener('click', e => { if (!mapWrap.contains(e.target)) mapWrap.classList.remove('is-active'); });
+  }
+
   // Year
   document.querySelectorAll('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
 
@@ -97,7 +118,7 @@ window.LR_T = window.LR_T || ((en) => en);
     const T = window.LR_T, none = T('not provided', 'non renseigné'), sep = T(':', ' :');
     const body = `${T('Name', 'Nom')}${sep} ${data.get('name')}\n${T('Company', 'Société')}${sep} ${data.get('company') || none}\n${T('Email', 'E-mail')}${sep} ${data.get('email')}\n${T('Phone', 'Téléphone')}${sep} ${data.get('phone') || none}\n${T('Subject', 'Objet')}${sep} ${data.get('subject') || none}\n\nMessage${sep}\n${data.get('message') || none}\n`;
     const subject = encodeURIComponent(data.get('subject') || 'Contact, Le Raccordement');
-    window.location.href = `mailto:contact@leraccordement.com?subject=${subject}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:info@leraccordement.com?subject=${subject}&body=${encodeURIComponent(body)}`;
   });
 })();
 
@@ -198,7 +219,9 @@ window.LR_T = window.LR_T || ((en) => en);
 /* Certificate viewer: whole pages fit on screen, multi-page reports shown all at once
    (click a page to see it alone). No download link; saving is blocked site-wide. */
 (function () {
-  const certs = window.LR_CERTS;
+  // Certificate list: JSON data in the page (no inline script)
+  let certs = null;
+  try { const el = document.getElementById('lr-certs'); if (el) certs = JSON.parse(el.textContent); } catch (e) { certs = null; }
   if (!certs) return;
   let dlg, doc = null, idx = -1;
   function build() {

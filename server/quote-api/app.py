@@ -13,6 +13,7 @@ Standard library only. Configuration via environment variables (see README.md):
   DATA_DIR         optional  directory (Railway volume) where every request is appended to quotes.jsonl
   SEND_CUSTOMER_COPY  optional "1" → also send a short acknowledgement to the customer
   TRUST_PROXY      default "1" → client IP taken from X-Forwarded-For (Railway runs behind a proxy)
+  ALLOW_ANY_ORIGIN optional "1" → accept every origin when ALLOWED_ORIGINS is empty (local testing only)
   RESEND_API_URL   default https://api.resend.com/emails (overridable for tests)
 """
 import datetime
@@ -37,6 +38,7 @@ CFG = {
     'data_dir': os.environ.get('DATA_DIR', ''),
     'customer_copy': os.environ.get('SEND_CUSTOMER_COPY', '') == '1',
     'trust_proxy': os.environ.get('TRUST_PROXY', '1') == '1',
+    'allow_any_origin': os.environ.get('ALLOW_ANY_ORIGIN', '') == '1',
     'resend_url': os.environ.get('RESEND_API_URL', 'https://api.resend.com/emails'),
     'min_fill_ms': int(os.environ.get('MIN_FILL_MS', '3000')),
     'rate_max': int(os.environ.get('RATE_MAX', '5')),
@@ -284,9 +286,27 @@ def to_french(msg):
     return msg
 
 # ---------------------------------------------------------------- HTTP
+SECURITY_HEADERS = {
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY',
+    'Content-Security-Policy': "default-src 'none'; frame-ancestors 'none'",
+    'Referrer-Policy': 'no-referrer',
+    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+    'Cross-Origin-Opener-Policy': 'same-origin',
+    'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=()',
+    'Cache-Control': 'no-store',
+}
+
+
 class Handler(BaseHTTPRequestHandler):
-    server_version = 'QuoteAPI/1.0'
+    server_version = 'QuoteAPI'
     sys_version = ''
+    timeout = 20   # seconds: a slow or idle connection cannot hold a worker
+
+    def end_headers(self):
+        for k, v in SECURITY_HEADERS.items():
+            self.send_header(k, v)
+        super().end_headers()
 
     def log_message(self, fmt, *args):  # keep stdout for structured logs
         pass
@@ -294,7 +314,8 @@ class Handler(BaseHTTPRequestHandler):
     def origin_allowed(self):
         origin = (self.headers.get('Origin') or '').rstrip('/')
         if not CFG['origins']:
-            return True, origin or '*'
+            # closed by default: an API without ALLOWED_ORIGINS accepts nothing, unless explicitly opened for local tests
+            return CFG['allow_any_origin'], origin or '*'
         return origin in CFG['origins'], origin
 
     def send_json(self, status, data, origin=None):
@@ -304,8 +325,6 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(status)
         self.send_header('Content-Type', 'application/json; charset=utf-8')
         self.send_header('Content-Length', str(len(body)))
-        self.send_header('Cache-Control', 'no-store')
-        self.send_header('X-Content-Type-Options', 'nosniff')
         if origin:
             self.send_header('Access-Control-Allow-Origin', origin)
             self.send_header('Vary', 'Origin')
@@ -314,7 +333,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def client_ip(self):
         if CFG['trust_proxy'] and self.headers.get('X-Forwarded-For'):
-            return self.headers['X-Forwarded-For'].split(',')[0].strip()
+            # the proxy appends the address it saw: the last entry cannot be forged by the client
+            return self.headers['X-Forwarded-For'].split(',')[-1].strip()[:64]
         return self.client_address[0]
 
     def do_OPTIONS(self):
@@ -344,6 +364,9 @@ class Handler(BaseHTTPRequestHandler):
         if not (CFG['api_key'] and CFG['mail_from']):
             log('not_configured')
             return self.send_json(503, {'ok': False, 'error': 'Quote service is not configured.'}, origin)
+        if (self.headers.get('Content-Type') or '').split(';')[0].strip().lower() != 'application/json':
+            # browsers cannot send JSON cross-site without CORS approval: refuses plain form posts from other sites
+            return self.send_json(415, {'ok': False, 'error': 'Invalid request'}, origin)
         try:
             length = int(self.headers.get('Content-Length') or 0)
         except ValueError:
@@ -383,6 +406,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_json(200, {'ok': True, 'id': prev['id'], 'receivedAt': prev['receivedAt'], 'duplicate': True}, origin)
             if prev and prev['state'] == 'pending':
                 return self.send_json(409, {'ok': False, 'error': 'This request is already being sent. Please wait.'}, origin)
+            for k in [k for k, v in _hits.items() if not v or now - v[-1] > CFG['rate_window']]:
+                del _hits[k]   # forget visitors whose window has passed (bounded memory)
             hits = [t for t in _hits.get(ip, []) if now - t < CFG['rate_window']]
             if len(hits) >= CFG['rate_max']:
                 log('rate_limited', ip=ip)
@@ -429,7 +454,7 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     if not CFG['origins']:
-        log('warning', message='ALLOWED_ORIGINS is empty: any website can post to this API. Set it in production.')
+        log('warning', message='ALLOWED_ORIGINS is empty: every request is refused (set ALLOW_ANY_ORIGIN=1 only for local tests).')
     if not (CFG['api_key'] and CFG['mail_from']):
         log('warning', message='RESEND_API_KEY / MAIL_FROM missing: /api/quote will answer 503.')
     srv = ThreadingHTTPServer(('0.0.0.0', CFG['port']), Handler)

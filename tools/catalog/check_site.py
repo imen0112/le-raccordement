@@ -97,6 +97,12 @@ def main():
             text = json.dumps(data)
             if '"offers"' in text or '"price"' in text:
                 errors.append('%s: JSON-LD declares a price/offer' % rel)
+        if 'http-equiv="Content-Security-Policy"' not in src:
+            errors.append('%s: no Content-Security-Policy' % rel)
+        if re.search(r'<script>|\son[a-z]+="', src):
+            errors.append('%s: inline script or event handler (blocked by the Content-Security-Policy)' % rel)
+        if re.search(r'target="_blank"(?![^>]*noopener)', src):
+            errors.append('%s: new-tab link without rel="noopener"' % rel)
         if re.search(r'€\s?\d|priceFrom|Indicative (sub)?total', src):
             errors.append('%s: price shown' % rel)
         lang = 'en' if rel.startswith('en/') else 'fr'

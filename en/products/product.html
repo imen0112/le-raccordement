@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self'; connect-src 'self' https://*.up.railway.app; frame-src https://www.openstreetmap.org; object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#0E2A47" />
 <title id="pd-title">Product · Le Raccordement</title>
@@ -21,9 +23,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../../css/main.css?v=20261014r" />
+<link rel="stylesheet" href="../../css/main.css?v=20261014s" />
 <script type="application/ld+json" id="pd-jsonld"></script>
-<script src="../../js/lang.js?v=20261014r"></script>
+<script src="../../js/lang.js?v=20261014s"></script>
 </head>
 <body>
 
@@ -238,7 +240,7 @@
     <div class="footer-grid footer">
       <div class="footer-brand">
         <a href="../" class="footer-logo" aria-label="Le Raccordement home page"><img src="../../assets/img/logo/logo.png" alt="" /></a>
-        <p style="font-size:var(--fs-14); color:rgba(255,255,255,0.65); max-width:36ch">North Africa's first manufacturer of seamless and welded butt-weld pipe fittings.</p>
+        <p style="font-size:var(--fs-14); color:rgba(255,255,255,0.65); max-width:36ch">North Africa's first manufacturer of seamless and welded butt-weld pipe fittings.</p><div class="footer-social" aria-label="Social networks"><a href="https://www.linkedin.com/company/79341577/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in a new tab)"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a><a href="https://www.facebook.com/profile.php?id=100062994896499" target="_blank" rel="noopener noreferrer" aria-label="Facebook (opens in a new tab)"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.5h-2.8V24C19.62 23.1 24 18.1 24 12.07z"/></svg></a></div>
       </div>
       <div><h4>Products</h4><ul>
         <li><a href="elbows.html">Elbows</a></li><li><a href="tees.html">Tees</a></li>
@@ -253,8 +255,8 @@
         <div class="footer-contact">
           <span>Zone Industrielle de Doukhane</span>
           <span>El Hencha, 3043 Sfax, Tunisia</span>
-          <a href="mailto:contact@leraccordement.com">contact@leraccordement.com</a>
-          <a href="tel:+21674000000">+216 74 000 000</a>
+          <a href="mailto:info@leraccordement.com">info@leraccordement.com</a>
+          <a href="tel:+21639156543">+216 39 15 65 43</a>
         </div>
       </div>
     </div>
@@ -277,183 +279,11 @@
   </div>
 </aside>
 
-<script src="../../js/i18n.js?v=20261014r"></script>
-<script src="../../js/products.js?v=20261014r"></script>
-<script src="../../js/product-specs.js?v=20261014r"></script>
-<script src="../../js/cart.js?v=20261014r"></script>
-<script src="../../js/main.js?v=20261014r"></script><script src="../../js/search.js?v=20261014r"></script>
-<script>
-
-  (function () {
-    const slug = new URLSearchParams(window.location.search).get('slug');
-    // Product types withdrawn from the range: send old links to their family page
-    const REMOVED = { 'elbow-180': 'elbows.html', 'reducing-tee': 'tees.html' };
-    if (REMOVED[slug]) { window.location.replace(REMOVED[slug]); return; }
-    const p = (window.LR_PRODUCTS || []).find(x => x.slug === slug);
-    const notFound = document.getElementById('pd-not-found');
-    const content = document.getElementById('pd-content');
-
-    if (!p) { notFound.style.display = ''; document.getElementById('pd-title').textContent = 'Product not found · Le Raccordement'; return; }
-    content.style.display = '';
-
-    // Meta
-    document.title = `${p.name}: ${p.categoryLabel} · Le Raccordement`;
-    document.getElementById('pd-desc').setAttribute('content', p.short);
-    document.getElementById('pd-canonical').href = `https://leraccordement.com/en/products/product.html?slug=${p.slug}`;
-    document.getElementById('pd-og-title').setAttribute('content', `${p.name} | Le Raccordement`);
-    document.getElementById('pd-og-desc').setAttribute('content', p.short);
-    // p.image is resolved from the site root (js/products.js): publish it on the main domain
-    const imageUrl = 'https://leraccordement.com/' + String(p.image).replace(window.LR_SITE_ROOT || '', '').replace(/^(\.\.\/)+/, '');
-    document.getElementById('pd-og-image').setAttribute('content', imageUrl);
-
-    // JSON-LD Product
-    const jsonld = {
-      "@context": "https://schema.org/",
-      "@type": "Product",
-      "name": p.name,
-      "image": [imageUrl],
-      "description": p.description,
-      "sku": p.slug,
-      "category": p.categoryLabel,
-      "brand": { "@type": "Brand", "name": "Le Raccordement" },
-      "manufacturer": { "@type": "Organization", "name": "Le Raccordement", "address": "Sfax, Tunisia" }
-    };
-    document.getElementById('pd-jsonld').textContent = JSON.stringify(jsonld);
-
-    // Hero
-    document.getElementById('pd-categoryLabel').textContent = p.categoryLabel;
-    document.getElementById('pd-name').textContent = p.name;
-    document.getElementById('pd-short').textContent = p.short;
-    const pdImg = document.getElementById('pd-image');
-    pdImg.src = p.image;
-    pdImg.alt = p.name;
-
-    // Gallery thumbnails, main photo + extra angles + technical drawing
-    const photoThumbs = [
-      { src: p.image, label: 'Photo 1', cls: 'photo' },
-      ...(p.gallery || []).map((src, i) => ({ src, label: `Photo ${i + 2}`, cls: 'photo' }))
-    ];
-    const thumbs = [
-      ...photoThumbs,
-      p.technical ? { src: p.technical, label: 'Technical', cls: 'tech' } : null
-    ].filter(Boolean);
-    if (thumbs.length > 1) {
-      const thumbWrap = document.getElementById('pd-thumbs');
-      thumbWrap.innerHTML = thumbs.map((t, i) => `
-        <button class="pd-thumb ${i === 0 ? 'is-active' : ''} pd-thumb-${t.cls}" data-thumb="${t.src}" aria-label="View ${t.label}">
-          <img src="${t.src}" alt="${t.label}" />
-          <span class="pd-thumb-label">${t.label}</span>
-        </button>`).join('');
-      thumbWrap.addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-thumb]');
-        if (!btn) return;
-        pdImg.src = btn.dataset.thumb;
-        thumbWrap.querySelectorAll('.pd-thumb').forEach(b => b.classList.toggle('is-active', b === btn));
-        // change pd-media background tone if showing technical drawing
-        document.querySelector('.pd-media').classList.toggle('is-technical', btn.classList.contains('pd-thumb-tech'));
-      });
-    }
-    document.getElementById('pd-description').textContent = p.description;
-
-
-    // Breadcrumb
-    document.getElementById('pd-crumb').innerHTML = `<a href="../">Home</a><span class="sep">/</span><a href="./">Products</a><span class="sep">/</span><a href="${p.category}.html">${p.categoryLabel}</a><span class="sep">/</span><span>${p.name}</span>`;
-
-    // Key spec grid (size, standards, grades, wall, finish from js/product-specs.js)
-    const list = a => (a || []).join(', ');
-    const keys = [
-      ['Category', p.categoryLabel],
-      p.angle ? ['Angle', p.angle] : null,
-      p.radius ? ['Bend radius', p.radius] : null,
-      p.sizeRange ? ['Size range', p.sizeRange] : null,
-      p.thickness ? ['Wall thickness', list(p.thickness)] : null,
-      p.materials ? ['Steel grade', list(p.materials)] : null,
-      p.standards ? ['Standard', list(p.standards)] : null,
-      p.manufacturing ? ['Manufacturing', list(p.manufacturing)] : null,
-      p.coating ? ['Finish', list(p.coating)] : null,
-      p.refCount ? ['Catalog references', p.refCount] : null,
-      ['Marking', p.marking],
-      ['Packaging', p.packaging],
-      ['Certificate', p.certificate],
-      ['Lead time', p.leadTime],
-      ['Min. order', p.minOrder]
-    ].filter(Boolean);
-    document.getElementById('pd-facts').innerHTML = keys.slice(1, 10).map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
-    document.getElementById('pd-keyspec').innerHTML = keys.map(([k, v]) => `<div class="k">${k}</div><div class="v">${v}</div>`).join('');
-
-    // Tag rows
-    const tagRow = (id, arr) => document.getElementById(id).innerHTML = (arr || []).map(t => `<span class="tag">${t}</span>`).join('');
-    tagRow('pd-materials', p.materials);
-    tagRow('pd-thickness', p.thickness);
-    tagRow('pd-coating', p.coating);
-
-    // Standards quick-pills (top of right column)
-    document.getElementById('pd-standards-quick').innerHTML = (p.standards || []).map(s => `<span class="tag">${s}</span>`).join('');
-
-    // Applications, render as 4-card grid
-    document.getElementById('pd-app-cards').innerHTML = (p.applications || []).map(app => `
-      <div class="card"><h3 class="h-4">${app}</h3></div>`).join('');
-
-    // Standards, render as detailed cards with descriptions
-    const STD_DESC = {
-      'ASME B16.9': 'Factory-made wrought butt-welding fittings. North-American reference for dimensions and tolerances.',
-      'EN 10253-1': 'European standard for butt-welding pipe fittings, Part 1, carbon steel without specific inspection requirements.'
-    };
-    document.getElementById('pd-standard-cards').innerHTML = (p.standards || []).map(s => `
-      <div class="cert-card">
-        <span class="num">Standard</span>
-        <h3>${s}</h3>
-        <p class="text-muted" style="font-size:var(--fs-14);">${STD_DESC[s] || 'International manufacturing standard.'}</p>
-      </div>`).join('');
-
-    // Catalog references matching this product type
-    (function renderRefs() {
-      const box = document.getElementById('pd-refs');
-      const prefixes = p.articles || [];
-      const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-      if (!prefixes.length) {
-        box.innerHTML = `<p class="text-muted">This product type is made to order and has no standard catalog reference yet. <a href="../contact.html" style="text-decoration:underline">Send us your specification</a> or browse all <a href="${p.category}.html#references" style="text-decoration:underline">${esc(p.categoryLabel.toLowerCase())} references</a>.</p>`;
-        return;
-      }
-      fetch(`../../data/catalog/${p.category}.json?v=${window.LR_DATA_V || ''}`).then(r => r.json()).then(data => {
-        const refs = data.items.filter(it => prefixes.some(pre => it.article.startsWith(pre)));
-        window.LR_REF_INDEX = window.LR_REF_INDEX || {};
-        refs.forEach(it => { window.LR_REF_INDEX[it.id] = it; });
-        const articles = Array.from(new Set(refs.map(it => it.articleEn)));
-        const qs = articles.map(a => 'article=' + encodeURIComponent(a)).join('&');
-        document.getElementById('pd-refs-title').textContent = `${refs.length} available references.`;
-        box.innerHTML = `<div class="ref-table-wrap"><table class="ref-table">
-          <thead><tr><th scope="col">Reference</th><th scope="col">Designation</th><th scope="col">Dimensions (mm)</th><th scope="col">Standard · grade</th><th scope="col">Type · finish</th><th scope="col">Quantity (min. 50)</th></tr></thead>
-          <tbody>${refs.map(it => `<tr data-ref-row>
-            <td data-label="Reference" class="ref-code"><a href="${it.family}/${it.slug}.html">${esc(it.code)}</a></td>
-            <td data-label="Designation" class="ref-desig"><a class="ref-desig-link" href="${it.family}/${it.slug}.html">${esc(it.designationEn)}</a></td>
-            <td data-label="Dimensions" class="ref-dims">${esc(it.dimsLabel)}</td>
-            <td data-label="Standard · grade">${esc(it.f.norme)}<span class="ref-sub">${esc(it.nuance)}</span></td>
-            <td data-label="Type · finish">${it.typeEn ? `${esc(it.typeEn)}<span class="ref-sub">${esc(it.finitionEn)}</span>` : esc(it.finitionEn)}</td>
-            <td data-label="Quantity" class="ref-actions"><div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="Decrease">−</button><input type="text" inputmode="numeric" value="50" data-row-qty aria-label="Quantity for ${esc(it.code)}"/><button type="button" data-qty="inc" aria-label="Increase">+</button></div>
-              <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(it.id)}">Add<span class="sr-only"> ${esc(it.code)} to quote list</span></button>
-            <a class="btn btn-ghost btn-sm ref-details" href="${it.family}/${it.slug}.html">Details<span class="sr-only"> and compatible fittings</span></a></td>
-          </tr>`).join('')}</tbody></table></div>
-          <p class="mt-6"><a class="btn btn-ghost btn-sm" href="${p.category}.html?${qs}#references">Filter these references by size, standard and finish →</a></p>`;
-      }).catch(() => {
-        box.innerHTML = `<p class="text-muted">References could not be loaded. <a href="${p.category}.html#references" style="text-decoration:underline">Open the ${esc(p.categoryLabel.toLowerCase())} catalog</a>.</p>`;
-      });
-    })();
-
-    // Related (same category, exclude self)
-    const related = (window.LR_PRODUCTS || []).filter(x => x.category === p.category && x.slug !== p.slug).slice(0, 4);
-    document.getElementById('pd-related').innerHTML = related.map(r => `
-      <a href="product.html?slug=${r.slug}" class="product-card">
-        <div class="product-card-media"><img src="${r.image}" alt="${r.name}" loading="lazy" /></div>
-        <div class="product-card-body">
-          <span class="product-card-cat">${r.categoryLabel}</span>
-          <h3>${r.name}</h3>
-        </div>
-        <div class="product-card-foot">
-          <span class="product-card-quote">Price on request</span>
-        </div>
-      </a>`).join('') || `<p class="text-muted">No related products in this category.</p>`;
-  })();
-</script>
+<script src="../../js/i18n.js?v=20261014s"></script>
+<script src="../../js/products.js?v=20261014s"></script>
+<script src="../../js/product-specs.js?v=20261014s"></script>
+<script src="../../js/cart.js?v=20261014s"></script>
+<script src="../../js/main.js?v=20261014s"></script><script src="../../js/search.js?v=20261014s"></script>
+<script src="../../js/product-page.js?v=20261014s"></script>
 </body>
 </html>
