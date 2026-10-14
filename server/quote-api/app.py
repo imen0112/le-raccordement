@@ -240,6 +240,49 @@ def new_id(now):
     return 'DV-%s-%s' % (now.strftime('%Y%m%d'), ''.join(secrets.choice(alphabet) for _ in range(5)))
 
 
+
+# ---------------------------------------------------------------- French error messages (French site)
+FR_FIELDS = {'Full name': 'Nom et prénom', 'Company': 'Société', 'Email': 'E-mail', 'Phone': 'Téléphone', 'Country': 'Pays',
+             'Incoterm': 'Incoterm', 'Message': 'Message', 'Reference': 'Référence', 'Designation': 'Désignation'}
+FR_EXACT = {
+    'Invalid request': 'Demande invalide',
+    'Contact details are missing': 'Les coordonnées sont manquantes',
+    'Please enter your full name and company': 'Veuillez indiquer vos nom, prénom et société',
+    'Please enter a valid email address': 'Veuillez indiquer une adresse e-mail valide',
+    'Please enter a valid phone number': 'Veuillez indiquer un numéro de téléphone valide',
+    'Your quote list is empty': 'Votre liste de devis est vide',
+    'Invalid line in quote list': 'Ligne invalide dans la liste de devis',
+    'Invalid quantity': 'Quantité invalide',
+    'Invalid reference code': 'Code de référence invalide',
+    'Invalid options': 'Options invalides',
+    'Quote service is not configured.': 'Le service de devis n’est pas configuré.',
+    'Request rejected.': 'Demande refusée.',
+    'The form was submitted too quickly. Please wait a few seconds and try again.':
+        'Le formulaire a été envoyé trop rapidement. Patientez quelques secondes puis réessayez.',
+    'This request is already being sent. Please wait.': 'Cette demande est déjà en cours d’envoi. Veuillez patienter.',
+    'Too many requests. Please try again later or email us directly.':
+        'Trop de demandes. Réessayez plus tard ou écrivez-nous directement par e-mail.',
+    'Your request could not be emailed to our sales team.': 'Votre demande n’a pas pu être transmise par e-mail à notre équipe commerciale.',
+}
+
+
+def to_french(msg):
+    if msg in FR_EXACT:
+        return FR_EXACT[msg]
+    m = re.match(r'^(.*?)( is required| is too long|: line breaks are not allowed|: invalid value)$', msg)
+    if m:
+        field = FR_FIELDS.get(m.group(1), m.group(1))
+        return field + {' is required': ' : champ obligatoire', ' is too long': ' : texte trop long',
+                        ': line breaks are not allowed': ' : les retours à la ligne ne sont pas autorisés',
+                        ': invalid value': ' : valeur invalide'}[m.group(2)]
+    m = re.match(r'^Minimum quantity is (\d+) pieces per reference$', msg)
+    if m:
+        return 'La quantité minimale est de %s pièces par référence' % m.group(1)
+    m = re.match(r'^Too many lines \(max (\d+)\)$', msg)
+    if m:
+        return 'Trop de lignes (%s au maximum)' % m.group(1)
+    return msg
+
 # ---------------------------------------------------------------- HTTP
 class Handler(BaseHTTPRequestHandler):
     server_version = 'QuoteAPI/1.0'
@@ -255,6 +298,8 @@ class Handler(BaseHTTPRequestHandler):
         return origin in CFG['origins'], origin
 
     def send_json(self, status, data, origin=None):
+        if status >= 400 and getattr(self, 'lang', 'en') == 'fr' and isinstance(data.get('error'), str):
+            data = dict(data, error=to_french(data['error']))
         body = json.dumps(data).encode('utf-8')
         self.send_response(status)
         self.send_header('Content-Type', 'application/json; charset=utf-8')
@@ -311,6 +356,7 @@ class Handler(BaseHTTPRequestHandler):
             body = json.loads(self.rfile.read(length).decode('utf-8'))
         except (ValueError, UnicodeDecodeError):
             return self.send_json(400, {'ok': False, 'error': 'Invalid JSON'}, origin)
+        self.lang = 'fr' if isinstance(body, dict) and body.get('lang') == 'fr' else 'en'
 
         ip = self.client_ip()
         # Spam traps: hidden field filled, or form submitted faster than a human can

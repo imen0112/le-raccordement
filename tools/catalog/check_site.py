@@ -11,7 +11,11 @@ from urllib.parse import urljoin, urlparse
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-KNOWN_MISSING = ('fr/',)   # French mirror not built yet (pre-existing language toggle)
+KNOWN_MISSING = ()
+# English UI wording that must not appear on a French page (French at the root, English under en/)
+ENGLISH_ON_FR = ('Request a quote', 'Add to quote list', 'Price on request', 'Your quote list', 'All rights reserved',
+                 'Quick quote builder', 'Technical data', 'Compatible fittings', 'Browse the', 'View the list', '>Home<',
+                 '>Products<', ' references<', 'Butt-weld', 'Wall thickness', 'Outside diameter', 'Steel grade')
 
 
 class Page(HTMLParser):
@@ -80,7 +84,7 @@ def main():
         titles.setdefault((p.title or '').strip(), []).append(rel)
         if rel not in ('404.html',) and not p.desc:
             errors.append('%s: no meta description' % rel)
-        if p.h1 != 1 and rel != 'products/product.html':
+        if p.h1 != 1 and not rel.endswith('products/product.html'):
             warnings.append('%s: %d <h1>' % (rel, p.h1))
         for block in p.jsonld:
             if not block.strip():
@@ -95,7 +99,22 @@ def main():
                 errors.append('%s: JSON-LD declares a price/offer' % rel)
         if re.search(r'€\s?\d|priceFrom|Indicative (sub)?total', src):
             errors.append('%s: price shown' % rel)
-        if rel.startswith('products/') and rel.count('/') == 2:
+        lang = 'en' if rel.startswith('en/') else 'fr'
+        m = re.search(r'<html lang="([a-z]+)"', src)
+        if not m or m.group(1) != lang:
+            errors.append('%s: <html lang> should be "%s"' % (rel, lang))
+        if lang == 'fr':
+            text_only = re.sub(r'<script[\s\S]*?</script>', '', src)
+            for w in ENGLISH_ON_FR:
+                if w in text_only:
+                    errors.append('%s: English text on a French page: %r' % (rel, w))
+        if rel != '404.html':
+            other = rel[3:] if lang == 'en' else 'en/' + rel
+            if not os.path.exists(os.path.join(ROOT, other)):
+                errors.append('%s: no %s counterpart %s' % (rel, 'French' if lang == 'en' else 'English', other))
+            elif 'hreflang="%s"' % ('fr' if lang == 'en' else 'en') not in src:
+                errors.append('%s: no hreflang link to %s' % (rel, other))
+        if re.match(r'^(en/)?products/[^/]+/[^/]+\.html$', rel):
             if p.canonical != url:
                 errors.append('%s: canonical %s ≠ %s' % (rel, p.canonical, url))
     for t, rels in titles.items():
@@ -110,7 +129,7 @@ def main():
             path += 'index.html'
         if not os.path.exists(os.path.join(ROOT, path)):
             errors.append('sitemap → missing %s' % loc)
-    refs = glob.glob(os.path.join(ROOT, 'products', '*', '*.html'))
+    refs = glob.glob(os.path.join(ROOT, 'products', '*', '*.html')) + glob.glob(os.path.join(ROOT, 'en', 'products', '*', '*.html'))
     in_sm = sum(1 for l in locs if re.search(r'/products/[a-z]+/[^/]+\.html$', l))
     if in_sm != len(refs):
         errors.append('sitemap lists %d reference pages, %d exist' % (in_sm, len(refs)))

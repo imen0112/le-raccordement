@@ -1,3 +1,6 @@
+/* Texts in the page language (js/i18n.js); English if i18n.js is missing */
+window.LR_T = window.LR_T || ((en) => en);
+
 /* Header scroll, mobile nav, reveal on scroll, simple year */
 (function () {
   const header = document.querySelector('.site-header');
@@ -34,6 +37,16 @@
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   } else {
     document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+  }
+
+  // Product-type page (product.html?slug=…): the FR/EN switch and hreflang links keep the product
+  const slug = new URLSearchParams(window.location.search).get('slug');
+  if (slug) {
+    document.querySelectorAll('[data-lang-toggle] a[hreflang], link[rel="alternate"][hreflang]').forEach(a => {
+      const u = new URL(a.getAttribute('href'), window.location.href);
+      u.searchParams.set('slug', slug);
+      a.setAttribute('href', a.tagName === 'LINK' ? u.href : a.getAttribute('href').split('?')[0] + u.search);
+    });
   }
 
   // Year
@@ -75,7 +88,8 @@
     if (!form) return;
     e.preventDefault();
     const data = new FormData(form);
-    const body = `Name: ${data.get('name')}\nCompany: ${data.get('company') || 'not provided'}\nEmail: ${data.get('email')}\nPhone: ${data.get('phone') || 'not provided'}\nSubject: ${data.get('subject') || 'not provided'}\n\nMessage:\n${data.get('message') || 'not provided'}\n`;
+    const T = window.LR_T, none = T('not provided', 'non renseigné'), sep = T(':', ' :');
+    const body = `${T('Name', 'Nom')}${sep} ${data.get('name')}\n${T('Company', 'Société')}${sep} ${data.get('company') || none}\n${T('Email', 'E-mail')}${sep} ${data.get('email')}\n${T('Phone', 'Téléphone')}${sep} ${data.get('phone') || none}\n${T('Subject', 'Objet')}${sep} ${data.get('subject') || none}\n\nMessage${sep}\n${data.get('message') || none}\n`;
     const subject = encodeURIComponent(data.get('subject') || 'Contact, Le Raccordement');
     window.location.href = `mailto:contact@leraccordement.com?subject=${subject}&body=${encodeURIComponent(body)}`;
   });
@@ -89,11 +103,12 @@
     if (dlg) return dlg;
     dlg = document.createElement('dialog');
     dlg.className = 'lightbox';
-    dlg.setAttribute('aria-label', 'Photo gallery');
-    dlg.innerHTML = '<button type="button" class="lightbox-close" aria-label="Close">×</button>' +
-      '<button type="button" class="lightbox-nav lightbox-prev" data-dir="-1" aria-label="Previous photo">‹</button>' +
+    const T = window.LR_T;
+    dlg.setAttribute('aria-label', T('Photo gallery', 'Galerie photos'));
+    dlg.innerHTML = '<button type="button" class="lightbox-close" aria-label="' + T('Close', 'Fermer') + '">×</button>' +
+      '<button type="button" class="lightbox-nav lightbox-prev" data-dir="-1" aria-label="' + T('Previous photo', 'Photo précédente') + '">‹</button>' +
       '<img alt="" draggable="false" />' +
-      '<button type="button" class="lightbox-nav lightbox-next" data-dir="1" aria-label="Next photo">›</button>' +
+      '<button type="button" class="lightbox-nav lightbox-next" data-dir="1" aria-label="' + T('Next photo', 'Photo suivante') + '">›</button>' +
       '<p class="lightbox-count" aria-live="polite"></p>';
     document.body.appendChild(dlg);
     dlg.addEventListener('click', e => {
@@ -129,7 +144,7 @@
       img.dataset.zoomReady = '1';
       img.tabIndex = 0;
       img.setAttribute('role', 'button');
-      img.setAttribute('aria-label', 'Open the photo gallery');
+      img.setAttribute('aria-label', window.LR_T('Open the photo gallery', 'Ouvrir la galerie photos'));
     });
   }
   document.addEventListener('click', e => {
@@ -183,8 +198,8 @@
   function build() {
     dlg = document.createElement('dialog');
     dlg.className = 'lightbox cert-viewer';
-    dlg.setAttribute('aria-label', 'Certificate viewer');
-    dlg.innerHTML = '<button type="button" class="lightbox-close" aria-label="Close">×</button>' +
+    dlg.setAttribute('aria-label', window.LR_T('Certificate viewer', 'Visionneuse de certificat'));
+    dlg.innerHTML = '<button type="button" class="lightbox-close" aria-label="' + window.LR_T('Close', 'Fermer') + '">×</button>' +
       '<div class="cert-viewer-stage"></div>' +
       '<div class="cert-viewer-bar"></div>';
     document.body.appendChild(dlg);
@@ -203,23 +218,24 @@
     });
   }
   function render() {
+    const T = window.LR_T;
     const stage = dlg.querySelector('.cert-viewer-stage');
     const bar = dlg.querySelector('.cert-viewer-bar');
     const multi = doc.pages.length > 1;
     if (multi && idx < 0) {
       stage.className = 'cert-viewer-stage is-grid';
       stage.innerHTML = doc.pages.map((src, i) =>
-        `<button type="button" class="cert-page" data-page="${i}" aria-label="Page ${i + 1}, view alone"><img src="${src}" alt="${doc.title}, page ${i + 1}" draggable="false" /><span>${i + 1}</span></button>`).join('');
+        `<button type="button" class="cert-page" data-page="${i}" aria-label="Page ${i + 1}, ${T('view alone', 'afficher seule')}"><img src="${src}" alt="${doc.title}, page ${i + 1}" draggable="false" /><span>${i + 1}</span></button>`).join('');
       bar.innerHTML = '';
     } else {
       const i = Math.max(0, idx);
       stage.className = 'cert-viewer-stage is-single';
       stage.innerHTML = `<img src="${doc.pages[i]}" alt="${doc.title}${multi ? ', page ' + (i + 1) : ''}" draggable="false" />`;
       bar.innerHTML = multi
-        ? `<button type="button" class="cert-nav" data-dir="-1" aria-label="Previous page"${i === 0 ? ' disabled' : ''}>‹</button>` +
+        ? `<button type="button" class="cert-nav" data-dir="-1" aria-label="${T('Previous page', 'Page précédente')}"${i === 0 ? ' disabled' : ''}>‹</button>` +
           `<span>Page ${i + 1} / ${doc.pages.length}</span>` +
-          `<button type="button" class="cert-nav" data-dir="1" aria-label="Next page"${i === doc.pages.length - 1 ? ' disabled' : ''}>›</button>` +
-          `<button type="button" class="cert-all" data-all>All pages</button>`
+          `<button type="button" class="cert-nav" data-dir="1" aria-label="${T('Next page', 'Page suivante')}"${i === doc.pages.length - 1 ? ' disabled' : ''}>›</button>` +
+          `<button type="button" class="cert-all" data-all>${T('All pages', 'Toutes les pages')}</button>`
         : '';
     }
   }

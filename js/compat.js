@@ -7,11 +7,13 @@
   const ROOT = window.LR_CART.ROOT;
   const FAMILIES = ['elbows', 'tees', 'reducers', 'caps'];
   const PER_GROUP = 8;
+  const T = window.LR_T || ((en) => en);
+  const TXT = it => (window.LR_REFTXT ? window.LR_REFTXT(it) : { designation: it.designationEn });
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   let all = null, loading = null;
 
   function load() {
-    if (!loading) loading = Promise.all(FAMILIES.map(f => fetch(ROOT + 'data/catalog/' + f + '.json').then(r => r.json())))
+    if (!loading) loading = Promise.all(FAMILIES.map(f => fetch(ROOT + 'data/catalog/' + f + '.json?v=' + (window.LR_DATA_V || '')).then(r => r.json())))
       .then(list => {
         all = [].concat(...list.map(d => d.items));
         window.LR_REF_INDEX = window.LR_REF_INDEX || {};
@@ -39,10 +41,10 @@
 
   function row(x) {
     return `<tr data-ref-row>
-      <td data-label="Reference" class="ref-code"><a href="${ROOT}products/${x.family}/${x.slug}.html">${esc(x.code)}</a></td>
-      <td data-label="Designation" class="ref-desig"><a class="ref-desig-link" href="${ROOT}products/${x.family}/${x.slug}.html">${esc(x.designationEn)}</a></td>
-      <td data-label="Quantity" class="ref-actions"><div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="Decrease">−</button><input type="text" inputmode="numeric" value="50" data-row-qty aria-label="Quantity for ${esc(x.code)}"/><button type="button" data-qty="inc" aria-label="Increase">+</button></div>
-        <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(x.id)}">Add<span class="sr-only"> ${esc(x.code)} to quote list</span></button></td>
+      <td data-label="${T('Reference', 'Référence')}" class="ref-code"><a href="${ROOT}products/${x.family}/${x.slug}.html">${esc(x.code)}</a></td>
+      <td data-label="${T('Designation', 'Désignation')}" class="ref-desig"><a class="ref-desig-link" href="${ROOT}products/${x.family}/${x.slug}.html">${esc(TXT(x).designation)}</a></td>
+      <td data-label="${T('Quantity', 'Quantité')}" class="ref-actions"><div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="${T('Decrease', 'Diminuer')}">−</button><input type="text" inputmode="numeric" value="50" data-row-qty aria-label="${T('Quantity for', 'Quantité pour')} ${esc(x.code)}"/><button type="button" data-qty="inc" aria-label="${T('Increase', 'Augmenter')}">+</button></div>
+        <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(x.id)}">${T('Add', 'Ajouter')}<span class="sr-only"> ${esc(x.code)} ${T('to quote list', 'à la liste de devis')}</span></button></td>
     </tr>`;
   }
 
@@ -57,16 +59,16 @@
         const list = compatible(it).filter(x => !inCart.has(x.code));
         if (!list.length) return '';
         const more = list.length > PER_GROUP
-          ? `<a class="ref-compat-link" href="${ROOT}products/${it.family}/${it.slug}.html#compatible">See all ${list.length} →</a>` : '';
+          ? `<a class="ref-compat-link" href="${ROOT}products/${it.family}/${it.slug}.html#compatible">${T('See all', 'Voir les')} ${list.length}${T('', ' références')} →</a>` : '';
         return `<div class="cart-compat-group">
-          <h3 class="cart-compat-title">For <span class="mono">${esc(it.code)}</span> <span class="text-muted">${esc(it.designationEn)}</span></h3>
-          <div class="ref-table-wrap"><table class="ref-table"><thead><tr><th scope="col">Reference</th><th scope="col">Designation</th><th scope="col">Quantity (min. 50)</th></tr></thead>
+          <h3 class="cart-compat-title">${T('For', 'Pour')} <span class="mono">${esc(it.code)}</span> <span class="text-muted">${esc(TXT(it).designation)}</span></h3>
+          <div class="ref-table-wrap"><table class="ref-table"><thead><tr><th scope="col">${T('Reference', 'Référence')}</th><th scope="col">${T('Designation', 'Désignation')}</th><th scope="col">${T('Quantity (min. 50)', 'Quantité (min. 50)')}</th></tr></thead>
           <tbody>${list.slice(0, PER_GROUP).map(row).join('')}</tbody></table></div>${more}
         </div>`;
       }).filter(Boolean);
       box.innerHTML = groups.length ? `<section class="cart-compat" aria-labelledby="cart-compat-h">
-        <h2 class="h-3" id="cart-compat-h">Compatible fittings for your references</h2>
-        <p class="catalog-note mt-2">Same pipe, same standard, grade and finish as the references in your list. Add what you need to complete the line.</p>
+        <h2 class="h-3" id="cart-compat-h">${T('Compatible fittings for your references', 'Raccords compatibles avec vos références')}</h2>
+        <p class="catalog-note mt-2">${T('Same pipe, same standard, grade and finish as the references in your list. Add what you need to complete the line.', 'Même tube, même norme, même nuance et même finition que les références de votre liste. Ajoutez ce qu’il vous faut pour compléter la ligne.')}</p>
         ${groups.join('')}</section>` : '';
     }).catch(() => { box.innerHTML = ''; });
   }

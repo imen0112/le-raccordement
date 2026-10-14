@@ -8,6 +8,7 @@
   const family = root.getAttribute('data-catalog');
   const PAGE = 50;
   const BAR = root.getAttribute('data-filter-style') === 'bar';
+  const T = window.LR_T, RT = window.LR_REFTXT;
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   const els = {
@@ -31,7 +32,7 @@
     .catch(err => {
       // The static table stays usable; only filtering is unavailable.
       console.error('Catalog data failed to load', err);
-      if (els.filters) els.filters.innerHTML = '<p class="catalog-note">Filters are temporarily unavailable. The full list is shown below.</p>';
+      if (els.filters) els.filters.innerHTML = '<p class="catalog-note">' + T('Filters are temporarily unavailable. The full list is shown below.', 'Les filtres sont momentanément indisponibles. La liste complète est affichée ci-dessous.') + '</p>';
     });
 
   function init(data) {
@@ -61,16 +62,17 @@
   }
 
   function rowHtml(it) {
+    const x = RT(it);
     return `<tr data-ref-row>
-      <td data-label="Reference" class="ref-code"><a href="${esc(family)}/${esc(it.slug)}.html">${esc(it.code)}</a></td>
-      <td data-label="Designation" class="ref-desig"><a class="ref-desig-link" href="${esc(family)}/${esc(it.slug)}.html">${esc(it.designationEn)}</a></td>
-      <td data-label="Dimensions" class="ref-dims">${esc(it.dimsLabel)}</td>
-      <td data-label="Standard · grade">${esc(it.f.norme)}<span class="ref-sub">${esc(it.nuance)}</span></td>
-      <td data-label="Type · finish">${it.typeEn ? `${esc(it.typeEn)}<span class="ref-sub">${esc(it.finitionEn)}</span>` : esc(it.finitionEn)}</td>
-      <td data-label="Quantity" class="ref-actions">
-        <div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="Decrease">−</button><input type="text" inputmode="numeric" value="50" data-row-qty aria-label="Quantity for ${esc(it.code)}"/><button type="button" data-qty="inc" aria-label="Increase">+</button></div>
-        <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(it.id)}">Add<span class="sr-only"> ${esc(it.code)} to quote list</span></button>
-        <a class="btn btn-ghost btn-sm ref-details" href="${esc(family)}/${esc(it.slug)}.html">Details<span class="sr-only"> and compatible fittings</span></a>
+      <td data-label="${T('Reference', 'Référence')}" class="ref-code"><a href="${esc(family)}/${esc(it.slug)}.html">${esc(it.code)}</a></td>
+      <td data-label="${T('Designation', 'Désignation')}" class="ref-desig"><a class="ref-desig-link" href="${esc(family)}/${esc(it.slug)}.html">${esc(x.designation)}</a></td>
+      <td data-label="${T('Dimensions', 'Dimensions')}" class="ref-dims">${esc(x.dims)}</td>
+      <td data-label="${T('Standard · grade', 'Norme · nuance')}">${esc(x.norme)}<span class="ref-sub">${esc(it.nuance)}</span></td>
+      <td data-label="${T('Type · finish', 'Type · finition')}">${x.type ? `${esc(x.type)}<span class="ref-sub">${esc(x.finish)}</span>` : esc(x.finish)}</td>
+      <td data-label="${T('Quantity', 'Quantité')}" class="ref-actions">
+        <div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="${T('Decrease', 'Diminuer')}">−</button><input type="text" inputmode="numeric" value="50" data-row-qty aria-label="${T('Quantity for', 'Quantité pour')} ${esc(it.code)}"/><button type="button" data-qty="inc" aria-label="${T('Increase', 'Augmenter')}">+</button></div>
+        <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(it.id)}">${T('Add', 'Ajouter')}<span class="sr-only"> ${esc(it.code)} ${T('to quote list', 'à la liste de devis')}</span></button>
+        <a class="btn btn-ghost btn-sm ref-details" href="${esc(family)}/${esc(it.slug)}.html">${T('Details', 'Détails')}<span class="sr-only"> ${T('and compatible fittings', 'et raccords compatibles')}</span></a>
       </td>
     </tr>`;
   }
@@ -90,8 +92,8 @@
 
     // Count
     els.count.innerHTML = matched.length === items.length
-      ? `<strong>${items.length}</strong> references`
-      : `<strong>${matched.length}</strong> of ${items.length} references`;
+      ? `<strong>${items.length}</strong> ${T('references', 'références')}`
+      : `<strong>${matched.length}</strong> ${T('of', 'sur')} ${items.length} ${T('references', 'références')}`;
     if (els.filterCount) els.filterCount.textContent = nActive ? `(${nActive})` : '';
 
     // Filters, keep keyboard focus across re-render
@@ -125,9 +127,9 @@
 
     // Active filter chips
     const chips = [];
-    if (state.query) chips.push(`<button type="button" class="chip" data-chip-q>Search: “${esc(state.query)}” <span aria-hidden="true">×</span><span class="sr-only">remove</span></button>`);
+    if (state.query) chips.push(`<button type="button" class="chip" data-chip-q>${T('Search', 'Recherche')}${T(':', ' :')} “${esc(state.query)}” <span aria-hidden="true">×</span><span class="sr-only">${T('remove', 'retirer')}</span></button>`);
     keys.forEach(k => (state.selection[k] || []).forEach(v => {
-      chips.push(`<button type="button" class="chip" data-chip="${esc(k)}" data-value="${esc(v)}">${esc(F.LABELS[k])}: ${esc(F.valueLabel(k, v))} <span aria-hidden="true">×</span><span class="sr-only">remove</span></button>`);
+      chips.push(`<button type="button" class="chip" data-chip="${esc(k)}" data-value="${esc(v)}">${esc(F.LABELS[k])}${T(':', ' :')} ${esc(F.valueLabel(k, v))} <span aria-hidden="true">×</span><span class="sr-only">${T('remove', 'retirer')}</span></button>`);
     }));
     els.chips.innerHTML = chips.join('');
     els.reset.forEach(b => { b.hidden = !chips.length; });
@@ -135,17 +137,17 @@
     // Table
     const shown = matched.slice(0, state.shown);
     if (!matched.length) {
-      els.table.innerHTML = `<div class="catalog-empty"><p><strong>No reference matches this combination.</strong></p><p>Remove a filter or <button type="button" class="link-btn" data-catalog-reset>reset all filters</button>.</p></div>`;
+      els.table.innerHTML = `<div class="catalog-empty"><p><strong>${T('No reference matches this combination.', 'Aucune référence ne correspond à cette combinaison.')}</strong></p><p>${T('Remove a filter or', 'Retirez un filtre ou')} <button type="button" class="link-btn" data-catalog-reset>${T('reset all filters', 'réinitialisez tous les filtres')}</button>.</p></div>`;
     } else {
       els.table.innerHTML = `<table class="ref-table">
-        <caption class="sr-only">${matched.length} references</caption>
-        <thead><tr><th scope="col">Reference</th><th scope="col">Designation</th><th scope="col">Dimensions (mm)</th><th scope="col">Standard · grade</th><th scope="col">Type · finish</th><th scope="col">Quantity (min. 50)</th></tr></thead>
+        <caption class="sr-only">${matched.length} ${T('references', 'références')}</caption>
+        <thead><tr><th scope="col">${T('Reference', 'Référence')}</th><th scope="col">${T('Designation', 'Désignation')}</th><th scope="col">${T('Dimensions (mm)', 'Dimensions (mm)')}</th><th scope="col">${T('Standard · grade', 'Norme · nuance')}</th><th scope="col">${T('Type · finish', 'Type · finition')}</th><th scope="col">${T('Quantity (min. 50)', 'Quantité (min. 50)')}</th></tr></thead>
         <tbody>${shown.map(rowHtml).join('')}</tbody></table>`;
     }
     const rest = matched.length - shown.length;
     els.more.innerHTML = rest > 0
-      ? `<button type="button" class="btn btn-ghost" data-catalog-more-btn>Show ${Math.min(PAGE, rest)} more <span class="text-muted">(${rest} remaining)</span></button>`
-      : (matched.length > PAGE ? `<p class="catalog-note">All ${matched.length} references shown.</p>` : '');
+      ? `<button type="button" class="btn btn-ghost" data-catalog-more-btn>${T('Show', 'Afficher')} ${Math.min(PAGE, rest)} ${T('more', 'de plus')} <span class="text-muted">(${rest} ${T('remaining', 'restantes')})</span></button>`
+      : (matched.length > PAGE ? `<p class="catalog-note">${T('All', 'Les')} ${matched.length} ${T('references shown.', 'références sont affichées.')}</p>` : '');
 
     syncUrl(pushUrl);
   }
@@ -153,15 +155,18 @@
   function exportList(kind) {
     const list = sorted(F.filter(items, state.selection, state.query));
     const base = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
-    const headers = ['Reference', 'Designation', 'Dimensions (mm)', 'Standard', 'Steel grade', 'Manufacturing', 'Finish', 'Web page'];
-    const rows = list.map(it => [it.code, it.designationEn, it.dimsLabel, it.f.norme, it.nuance, it.typeEn || '', it.finitionEn, base + family + '/' + it.slug + '.html']);
-    const famName = family.charAt(0).toUpperCase() + family.slice(1);
-    const filters = Object.keys(state.selection).map(k => F.LABELS[k] + ': ' + state.selection[k].map(v => F.valueLabel(k, v)).join(', '));
-    if (state.query) filters.push('Search: ' + state.query);
-    const subtitle = list.length + ' references' + (filters.length ? ' · ' + filters.join(' · ') : ' · no filter');
+    const headers = T(['Reference', 'Designation', 'Dimensions (mm)', 'Standard', 'Steel grade', 'Manufacturing', 'Finish', 'Web page'],
+                      ['Référence', 'Désignation', 'Dimensions (mm)', 'Norme', 'Nuance', 'Fabrication', 'Finition', 'Page web']);
+    const rows = list.map(it => { const x = RT(it); return [it.code, x.designation, x.dims, x.norme, it.nuance, x.type || '', x.finish, base + family + '/' + it.slug + '.html']; });
+    const famName = window.LR_FAMILY(family);
+    const sep = T(': ', ' : ');
+    const filters = Object.keys(state.selection).map(k => F.LABELS[k] + sep + state.selection[k].map(v => F.valueLabel(k, v)).join(', '));
+    if (state.query) filters.push(T('Search', 'Recherche') + sep + state.query);
+    const subtitle = list.length + ' ' + T('references', 'références') + (filters.length ? ' · ' + filters.join(' · ') : ' · ' + T('no filter', 'sans filtre'));
     const stamp = new Date().toISOString().slice(0, 10);
-    if (kind === 'xlsx') window.LR_EXPORT.excel(`le-raccordement-${family}-${stamp}.xlsx`, famName, headers, rows, `Le Raccordement · ${famName} · ${subtitle}`);
-    else window.LR_EXPORT.print(`${famName}: reference list`, subtitle, headers.slice(0, 7), rows.map(r => r.slice(0, 7)));
+    const fileFam = T(family, { elbows: 'coudes', tees: 'tes', reducers: 'reductions', caps: 'caps-et-fonds' }[family]);
+    if (kind === 'xlsx') window.LR_EXPORT.excel(`le-raccordement-${fileFam}-${stamp}.xlsx`, famName, headers, rows, `Le Raccordement · ${famName} · ${subtitle}`);
+    else window.LR_EXPORT.print(`${famName}${T(': reference list', ' : liste des références')}`, subtitle, headers.slice(0, 7), rows.map(r => r.slice(0, 7)));
   }
 
   function syncUrl(push) {

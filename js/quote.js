@@ -6,6 +6,7 @@
   const form = document.querySelector('[data-quote-form]');
   if (!form || !window.LR_CART) return;
   const cfg = window.LR_CONFIG || {};
+  const T = window.LR_T || ((en) => en);
   const errorBox = document.getElementById('quote-error');
   const submitBtn = form.querySelector('[data-quote-submit]');
   const toEl = document.getElementById('quote-to');
@@ -25,10 +26,10 @@
   }
 
   const RULES = {
-    name: v => v.length >= 2 || 'Please enter your full name.',
-    company: v => v.length >= 2 || 'Please enter your company name.',
-    email: v => /^[^\s@<>()",;:]+@[^\s@<>()",;:]+\.[a-z]{2,}$/i.test(v) || 'Please enter a valid email address.',
-    phone: v => (/^\+?[\d\s().\-/]{6,30}$/.test(v) && v.replace(/\D/g, '').length >= 6 && v.replace(/\D/g, '').length <= 20) || 'Please enter a valid phone number (digits, spaces, + allowed).'
+    name: v => v.length >= 2 || T('Please enter your full name.', 'Veuillez indiquer vos nom et prénom.'),
+    company: v => v.length >= 2 || T('Please enter your company name.', 'Veuillez indiquer le nom de votre société.'),
+    email: v => /^[^\s@<>()",;:]+@[^\s@<>()",;:]+\.[a-z]{2,}$/i.test(v) || T('Please enter a valid email address.', 'Veuillez indiquer une adresse e-mail valide.'),
+    phone: v => (/^\+?[\d\s().\-/]{6,30}$/.test(v) && v.replace(/\D/g, '').length >= 6 && v.replace(/\D/g, '').length <= 20) || T('Please enter a valid phone number (digits, spaces, + allowed).', 'Veuillez indiquer un numéro de téléphone valide (chiffres, espaces et + acceptés).')
   };
 
   function fieldError(name, msg) {
@@ -80,13 +81,16 @@
       website: v('website'),
       customer: { name: v('name'), company: v('company'), email: v('email'), phone: v('phone'), country: v('country'), incoterm: v('incoterm'), message: v('message') },
       items: window.LR_CART.lines().map(l => Object.assign({ kind: l.kind, code: l.code, designation: l.designation, qty: l.qty, url: l.url }, l.detail)),
-      page: window.location.href
+      page: window.location.href,
+      lang: window.LR_LANG || 'en'
     };
   }
 
   function mailtoFallback(p) {
-    const lines = p.items.map(i => `${i.code}\t${i.qty} pcs\t${i.designation}`).join('\n');
-    const body = `Quote request from the website\n\nName: ${p.customer.name}\nCompany: ${p.customer.company}\nEmail: ${p.customer.email}\nPhone: ${p.customer.phone}\nCountry: ${p.customer.country || 'not provided'}\nIncoterm: ${p.customer.incoterm || 'not provided'}\n\nMessage:\n${p.customer.message || 'not provided'}\n\nReference\tQty\tDesignation\n${lines}\n`;
+    const lines = p.items.map(i => `${i.code}\t${i.qty} ${T('pcs', 'pièces')}\t${i.designation}`).join('\n');
+    const na = T('not provided', 'non renseigné');
+    const body = T(`Quote request from the website\n\nName: ${p.customer.name}\nCompany: ${p.customer.company}\nEmail: ${p.customer.email}\nPhone: ${p.customer.phone}\nCountry: ${p.customer.country || na}\nIncoterm: ${p.customer.incoterm || na}\n\nMessage:\n${p.customer.message || na}\n\nReference\tQty\tDesignation\n${lines}\n`,
+                   `Demande de devis depuis le site\n\nNom : ${p.customer.name}\nSociété : ${p.customer.company}\nE-mail : ${p.customer.email}\nTéléphone : ${p.customer.phone}\nPays : ${p.customer.country || na}\nIncoterm : ${p.customer.incoterm || na}\n\nMessage :\n${p.customer.message || na}\n\nRéférence\tQté\tDésignation\n${lines}\n`);
     return `mailto:${cfg.quoteEmail}?subject=${encodeURIComponent('Demande de devis, site Le Raccordement')}&body=${encodeURIComponent(body)}`;
   }
 
@@ -94,14 +98,16 @@
     e.preventDefault();
     if (sending) return;
     errorBox.hidden = true;
-    if (!window.LR_CART.count()) { showError('Your quote list is empty. <a href="products/">Add references from the catalog</a>.'); return; }
+    if (!window.LR_CART.count()) { showError(T('Your quote list is empty. <a href="products/">Add references from the catalog</a>.', 'Votre liste de devis est vide. <a href="products/">Ajoutez des références depuis le catalogue</a>.')); return; }
     const bad = validate();
     if (bad) { bad.focus(); return; }
     const p = payload();
 
     if (!cfg.quoteEndpoint) {
-      showError(`<strong>Online sending is not configured yet, your request has not been sent.</strong><br>
-        You can send it from your own email app instead: <a href="${esc(mailtoFallback(p))}">open a pre-filled email to ${esc(cfg.quoteEmail)}</a>.`);
+      showError(T(`<strong>Online sending is not configured yet, your request has not been sent.</strong><br>
+        You can send it from your own email app instead: <a href="${esc(mailtoFallback(p))}">open a pre-filled email to ${esc(cfg.quoteEmail)}</a>.`,
+        `<strong>L’envoi en ligne n’est pas encore activé : votre demande n’a pas été envoyée.</strong><br>
+        Vous pouvez l’envoyer depuis votre messagerie : <a href="${esc(mailtoFallback(p))}">ouvrir un e-mail pré-rempli à ${esc(cfg.quoteEmail)}</a>.`));
       return;
     }
 
@@ -109,7 +115,7 @@
     submitBtn.disabled = true;
     submitBtn.setAttribute('aria-busy', 'true');
     const label = submitBtn.innerHTML;
-    submitBtn.textContent = 'Sending…';
+    submitBtn.textContent = T('Sending…', 'Envoi en cours…');
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 25000);
     try {
@@ -131,10 +137,12 @@
         window.location.href = 'quote-sent.html?id=' + encodeURIComponent(data.id);
         return;
       }
-      const msg = (data && data.error) ? esc(data.error) : 'The server could not process your request.';
-      showError(`<strong>Your request was not sent.</strong> ${msg}<br>Please try again, or <a href="${esc(mailtoFallback(p))}">send it by email to ${esc(cfg.quoteEmail)}</a>.`);
+      const msg = (data && data.error) ? esc(data.error) : T('The server could not process your request.', 'Le serveur n’a pas pu traiter votre demande.');
+      showError(T(`<strong>Your request was not sent.</strong> ${msg}<br>Please try again, or <a href="${esc(mailtoFallback(p))}">send it by email to ${esc(cfg.quoteEmail)}</a>.`,
+                  `<strong>Votre demande n’a pas été envoyée.</strong> ${msg}<br>Veuillez réessayer, ou <a href="${esc(mailtoFallback(p))}">l’envoyer par e-mail à ${esc(cfg.quoteEmail)}</a>.`));
     } catch (err) {
-      showError(`<strong>Your request was not sent</strong> (${err.name === 'AbortError' ? 'the server did not answer in time' : 'network error'}).<br>Your list is kept, please try again, or <a href="${esc(mailtoFallback(p))}">send it by email to ${esc(cfg.quoteEmail)}</a>.`);
+      showError(T(`<strong>Your request was not sent</strong> (${err.name === 'AbortError' ? 'the server did not answer in time' : 'network error'}).<br>Your list is kept, please try again, or <a href="${esc(mailtoFallback(p))}">send it by email to ${esc(cfg.quoteEmail)}</a>.`,
+                  `<strong>Votre demande n’a pas été envoyée</strong> (${err.name === 'AbortError' ? 'le serveur n’a pas répondu à temps' : 'erreur réseau'}).<br>Votre liste est conservée : veuillez réessayer, ou <a href="${esc(mailtoFallback(p))}">l’envoyer par e-mail à ${esc(cfg.quoteEmail)}</a>.`));
     } finally {
       clearTimeout(timer);
       sending = false;
@@ -152,13 +160,17 @@
     if (!b || !window.LR_EXPORT || !window.LR_CART) return;
     const lines = window.LR_CART.lines();
     if (!lines.length) return;
-    const headers = ['Reference', 'Designation', 'Dimensions (mm)', 'Standard', 'Steel grade', 'Manufacturing', 'Finish', 'Quantity (pcs)'];
+    const T = window.LR_T || ((en) => en);
+    const headers = T(['Reference', 'Designation', 'Dimensions (mm)', 'Standard', 'Steel grade', 'Manufacturing', 'Finish', 'Quantity (pcs)'],
+                      ['Référence', 'Désignation', 'Dimensions (mm)', 'Norme', 'Nuance', 'Fabrication', 'Finition', 'Quantité (pièces)']);
     const rows = lines.map(l => [l.code, l.designation, (l.detail && l.detail.dims) || '', (l.detail && l.detail.norme) || '',
       (l.detail && l.detail.nuance) || '', (l.detail && l.detail.type) || '', (l.detail && l.detail.finition) || '', l.qty]);
     const units = lines.reduce((s, l) => s + l.qty, 0);
-    const subtitle = lines.length + ' references · ' + units + ' pieces · prices on request';
+    const subtitle = T(lines.length + ' references · ' + units + ' pieces · prices on request',
+                       lines.length + ' références · ' + units + ' pièces · prix sur demande');
     const stamp = new Date().toISOString().slice(0, 10);
-    if (b.getAttribute('data-cart-export') === 'xlsx') window.LR_EXPORT.excel('le-raccordement-quote-list-' + stamp + '.xlsx', 'Quote list', headers, rows, 'Le Raccordement · Quote list · ' + subtitle);
-    else window.LR_EXPORT.print('Quote list', subtitle, headers, rows);
+    const title = T('Quote list', 'Liste de devis');
+    if (b.getAttribute('data-cart-export') === 'xlsx') window.LR_EXPORT.excel(T('le-raccordement-quote-list-', 'le-raccordement-liste-de-devis-') + stamp + '.xlsx', title, headers, rows, 'Le Raccordement · ' + title + ' · ' + subtitle);
+    else window.LR_EXPORT.print(title, subtitle, headers, rows);
   });
 })();

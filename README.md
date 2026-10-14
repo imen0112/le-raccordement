@@ -10,8 +10,11 @@ Modern, SEO-ready static website for **Le Raccordement** — manufacturer of sea
 - Catalog: 558 references imported from the official Excel article files, one static page per reference, interdependent filters on each family page
 - Quote list: localStorage-backed, no prices; requests are emailed to commande@leraccordement.com by the quote API in [`server/quote-api`](server/quote-api/README.md) (Railway + Resend)
 - Contact form: still opens the visitor's mail client
+- Two languages: **French at the site root** (main language, product wording taken from the Excel files) and **English under `/en/`**, same tree, linked by the FR/EN switch and `hreflang`
 
 ## Pages
+
+French pages are at the root; each English page is the same path under `/en/` (e.g. `/about.html` ↔ `/en/about.html`).
 
 | URL | What it is |
 | --- | --- |
@@ -26,7 +29,7 @@ Modern, SEO-ready static website for **Le Raccordement** — manufacturer of sea
 | `/certifications.html` | ISO 9001, standards, inspection capabilities |
 | `/clients.html` | Logo wall, geographies, sectors |
 | `/contact.html` | Contact info, OSM map, message form |
-| `/fr/...` | French mirror (to be built) |
+| `/en/...` | English version of every page above |
 
 ## Catalog data
 
@@ -45,8 +48,11 @@ python3 tools/catalog/check_site.py        # links, titles, canonicals, JSON-LD,
 
 - `import_excel.py` writes `data/catalog/<family>.json` and, in `--report-dir`, a data-quality report plus a full private export.
   Only "Local" rows are published (customer codes `.01`/`.02` are not); strictly identical duplicate rows are published once.
-- `build_pages.py` only rewrites content between `<!-- CATALOG / JSONLD / FAMILIES / REFERENCES :START/END -->` markers
-  and the generated folders `products/<family>/`.
+- `build_pages.py` builds both languages: it only rewrites content between `<!-- CATALOG / JSONLD / FAMILYHEAD / FAMILIES / RANGE / REFERENCES :START/END -->`
+  markers, the generated folders `products/<family>/` and `en/products/<family>/`, `js/product-specs.js`, and the FR/EN switch + `hreflang` of every page.
+  French reference texts are the Excel designations (`designationDisplay`), English ones are built from the glossary.
+- Hand-written pages exist twice (`page.html` and `en/page.html`): edit both. Shared scripts pick their texts with `LR_T(english, french)`
+  from [`js/i18n.js`](js/i18n.js), loaded first on every page.
 - Filters: [`js/facets.js`](js/facets.js) (pure logic) + [`js/catalog.js`](js/catalog.js) (family page UI). Each filter's options are
   computed from the references matching all *other* active filters, so impossible combinations are never offered.
 
@@ -70,14 +76,13 @@ plainly that online sending is not configured and offers a pre-filled email inst
 - [ ] Confirm that "EN/1" in the article files means EN 10253-1 (shown as "EN 10253-1 (EN/1)")
 - [ ] Replace placeholder phone number `+216 74 000 000` with the real plant number (footer + `contact.html` + `index.html` JSON-LD)
 - [ ] Upload tech-sheet PDFs to `assets/datasheets/{slug}.pdf` and enable the "Download datasheet" button in `products/product.html`
-- [ ] Build the French (`/fr/`) mirror, then restore the FR toggle links and `hreflang`
 
 ## SEO
 
 - Per-page `<title>`, `<meta description>`, canonical, OpenGraph + Twitter cards
 - Organization JSON-LD (home), CollectionPage + ItemList + BreadcrumbList (families), Product + BreadcrumbList (each reference) — no price, availability or review is declared
-- `sitemap.xml` (558 reference pages + core pages) + `robots.txt`; filtered family URLs are `noindex, follow` and canonical to the family page
-- `hreflang` removed until the French mirror exists (it pointed to missing pages)
+- `sitemap.xml` (558 reference pages × 2 languages + core pages) + `robots.txt`; filtered family URLs are `noindex, follow` and canonical to the family page
+- `hreflang` fr / en / x-default (French) on every page, French and English URLs in `sitemap.xml`
 - Semantic HTML with proper heading hierarchy
 
 ## Local preview

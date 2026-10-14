@@ -64,10 +64,11 @@
 
   /* ---------- Printable page (Print / Save as PDF) ---------- */
   function printable(title, subtitle, headers, rows, root) {
+    const FR = window.LR_LANG === 'fr', T = (en, fr) => (FR ? fr : en);
     const w = window.open('', '_blank');
-    if (!w) { alert('Please allow pop-ups for this site to print the list.'); return; }
-    const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    w.document.write(`<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${esc(title)}</title><style>
+    if (!w) { alert(T('Please allow pop-ups for this site to print the list.', 'Autorisez les fenêtres pop-up pour ce site afin d’imprimer la liste.')); return; }
+    const today = new Date().toLocaleDateString(FR ? 'fr-FR' : 'en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    w.document.write(`<!doctype html><html lang="${FR ? 'fr' : 'en'}"><head><meta charset="utf-8"><title>${esc(title)}</title><style>
       @page { size: A4; margin: 12mm 12mm 14mm; }
       body { font: 10pt/1.4 Arial, Helvetica, sans-serif; color: #0A1929; margin: 0; }
       header { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 2px solid #0E2A47; padding-bottom: 8px; margin-bottom: 12px; }
@@ -79,12 +80,12 @@
       thead { display: table-header-group; } tr { break-inside: avoid; }
       footer { margin-top: 12px; font-size: 8pt; color: #5A6B7D; }
     </style></head><body>
-      <header><img src="${root}assets/img/logo/logo.png" alt="Le Raccordement"><p>Le Raccordement · Zone Industrielle de Doukhane, El Hencha, 3043 Sfax, Tunisia<br>commande@leraccordement.com · leraccordement.com · ${esc(today)}</p></header>
+      <header><img src="${root}assets/img/logo/logo.png" alt="Le Raccordement"><p>Le Raccordement · Zone Industrielle de Doukhane, El Hencha, 3043 Sfax, ${T('Tunisia', 'Tunisie')}<br>commande@leraccordement.com · leraccordement.com · ${esc(today)}</p></header>
       <h1>${esc(title)}</h1><p class="sub">${esc(subtitle)}</p>
       <table><thead><tr>${headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>
       ${rows.map(r => `<tr>${r.map((v, i) => `<td class="${i === 0 ? 'code' : typeof v === 'number' ? 'num' : ''}">${esc(v)}</td>`).join('')}</tr>`).join('')}
       </tbody></table>
-      <footer>Prices on request. Data from the Le Raccordement article files. Dimensions in millimetres.</footer>
+      <footer>${T('Prices on request. Data from the Le Raccordement article files. Dimensions in millimetres.', 'Prix sur demande. Données issues des fichiers articles Le Raccordement. Dimensions en millimètres.')}</footer>
       <script>window.onload = () => { setTimeout(() => window.print(), 300); };<\/script>
     </body></html>`);
     w.document.close();

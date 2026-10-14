@@ -4,9 +4,9 @@
   const results = [];
   const ok = (name, cond, detail) => results.push({ name, pass: !!cond, detail: cond ? '' : (detail || '') });
   const families = ['elbows', 'tees', 'reducers', 'caps'];
-  const index = await fetch('../data/catalog/index.json').then(r => r.json());
+  const index = await fetch('../data/catalog/index.json', { cache: 'no-store' }).then(r => r.json());
   const data = {};
-  for (const f of families) data[f] = await fetch(`../data/catalog/${f}.json`).then(r => r.json());
+  for (const f of families) data[f] = await fetch(`../data/catalog/${f}.json`, { cache: 'no-store' }).then(r => r.json());
 
   /* ---------- Data ---------- */
   ok('4 families in index', index.families.map(f => f.slug).join() === families.join());
@@ -35,6 +35,14 @@
   ok('English designation built from the glossary', by('C3S21N').designationEn === 'Butt-weld elbow 90° 3D, Ø21.3 × 2 mm, S235, seamless, EN 10253-1, black');
   ok('Every reference has English article, finish and designation', all.every(i => i.articleEn && i.finitionEn && i.designationEn && !/[àéè]/.test(i.designationEn)));
   ok('English facet values (no French in filters)', all.every(i => !/souder|Soudé|Sans soudure|Noir|Peint|Galv\.$/.test([i.f.article, i.f.type, i.f.finition].join(' '))));
+
+  /* ---------- French site (site root): wording of the Excel files ---------- */
+  ok('French designation = Excel designation with spaces tidied', all.every(i => i.designationDisplay === i.designation.replace(/_/g, ' ').replace(/\s+/g, ' ').trim()));
+  ok('French designation always names the standard', all.every(i => /EN\/1|ASME B16\.9/.test(i.designationDisplay)));
+  ok('French facet values come from the Excel files', all.every(i => i.ffr && i.ffr.article === i.article && i.ffr.type === i.type && i.ffr.nuance === i.nuance));
+  ok('French finishes: Noir, Galvanisé or Peint', all.every(i => ['Noir', 'Galvanisé', 'Peint'].indexOf(i.finitionFr) !== -1 && i.ffr.finition === i.finitionFr));
+  ok('French standard labels', all.every(i => ['EN 10253-1', 'ASME B16.9'].indexOf(i.ffr.norme) !== -1));
+  ok('French dimensions use a decimal comma', all.every(i => i.dimsLabelFr && !/\d\.\d/.test(i.dimsLabelFr)));
 
   /* ---------- Facets: brute-force consistency ---------- */
   let seed = 42;

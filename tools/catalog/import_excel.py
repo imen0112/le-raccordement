@@ -164,6 +164,7 @@ ARTICLE_EN = [
 ]
 TYPE_EN = {'Sans soudure': 'Seamless', 'Soudé': 'Welded'}
 FINISH_EN = {'Noir': 'Black', 'Galv.': 'Galvanized', 'Peint': 'Painted', 'Peinte': 'Painted'}
+FINISH_FR = {'Noir': 'Noir', 'Galv.': 'Galvanisé', 'Peint': 'Peint', 'Peinte': 'Peint'}
 NORME_EN = {'EN/1': 'EN 10253-1'}
 
 
@@ -300,6 +301,10 @@ def main():
             rec['typeEn'] = TYPE_EN.get(rec['type']) if rec['type'] else None
             rec['finitionEn'] = FINISH_EN[fin_raw]
             rec['designationEn'] = designation_en(rec)
+            # French facet values (French pages): Excel wording, clear finish names
+            rec['finitionFr'] = FINISH_FR[fin_raw]
+            rec['ffr'] = dict(f, article=article, type=rec['type'], nuance=rec['nuance'],
+                              norme=NORME_EN.get(rec['norme'], rec['norme']), finition=rec['finitionFr'])
             rec['f'] = dict(f, article=rec['articleEn'], type=rec['typeEn'], nuance=rec['nuance'],
                             norme=NORME_EN.get(rec['norme'], rec['norme']), finition=rec['finitionEn'])
 
@@ -398,7 +403,7 @@ def main():
     records.sort(key=lambda r: (fam_order[r['family']],) + sort_key(r))
     public_keys = ['id', 'code', 'slug', 'family', 'article', 'type', 'nuance', 'norme', 'finition',
                    'finitionRaw', 'dRaw', 'epRaw', 'dims', 'dimsLabel', 'dimsLabelFr', 'designation', 'designationDisplay',
-                   'articleEn', 'typeEn', 'finitionEn', 'designationEn', 'f']
+                   'articleEn', 'typeEn', 'finitionEn', 'designationEn', 'f', 'finitionFr', 'ffr']
     os.makedirs(OUT_DIR, exist_ok=True)
     generated = datetime.date.today().isoformat()
     counts = {}

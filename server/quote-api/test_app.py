@@ -135,6 +135,13 @@ class QuoteApiTest(unittest.TestCase):
             self.assertIn(hint.lower(), data['error'].lower())
         self.assertEqual(len(SENT), 0)
 
+    def test_french_errors_for_french_site(self):
+        status, data, _ = post(payload(email='not-an-email', lang='fr'))
+        self.assertEqual(status, 400)
+        self.assertEqual(data['error'], 'Veuillez indiquer une adresse e-mail valide')
+        status, data, _ = post(payload(items=[{'kind': 'ref', 'code': 'C3S21N', 'designation': 'x', 'qty': 49}], lang='fr'))
+        self.assertEqual(data['error'], 'La quantité minimale est de 50 pièces par référence')
+
     def test_header_injection_rejected(self):
         for field in ('email', 'name', 'company'):
             status, data, _ = post(payload(**{field: 'amira@hydrosud.tn\r\nBcc: victim@example.com'}))

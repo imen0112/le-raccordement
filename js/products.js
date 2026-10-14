@@ -186,23 +186,88 @@ window.LR_byCategory = function(catSlug) {
 };
 
 /* ---------------------------------------------------------------
-   Path resolver, image paths are stored relative to site root
-   (e.g. "assets/img/products/elbow-90.webp"). When this file is
-   loaded from a subfolder like /products/ or /fr/produits/, every
-   relative path needs to step UP before stepping back DOWN.
-   This block runs once at load and rewrites the in-memory data.
+   French texts (French site, see js/i18n.js). Product-type names use the
+   wording of the Excel article files. Applied over the English texts above.
    --------------------------------------------------------------- */
 (function () {
-  const p = window.location.pathname;
-  let prefix = '';
-  if (/\/fr\/produits\//.test(p))      prefix = '../../';
-  else if (/\/fr\//.test(p))           prefix = '../';
-  else if (/\/products\//.test(p))     prefix = '../';
+  if (window.LR_LANG === 'en' || !window.LR_LANG) return;
+  const common = {
+    rawMaterial: 'Tubes sans soudure et soudés',
+    marking: 'Marquage par micro-percussion',
+    packaging: 'Palettes, cartons',
+    certificate: 'EN 10204 : certificat de réception 3.1 / relevé de contrôle 2.2',
+    applications: ['Pétrole', 'Gaz naturel', 'Génie chimique', 'Production d’énergie', 'Construction navale', 'Distribution d’eau', 'Énergie nucléaire', 'Traitement des déchets'],
+    leadTime: '3 à 6 semaines',
+    minOrder: '50 pièces'
+  };
+  const FR = {
+    'elbow-90-1-5d': {
+      name: 'Coude à souder 90° 1.5D', categoryLabel: 'Coudes',
+      short: 'Coude 90° grand rayon, rayon de cintrage 1.5D, sans soudure, selon ASME B16.9 en A234 WPB.',
+      description: 'Coude 90° grand rayon (LR) 1.5D pour réseaux de tuyauterie soudés bout à bout. Formé à froid à partir de tube sans soudure en A234 WPB selon ASME B16.9, épaisseur STD ou XS, finition peinte.'
+    },
+    'elbow-90-3d': {
+      name: 'Coude à souder 90° 3D', categoryLabel: 'Coudes',
+      short: 'Coude 90° de rayon 3D, sans soudure ou soudé, selon EN 10253-1 en S235.',
+      description: 'Coude 90° très grand rayon 3D pour les lignes qui demandent moins de turbulences et de pertes de charge. Formé à froid à partir de tube sans soudure ou soudé en S235 selon EN 10253-1, noir ou galvanisé.'
+    },
+    'elbow-45': {
+      name: 'Coude à souder 45°', categoryLabel: 'Coudes',
+      short: 'Coude 45°, rayon 1.5D (ASME B16.9) ou 3D (EN 10253-1).',
+      description: 'Coude 45° à souder bout à bout pour dévier le flux en douceur. Disponible en rayon 1.5D selon ASME B16.9 (A234 WPB, STD ou XS, peint) et en rayon 3D selon EN 10253-1 (S235, sans soudure ou soudé, noir ou galvanisé).'
+    },
+    'equal-tee': {
+      name: 'Té égal à souder', categoryLabel: 'Tés',
+      short: 'Té égal à souder bout à bout, Ø 60,3 à 219,1 mm, selon ASME B16.9 et EN 10253-1.',
+      description: 'Té égal à souder bout à bout, avec trois sorties identiques, pour diviser ou réunir un flux. Fabriqué à partir de tube sans soudure ou soudé, selon ASME B16.9 (A234 WPB) et EN 10253-1 (S235).'
+    },
+    'concentric-reducer': {
+      name: 'Réduction concentrique à souder', categoryLabel: 'Réductions',
+      short: 'Réduction concentrique (forme 1, forme 2 et ASME B16.9) pour les transitions coaxiales.',
+      description: 'Réduction concentrique à souder bout à bout reliant deux tubes de diamètres différents sur un même axe. EN 10253-1 forme 1 et forme 2 en S235 (sans soudure ou soudée, noire ou galvanisée), et ASME B16.9 en A234 WPB (STD ou XS, peinte).'
+    },
+    'eccentric-reducer': {
+      name: 'Réduction excentrique à souder', categoryLabel: 'Réductions',
+      short: 'Réduction excentrique qui garde un côté plat, selon ASME B16.9 en A234 WPB.',
+      description: 'Réduction excentrique à souder bout à bout, aux axes décalés, qui garde une génératrice alignée. Utilisée à l’aspiration des pompes sur les lignes horizontales pour éviter les poches d’air. Sans soudure, A234 WPB selon ASME B16.9, STD ou XS, peinte.'
+    },
+    'cap': {
+      name: 'Caps et fonds à souder', categoryLabel: 'Caps et fonds',
+      short: 'Caps et fonds à souder bout à bout, Ø 21,3 à 219,1 mm.',
+      description: 'Caps et fonds à souder bout à bout pour fermer une ligne de tuyauterie. EN 10253-1 en S235 (noir ou galvanisé) et ASME B16.9 en A234 WPB (STD ou XS, peint).'
+    }
+  };
+  const CAT = {
+    elbows: { name: 'Coudes', tagline: 'Coudes grand rayon, 45° · 90°', description: 'Coudes 45° et 90°, rayon 1.5D et 3D, Ø 21,3 à 323,8 mm, selon ASME B16.9 et EN 10253-1.' },
+    tees: { name: 'Tés', tagline: 'Tés égaux', description: 'Tés égaux à souder, Ø 60,3 à 219,1 mm, sans soudure ou soudés.' },
+    reducers: { name: 'Réductions', tagline: 'Concentriques et excentriques', description: 'Réductions concentriques (forme 1, forme 2, ASME) et excentriques.' },
+    caps: { name: 'Caps et fonds', tagline: 'Fermeture de ligne', description: 'Caps et fonds à souder, Ø 21,3 à 219,1 mm.' }
+  };
+  (window.LR_PRODUCTS || []).forEach(p => { if (FR[p.slug]) Object.assign(p, common, FR[p.slug]); });
+  (window.LR_CATEGORIES || []).forEach(c => { if (CAT[c.slug]) Object.assign(c, CAT[c.slug]); });
+})();
+
+/* Name of a product type in the page language (quote list) */
+window.LR_PNAME = p => p.name;
+
+/* ---------------------------------------------------------------
+   Path resolver: image paths are stored relative to the site root
+   (e.g. "assets/img/products/elbow-90.webp"). Pages live at different
+   depths (French at the root, English under /en/), so every path is
+   made absolute from the site root found by js/i18n.js.
+   --------------------------------------------------------------- */
+(function () {
+  let prefix = window.LR_SITE_ROOT || '';
+  if (!prefix) {
+    // i18n.js missing: work out the depth from the URL
+    const p = window.location.pathname;
+    prefix = (/\/en\//.test(p) ? '../' : '') + (/\/products\//.test(p) ? '../' : '');
+  }
   if (!prefix) return;
 
   function fix(s) {
     if (typeof s !== 'string') return s;
-    if (s.startsWith('http') || s.startsWith('/') || s.startsWith('../')) return s;
+    if (/^(https?:|\/|\.\.\/)/.test(s)) return s;
     return prefix + s;
   }
   (window.LR_PRODUCTS || []).forEach(pr => {

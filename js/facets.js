@@ -7,8 +7,21 @@
    picking a diameter first narrows the standards just the same. */
 (function (root) {
   const NONE = '__none';
+  // French pages use the French facet values (ffr), English pages the English ones (f)
+  const FR = root.LR_LANG === 'fr';
+  const FK = FR ? 'ffr' : 'f';
 
-  const LABELS = {
+  const LABELS = FR ? {
+    norme: 'Norme',
+    article: 'Type de produit',
+    type: 'Fabrication',
+    d: 'Ø extérieur (mm)',
+    d1: 'Ø grand côté (mm)',
+    d2: 'Ø petit côté (mm)',
+    ep: 'Épaisseur',
+    nuance: 'Nuance',
+    finition: 'Finition'
+  } : {
     norme: 'Standard',
     article: 'Product type',
     type: 'Manufacturing',
@@ -24,20 +37,21 @@
     _default: ['norme', 'article', 'type', 'd', 'ep', 'nuance', 'finition']
   };
   const NUMERIC = { d: 1, d1: 1, d2: 1 };
-  // Facet values are the English labels built at import (data/catalog/*.json → f).
-  const num = v => String(v);
+  // Facet values are built at import (data/catalog/*.json → f in English, ffr in French).
+  const num = v => (FR ? String(v).replace('.', ',') : String(v));
 
   function valueOf(item, key) {
-    const v = item.f ? item.f[key] : undefined;
+    const facets = item[FK] || item.f;
+    const v = facets ? facets[key] : undefined;
     return v === null || v === undefined || v === '' ? NONE : String(v);
   }
 
   function valueLabel(key, v) {
-    if (v === NONE) return 'Not specified';
+    if (v === NONE) return FR ? 'Non renseigné' : 'Not specified';
     if (NUMERIC[key]) return num(v);
     if (key === 'ep') {
-      if (/^[\d.]+\/[\d.]+$/.test(v)) return v.split('/').join(' / ') + ' mm';
-      if (/^[\d.]+$/.test(v)) return v + ' mm';
+      if (/^[\d.]+\/[\d.]+$/.test(v)) return v.split('/').map(num).join(' / ') + ' mm';
+      if (/^[\d.]+$/.test(v)) return num(v) + ' mm';
       return v;
     }
     return v;
@@ -50,7 +64,7 @@
   function searchText(item) {
     if (!item._q) {
       // English and French fields, so a buyer can search in either language
-      item._q = fold([item.code, item.designationEn, item.articleEn, item.typeEn, item.finitionEn, item.f && item.f.norme,
+      item._q = fold([item.code, item.designationEn, item.articleEn, item.typeEn, item.finitionEn, item.finitionFr, item.f && item.f.norme,
         item.designation, item.designationDisplay, item.article, item.dimsLabel, item.dimsLabelFr,
         item.norme, item.nuance, item.finition, item.finitionRaw, item.type].join(' '));
     }
@@ -133,5 +147,5 @@
     return p;
   }
 
-  root.LR_FACETS = { NONE, LABELS, valueOf, valueLabel, matches, matchesQuery, filter, facetKeys, compute, fromParams, toParams, fold };
+  root.LR_FACETS = { FK, NONE, LABELS, valueOf, valueLabel, matches, matchesQuery, filter, facetKeys, compute, fromParams, toParams, fold };
 })(typeof window !== 'undefined' ? window : globalThis);
