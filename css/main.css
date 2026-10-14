@@ -2197,3 +2197,4 @@ button.cert-feature-media { width: 100%; padding: 0; border: 0; border-bottom: 1
 @media (max-width: 599px) { .lightbox-nav { width: 42px; height: 42px; font-size: 26px; } .lightbox-prev { left: 6px; } .lightbox-next { right: 6px; } }
 .ref-compat-link { font-weight: 600; font-size: var(--fs-14); color: var(--c-navy-700); text-decoration: underline; text-underline-offset: 3px; }
 .ref-compat { scroll-margin-top: 110px; background: var(--c-bg-soft); }
+.split-img.split-img-wide { aspect-ratio: 3 / 2; align-self: center; max-width: 667px; }
