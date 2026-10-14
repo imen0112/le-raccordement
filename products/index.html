@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../css/main.css?v=20261014l" />
+<link rel="stylesheet" href="../css/main.css?v=20261014m" />
 
 <script type="application/ld+json">
 {
@@ -316,9 +316,9 @@
   </div>
 </aside>
 
-<script src="../js/products.js?v=20261014l"></script>
-<script src="../js/cart.js?v=20261014l"></script>
-<script src="../js/main.js?v=20261014l"></script>
+<script src="../js/products.js?v=20261014m"></script>
+<script src="../js/cart.js?v=20261014m"></script>
+<script src="../js/main.js?v=20261014m"></script>
 <script>
   /* Range table tabs (EN / ASME) */
   document.addEventListener('click', function (e) {
@@ -328,7 +328,7 @@
     document.querySelectorAll('.range-panel').forEach(p => { p.hidden = p.id !== 'range-panel-' + t.dataset.rangeTab; });
   });
 </script>
-<script src="../js/facets.js?v=20261014l"></script>
+<script src="../js/facets.js?v=20261014m"></script>
 <script>
   /* Reference finder across the four families (loads the JSON on first use) */
   (function () {
@@ -352,10 +352,11 @@
         out.innerHTML = `<p class="catalog-note"><strong>${hits.length}</strong> matching reference${hits.length > 1 ? 's' : ''}${hits.length > 25 ? ' (first 25 shown, refine your search)' : ''}.</p>
           <div class="ref-table-wrap"><table class="ref-table"><thead><tr><th scope="col">Reference</th><th scope="col">Designation</th><th scope="col">Family</th><th scope="col">Quantity (min. 50)</th></tr></thead><tbody>
           ${shown.map(it => `<tr data-ref-row><td data-label="Reference" class="ref-code"><a href="${it.family}/${it.slug}.html">${esc(it.code)}</a></td>
-            <td data-label="Designation" class="ref-desig">${esc(it.designationEn)}</td>
+            <td data-label="Designation" class="ref-desig"><a class="ref-desig-link" href="${it.family}/${it.slug}.html">${esc(it.designationEn)}</a></td>
             <td data-label="Family"><a href="${it.family}.html">${esc(it.family.charAt(0).toUpperCase() + it.family.slice(1))}</a></td>
             <td data-label="Quantity" class="ref-actions"><div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="Decrease">−</button><input type="text" inputmode="numeric" value="50" data-row-qty aria-label="Quantity for ${esc(it.code)}"/><button type="button" data-qty="inc" aria-label="Increase">+</button></div>
-            <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(it.id)}">Add<span class="sr-only"> ${esc(it.code)}</span></button></td></tr>`).join('')}
+            <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(it.id)}">Add<span class="sr-only"> ${esc(it.code)}</span></button>
+            <a class="btn btn-ghost btn-sm ref-details" href="${it.family}/${it.slug}.html">Details<span class="sr-only"> and compatible fittings</span></a></td></tr>`).join('')}
           </tbody></table></div>`;
       }).catch(() => { out.innerHTML = '<p class="catalog-note">Search is temporarily unavailable, open a family above.</p>'; });
     }

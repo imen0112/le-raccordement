@@ -2206,3 +2206,8 @@ button.cert-feature-media { width: 100%; padding: 0; border: 0; border-bottom: 1
 .cart-compat-title .text-muted { font-weight: 400; font-size: var(--fs-13); margin-left: 6px; }
 .cart-compat .ref-table { background: #fff; }
 .cart-compat .ref-compat-link { display: inline-block; margin-top: var(--s-2); }
+
+/* Designation opens the reference page (codes are internal; buyers read designations) */
+.ref-desig-link { color: inherit; text-decoration: none; }
+.ref-desig-link:hover, .ref-desig-link:focus-visible { color: var(--c-navy-700); text-decoration: underline; text-underline-offset: 3px; }
+.ref-actions .ref-details { margin-left: var(--s-2); }

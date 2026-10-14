@@ -40,7 +40,7 @@
   function row(x) {
     return `<tr data-ref-row>
       <td data-label="Reference" class="ref-code"><a href="${ROOT}products/${x.family}/${x.slug}.html">${esc(x.code)}</a></td>
-      <td data-label="Designation" class="ref-desig">${esc(x.designationEn)}</td>
+      <td data-label="Designation" class="ref-desig"><a class="ref-desig-link" href="${ROOT}products/${x.family}/${x.slug}.html">${esc(x.designationEn)}</a></td>
       <td data-label="Quantity" class="ref-actions"><div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="Decrease">−</button><input type="text" inputmode="numeric" value="50" data-row-qty aria-label="Quantity for ${esc(x.code)}"/><button type="button" data-qty="inc" aria-label="Increase">+</button></div>
         <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(x.id)}">Add<span class="sr-only"> ${esc(x.code)} to quote list</span></button></td>
     </tr>`;

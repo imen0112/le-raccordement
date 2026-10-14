@@ -22,7 +22,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261014l'
+ASSET_V = '20261014m'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 FAMILY_TEXT = {
     'elbows':   {'title': 'Elbows',   'one': 'elbow',   'lead': '45° and 90° butt-weld elbows, 1.5D and 3D radius'},
@@ -158,11 +158,11 @@ def properties(it):
 
 def row_static(it, prefix=''):
     return ('<tr data-ref-row><td data-label="Reference" class="ref-code"><a href="%s%s/%s.html">%s</a></td>'
-            '<td data-label="Designation" class="ref-desig">%s</td>'
+            '<td data-label="Designation" class="ref-desig"><a class="ref-desig-link" href="%s%s/%s.html">%s</a></td>'
             '<td data-label="Dimensions" class="ref-dims">%s</td>'
             '<td data-label="Standard · grade">%s<span class="ref-sub">%s</span></td>'
             '<td data-label="Type · finish">%s</td></tr>') % (
-        prefix, e(it['family']), e(it['slug']), e(it['code']), e(it['designationEn']), e(it['dimsLabel']),
+        prefix, e(it['family']), e(it['slug']), e(it['code']), prefix, e(it['family']), e(it['slug']), e(it['designationEn']), e(it['dimsLabel']),
         e(norme_label(it['norme'])), e(it['nuance']),
         ('%s<span class="ref-sub">%s</span>' % (e(it['typeEn']), e(it['finitionEn']))) if it['typeEn'] else e(it['finitionEn']))
 
@@ -206,12 +206,12 @@ def compat_section(it, compat):
         return ''
     rows = ''.join(
         '<tr data-ref-row><td data-label="Reference" class="ref-code"><a href="../%s/%s.html">%s</a></td>'
-        '<td data-label="Designation" class="ref-desig">%s</td>'
+        '<td data-label="Designation" class="ref-desig"><a class="ref-desig-link" href="../%s/%s.html">%s</a></td>'
         '<td data-label="Quantity" class="ref-actions"><div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="Decrease">−</button>'
         '<input type="text" inputmode="numeric" value="50" data-row-qty aria-label="Quantity for %s"/>'
         '<button type="button" data-qty="inc" aria-label="Increase">+</button></div>'
         '<button type="button" class="btn btn-dark btn-sm" data-add-ref="%s">Add<span class="sr-only"> %s to quote list</span></button></td></tr>' % (
-            e(x['family']), e(x['slug']), e(x['code']), e(x['designationEn']), e(x['code']), e(x['id']), e(x['code']))
+            e(x['family']), e(x['slug']), e(x['code']), e(x['family']), e(x['slug']), e(x['designationEn']), e(x['code']), e(x['id']), e(x['code']))
         for x in compat)
     d = it['dims']
     size = ('Ø %s mm' % num(d['d'])) if 'd' in d else ('Ø %s or %s mm' % (num(d['d1']), num(d['d2'])))

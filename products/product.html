@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../css/main.css?v=20261014l" />
+<link rel="stylesheet" href="../css/main.css?v=20261014m" />
 <script type="application/ld+json" id="pd-jsonld"></script>
 </head>
 <body>
@@ -276,10 +276,10 @@
   </div>
 </aside>
 
-<script src="../js/products.js?v=20261014l"></script>
-<script src="../js/product-specs.js?v=20261014l"></script>
-<script src="../js/cart.js?v=20261014l"></script>
-<script src="../js/main.js?v=20261014l"></script>
+<script src="../js/products.js?v=20261014m"></script>
+<script src="../js/product-specs.js?v=20261014m"></script>
+<script src="../js/cart.js?v=20261014m"></script>
+<script src="../js/main.js?v=20261014m"></script>
 <script>
 
   (function () {
@@ -422,12 +422,13 @@
           <thead><tr><th scope="col">Reference</th><th scope="col">Designation</th><th scope="col">Dimensions (mm)</th><th scope="col">Standard · grade</th><th scope="col">Type · finish</th><th scope="col">Quantity (min. 50)</th></tr></thead>
           <tbody>${refs.map(it => `<tr data-ref-row>
             <td data-label="Reference" class="ref-code"><a href="${it.family}/${it.slug}.html">${esc(it.code)}</a></td>
-            <td data-label="Designation" class="ref-desig">${esc(it.designationEn)}</td>
+            <td data-label="Designation" class="ref-desig"><a class="ref-desig-link" href="${it.family}/${it.slug}.html">${esc(it.designationEn)}</a></td>
             <td data-label="Dimensions" class="ref-dims">${esc(it.dimsLabel)}</td>
             <td data-label="Standard · grade">${esc(it.f.norme)}<span class="ref-sub">${esc(it.nuance)}</span></td>
             <td data-label="Type · finish">${it.typeEn ? `${esc(it.typeEn)}<span class="ref-sub">${esc(it.finitionEn)}</span>` : esc(it.finitionEn)}</td>
             <td data-label="Quantity" class="ref-actions"><div class="qty qty-sm"><button type="button" data-qty="dec" aria-label="Decrease">−</button><input type="text" inputmode="numeric" value="50" data-row-qty aria-label="Quantity for ${esc(it.code)}"/><button type="button" data-qty="inc" aria-label="Increase">+</button></div>
-              <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(it.id)}">Add<span class="sr-only"> ${esc(it.code)} to quote list</span></button></td>
+              <button type="button" class="btn btn-dark btn-sm" data-add-ref="${esc(it.id)}">Add<span class="sr-only"> ${esc(it.code)} to quote list</span></button>
+            <a class="btn btn-ghost btn-sm ref-details" href="${it.family}/${it.slug}.html">Details<span class="sr-only"> and compatible fittings</span></a></td>
           </tr>`).join('')}</tbody></table></div>
           <p class="mt-6"><a class="btn btn-ghost btn-sm" href="${p.category}.html?${qs}#references">Filter these references by size, standard and finish →</a></p>`;
       }).catch(() => {
