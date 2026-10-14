@@ -155,3 +155,47 @@
   document.addEventListener('dragstart', e => { if (media(e.target)) e.preventDefault(); });
   document.querySelectorAll('video').forEach(v => { v.setAttribute('controlslist', 'nodownload'); v.disablePictureInPicture = true; });
 })();
+
+/* Certificate viewer: read the certificates large, page by page, without a download link */
+(function () {
+  const certs = window.LR_CERTS;
+  if (!certs) return;
+  let dlg, list = [], idx = 0;
+  function build() {
+    dlg = document.createElement('dialog');
+    dlg.className = 'lightbox cert-viewer';
+    dlg.setAttribute('aria-label', 'Certificate viewer');
+    dlg.innerHTML = '<button type="button" class="lightbox-close" aria-label="Close">×</button>' +
+      '<div class="cert-viewer-stage"><img alt="" draggable="false" /></div>' +
+      '<div class="cert-viewer-bar"><button type="button" class="cert-nav" data-dir="-1" aria-label="Previous page">‹</button>' +
+      '<span class="cert-viewer-count" aria-live="polite"></span>' +
+      '<button type="button" class="cert-nav" data-dir="1" aria-label="Next page">›</button></div>';
+    document.body.appendChild(dlg);
+    dlg.addEventListener('click', e => {
+      if (e.target === dlg || e.target.closest('.lightbox-close')) dlg.close();
+      const nav = e.target.closest('.cert-nav');
+      if (nav) go(+nav.dataset.dir);
+    });
+    dlg.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') go(1);
+      if (e.key === 'ArrowLeft') go(-1);
+    });
+  }
+  function show() {
+    const img = dlg.querySelector('img');
+    img.src = list.pages[idx];
+    img.alt = list.title + (list.pages.length > 1 ? ', page ' + (idx + 1) : '');
+    dlg.querySelector('.cert-viewer-count').textContent = list.pages.length > 1 ? (idx + 1) + ' / ' + list.pages.length : list.title;
+    dlg.querySelectorAll('.cert-nav').forEach(b => { b.hidden = list.pages.length < 2; });
+    dlg.querySelector('.cert-viewer-stage').scrollTop = 0;
+    if (list.pages[idx + 1]) { const pre = new Image(); pre.src = list.pages[idx + 1]; }
+  }
+  function go(d) { idx = Math.min(list.pages.length - 1, Math.max(0, idx + d)); show(); }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-cert-viewer]');
+    if (!b || !certs[b.dataset.certViewer]) return;
+    if (!dlg) build();
+    list = certs[b.dataset.certViewer]; idx = 0; show();
+    dlg.showModal();
+  });
+})();

@@ -2103,3 +2103,13 @@ h1, h2, h3, h4 {
 
 /* Photos cannot be dragged, selected or long-press saved */
 img, video { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+
+/* Certificate viewer (view only) */
+button.cert-feature-media { width: 100%; padding: 0; border: 0; border-bottom: 1px solid var(--c-line); cursor: zoom-in; text-align: inherit; font: inherit; color: inherit; }
+.cert-viewer { width: min(94vw, 1100px); }
+.cert-viewer-stage { max-height: 82vh; overflow: auto; border-radius: var(--radius); background: #fff; }
+.cert-viewer-stage img { display: block; width: 100%; height: auto; max-width: none; max-height: none; border-radius: 0; pointer-events: none; }
+.cert-viewer-bar { display: flex; align-items: center; justify-content: center; gap: var(--s-4); margin-top: var(--s-3); color: #fff; font-family: var(--ff-mono); font-size: var(--fs-14); }
+.cert-nav { width: 44px; height: 44px; border-radius: 999px; background: rgba(255,255,255,0.14); color: #fff; font-size: 26px; line-height: 1; }
+.cert-nav:hover { background: rgba(255,255,255,0.26); }
+@media print { .cert-feature-media img, .cert-viewer, .lightbox { display: none !important; } }

@@ -22,7 +22,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261014e'
+ASSET_V = '20261014f'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 FAMILY_TEXT = {
     'elbows':   {'title': 'Elbows',   'one': 'elbow',   'lead': '45° and 90° butt-weld elbows, 1.5D and 3D radius'},

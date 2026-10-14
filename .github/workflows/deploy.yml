@@ -38,7 +38,8 @@ jobs:
         run: |
           mkdir _site
           rsync -a --exclude '.git' --exclude '.github' --exclude '_site' --exclude 'tools' \
-            --exclude 'server' --exclude 'tests' --exclude 'README.md' --exclude '.DS_Store' ./ _site/
+            --exclude 'server' --exclude 'tests' --exclude 'README.md' --exclude '.DS_Store' \
+            --exclude 'assets/certifications' ./ _site/
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
