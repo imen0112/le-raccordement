@@ -26,7 +26,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261014x'
+ASSET_V = '20261014y'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 LANGS = ['fr', 'en']    # French first (site root), English under en/
 LG = 'fr'               # language being generated, set in main()
@@ -594,8 +594,8 @@ def size_range(items, ends=False):
 
 def inox_note():
     """Announcement shown on every product page: stainless steel range on its way."""
-    return t('<p class="inox-soon"><span class="inox-soon-badge">Coming soon</span> <strong>Stainless steel</strong> fittings: coming soon.</p>',
-             '<p class="inox-soon"><span class="inox-soon-badge">Bientôt</span> Raccords en <strong>acier inoxydable</strong> : bientôt disponibles.</p>')
+    return t('<p class="inox-soon"><span class="inox-soon-badge">New</span><span><strong>Stainless steel</strong> fittings coming soon.</span></p>',
+             '<p class="inox-soon"><span class="inox-soon-badge">Nouveauté</span><span>Raccords en <strong>acier inoxydable</strong> bientôt disponibles.</span></p>')
 
 
 def family_head(fam, items):
