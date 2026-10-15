@@ -26,7 +26,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261015a'
+ASSET_V = '20261015b'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 LANGS = ['fr', 'en']    # French first (site root), English under en/
 LG = 'fr'               # language being generated, set in main()
@@ -801,7 +801,7 @@ def product_specs(data):
 # the quote API on Railway; the OpenStreetMap frame on the contact page. Keep in sync with js/config.js.
 CSP = ("default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
        "font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self'; "
-       "connect-src 'self' https://*.up.railway.app; frame-src https://www.openstreetmap.org; "
+       "connect-src 'self' https://*.up.railway.app https://api.web3forms.com; frame-src https://www.openstreetmap.org; "
        "object-src 'none'; base-uri 'self'; form-action 'self'; manifest-src 'self'")
 SECURITY_META = ('<meta http-equiv="Content-Security-Policy" content="%s" />\n'
                  '<meta name="referrer" content="strict-origin-when-cross-origin" />') % CSP

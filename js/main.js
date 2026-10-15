@@ -109,13 +109,45 @@ window.LR_T = window.LR_T || ((en) => en);
     });
   }
 
-  // Quote form: see js/quote.js (cart page). Contact form below still uses the mail client.
-  document.addEventListener('submit', function (e) {
+  // Contact form: sent directly to info@ through Web3Forms when a key is set (js/config.js), otherwise opens the mail client.
+  document.addEventListener('submit', async function (e) {
     const form = e.target.closest('[data-contact-form]');
     if (!form) return;
     e.preventDefault();
     const data = new FormData(form);
     const T = window.LR_T, none = T('not provided', 'non renseigné'), sep = T(':', ' :');
+    const key = window.LR_CONFIG && window.LR_CONFIG.web3formsContactKey;
+    const btn = form.querySelector('[type="submit"]');
+    const note = (html, ok) => {
+      let box = form.querySelector('.form-result');
+      if (!box) { box = document.createElement('div'); box.className = 'form-result'; box.setAttribute('role', 'status'); btn.after(box); }
+      box.className = 'form-result ' + (ok ? 'is-ok' : 'form-error');
+      box.textContent = html;
+    };
+    if (key) {
+      btn.disabled = true;
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: key, from_name: 'Site Le Raccordement', replyto: data.get('email'),
+            subject: 'Contact : ' + (data.get('subject') || 'message') + ' · ' + (data.get('company') || data.get('name')),
+            'Nom': data.get('name'), 'Société': data.get('company') || none, 'E-mail': data.get('email'),
+            'Téléphone': data.get('phone') || none, 'Objet': data.get('subject') || none, 'Message': data.get('message') || none
+          })
+        });
+        const out = await res.json().catch(() => null);
+        if (res.ok && out && out.success) {
+          form.reset();
+          note(T('Thank you, your message has been sent. We reply within one business day.', 'Merci, votre message a bien été envoyé. Nous répondons sous un jour ouvré.'), true);
+          return;
+        }
+        note(T('Your message could not be sent. Please email info@leraccordement.com.', 'Votre message n’a pas pu être envoyé. Écrivez-nous à info@leraccordement.com.'), false);
+      } catch (err) {
+        note(T('Network error: your message was not sent. Please try again.', 'Erreur réseau : votre message n’a pas été envoyé. Veuillez réessayer.'), false);
+      } finally { btn.disabled = false; }
+      return;
+    }
     const body = `${T('Name', 'Nom')}${sep} ${data.get('name')}\n${T('Company', 'Société')}${sep} ${data.get('company') || none}\n${T('Email', 'E-mail')}${sep} ${data.get('email')}\n${T('Phone', 'Téléphone')}${sep} ${data.get('phone') || none}\n${T('Subject', 'Objet')}${sep} ${data.get('subject') || none}\n\nMessage${sep}\n${data.get('message') || none}\n`;
     const subject = encodeURIComponent(data.get('subject') || 'Contact, Le Raccordement');
     window.location.href = `mailto:info@leraccordement.com?subject=${subject}&body=${encodeURIComponent(body)}`;

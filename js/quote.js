@@ -94,6 +94,68 @@
     return `mailto:${cfg.quoteEmail}?subject=${encodeURIComponent('Demande de devis, site Le Raccordement')}&body=${encodeURIComponent(body)}`;
   }
 
+  // Direct email to commande@ through Web3Forms (free, no server)
+  function newId() {
+    const d = new Date(), pad = n => String(n).padStart(2, '0');
+    const r = Array.from(crypto.getRandomValues(new Uint8Array(3)), b => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b % 32]).join('');
+    return 'DV-' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()) + '-' + r;
+  }
+  async function sendWeb3Forms(p) {
+    const id = newId();
+    const lines = p.items.map((i, n) => `${n + 1}. ${i.code} | ${i.qty} pièces | ${i.designationFr || i.designation}`).join('\n');
+    const c = p.customer;
+    const body = {
+      access_key: cfg.web3formsKey,
+      subject: `Demande de devis ${id} · ${c.company} (${p.items.length} réf.)`,
+      from_name: 'Site Le Raccordement',
+      replyto: c.email,
+      botcheck: p.website ? true : '',
+      'N° de demande': id,
+      'Nom': c.name, 'Société': c.company, 'E-mail': c.email, 'Téléphone': c.phone, 'Pays': c.country || 'non renseigné',
+      'Langue du site': p.lang === 'fr' ? 'français' : 'anglais',
+      'Références demandées': lines,
+      'Message': c.message || '(aucun)'
+    };
+    sending = true;
+    submitBtn.disabled = true;
+    submitBtn.setAttribute('aria-busy', 'true');
+    const label = submitBtn.innerHTML;
+    submitBtn.textContent = T('Sending…', 'Envoi en cours…');
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 25000);
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(body), signal: ctrl.signal
+      });
+      let data = null;
+      try { data = await res.json(); } catch (_) { /* non-JSON error page */ }
+      if (res.ok && data && data.success) {
+        try {
+          sessionStorage.setItem('lr_last_quote', JSON.stringify({
+            id, receivedAt: new Date().toISOString(), customer: { name: c.name, company: c.company, email: c.email },
+            items: p.items.map(i => ({ code: i.code, designation: i.designation, qty: i.qty }))
+          }));
+        } catch (_) { /* confirmation page falls back to the id only */ }
+        window.LR_CART.clear();
+        requestKey = newKey();
+        window.location.href = 'quote-sent.html?id=' + encodeURIComponent(id);
+        return;
+      }
+      showError(T(`<strong>Your request was not sent.</strong> Please try again, or <a href="${esc(mailtoFallback(p))}">send it by email to ${esc(cfg.quoteEmail)}</a>.`,
+                  `<strong>Votre demande n’a pas été envoyée.</strong> Veuillez réessayer, ou <a href="${esc(mailtoFallback(p))}">l’envoyer par e-mail à ${esc(cfg.quoteEmail)}</a>.`));
+    } catch (err) {
+      showError(T(`<strong>Your request was not sent</strong> (network error). Your list is kept, please try again, or <a href="${esc(mailtoFallback(p))}">send it by email to ${esc(cfg.quoteEmail)}</a>.`,
+                  `<strong>Votre demande n’a pas été envoyée</strong> (erreur réseau). Votre liste est conservée : réessayez, ou <a href="${esc(mailtoFallback(p))}">envoyez-la par e-mail à ${esc(cfg.quoteEmail)}</a>.`));
+    } finally {
+      clearTimeout(timer);
+      sending = false;
+      submitBtn.disabled = false;
+      submitBtn.removeAttribute('aria-busy');
+      submitBtn.innerHTML = label;
+    }
+  }
+
   form.addEventListener('submit', async function (e) {
     e.preventDefault();
     if (sending) return;
@@ -103,6 +165,7 @@
     if (bad) { bad.focus(); return; }
     const p = payload();
 
+    if (cfg.web3formsKey) return sendWeb3Forms(p);
     if (!cfg.quoteEndpoint) {
       showError(T(`<strong>Online sending is not configured yet, your request has not been sent.</strong><br>
         You can send it from your own email app instead: <a href="${esc(mailtoFallback(p))}">open a pre-filled email to ${esc(cfg.quoteEmail)}</a>.`,
