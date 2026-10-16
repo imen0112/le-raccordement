@@ -7,8 +7,6 @@
 window.LR_CONFIG = {
   // Free direct sending to commande@ without a server: Web3Forms access key (https://web3forms.com, 250 requests/month).
   // The key only allows sending to the address it was created for; it is meant to be public.
-  // Recommended: Google Apps Script web app (tools/forms/google-apps-script.gs): email to commande@ + copy to the client, free
-  appsScriptUrl: '',
   web3formsKey: '',          // quote requests → commande@leraccordement.com
   web3formsContactKey: '',   // contact form → info@leraccordement.com (a second key created for that address)
   quoteEndpoint: '',

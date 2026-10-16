@@ -165,9 +165,8 @@
     if (bad) { bad.focus(); return; }
     const p = payload();
 
-    const endpoint = cfg.appsScriptUrl || cfg.quoteEndpoint;
-    if (!cfg.appsScriptUrl && cfg.web3formsKey) return sendWeb3Forms(p);
-    if (!endpoint) {
+    if (cfg.web3formsKey) return sendWeb3Forms(p);
+    if (!cfg.quoteEndpoint) {
       showError(T(`<strong>Online sending is not configured yet, your request has not been sent.</strong><br>
         You can send it from your own email app instead: <a href="${esc(mailtoFallback(p))}">open a pre-filled email to ${esc(cfg.quoteEmail)}</a>.`,
         `<strong>L’envoi en ligne n’est pas encore activé : votre demande n’a pas été envoyée.</strong><br>
@@ -183,9 +182,8 @@
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 25000);
     try {
-      // Apps Script only accepts "simple" requests (text/plain, no preflight)
-      const res = await fetch(endpoint, {
-        method: 'POST', headers: { 'Content-Type': cfg.appsScriptUrl ? 'text/plain;charset=utf-8' : 'application/json' },
+      const res = await fetch(cfg.quoteEndpoint, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(p), signal: ctrl.signal
       });
       let data = null;

@@ -2,7 +2,6 @@
 window.LR_T = window.LR_T || ((en) => en);
 
 /* Header scroll, mobile nav, reveal on scroll, simple year */
-window.LR_PAGE_START = Date.now();   // contact form: minimum filling time (anti-spam)
 (function () {
   const header = document.querySelector('.site-header');
   if (header) {
@@ -117,8 +116,7 @@ window.LR_PAGE_START = Date.now();   // contact form: minimum filling time (anti
     e.preventDefault();
     const data = new FormData(form);
     const T = window.LR_T, none = T('not provided', 'non renseigné'), sep = T(':', ' :');
-    const cfg = window.LR_CONFIG || {};
-    const key = cfg.web3formsContactKey;
+    const key = window.LR_CONFIG && window.LR_CONFIG.web3formsContactKey;
     const btn = form.querySelector('[type="submit"]');
     const note = (html, ok) => {
       let box = form.querySelector('.form-result');
@@ -126,29 +124,6 @@ window.LR_PAGE_START = Date.now();   // contact form: minimum filling time (anti
       box.className = 'form-result ' + (ok ? 'is-ok' : 'form-error');
       box.textContent = html;
     };
-    if (cfg.appsScriptUrl) {
-      // Google Apps Script: email to info@ + acknowledgement to the sender
-      btn.disabled = true;
-      try {
-        const res = await fetch(cfg.appsScriptUrl, {
-          method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ kind: 'contact', lang: window.LR_LANG || 'fr', elapsedMs: Date.now() - (window.LR_PAGE_START || 0),
-            website: data.get('website') || '',
-            customer: { name: data.get('name'), company: data.get('company'), email: data.get('email'), phone: data.get('phone'),
-                        subject: data.get('subject'), message: data.get('message') } })
-        });
-        const out = await res.json().catch(() => null);
-        if (res.ok && out && out.ok) {
-          form.reset();
-          note(T('Thank you, your message has been sent. A confirmation is on its way to your inbox.', 'Merci, votre message a bien été envoyé. Une confirmation vous a été envoyée par e-mail.'), true);
-          return;
-        }
-        note((out && out.error) || T('Your message could not be sent. Please email info@leraccordement.com.', 'Votre message n’a pas pu être envoyé. Écrivez-nous à info@leraccordement.com.'), false);
-      } catch (err) {
-        note(T('Network error: your message was not sent. Please try again.', 'Erreur réseau : votre message n’a pas été envoyé. Veuillez réessayer.'), false);
-      } finally { btn.disabled = false; }
-      return;
-    }
     if (key) {
       btn.disabled = true;
       try {
