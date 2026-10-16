@@ -82,7 +82,7 @@ def main():
         if not p.title:
             errors.append('%s: no <title>' % rel)
         titles.setdefault((p.title or '').strip(), []).append(rel)
-        redirect = rel.startswith('go/')   # forwarding pages to the social networks (noindex)
+        redirect = 'http-equiv="refresh"' in src   # forwarding pages: social networks, old site addresses (noindex)
         if rel not in ('404.html',) and not redirect and not p.desc:
             errors.append('%s: no meta description' % rel)
         if p.h1 != 1 and not rel.endswith('products/product.html') and not redirect:
