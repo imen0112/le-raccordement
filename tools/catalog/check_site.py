@@ -81,7 +81,8 @@ def main():
                 (warnings if target.startswith(KNOWN_MISSING) else errors).append('%s → broken link %s' % (rel, href))
         if not p.title:
             errors.append('%s: no <title>' % rel)
-        titles.setdefault((p.title or '').strip(), []).append(rel)
+        if 'http-equiv="refresh"' not in src:   # forwarding pages share a title on purpose
+            titles.setdefault((p.title or '').strip(), []).append(rel)
         redirect = 'http-equiv="refresh"' in src   # forwarding pages: social networks, old site addresses (noindex)
         if rel not in ('404.html',) and not redirect and not p.desc:
             errors.append('%s: no meta description' % rel)
