@@ -2236,13 +2236,6 @@ a[href^="mailto:"] { overflow-wrap: anywhere; }
 .inox-soon strong { color: var(--c-ink); }
 .inox-soon-badge { display: inline-block; padding: 2px 9px; border-radius: 999px; background: var(--c-green-100); color: var(--c-navy-900); font-family: var(--ff-mono); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
 
-/* Standard documents (EN 10253-1, ASME B16.9) on the quality page and the family pages */
-.std-doc-grid { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); margin-top: var(--s-5); }
-.std-doc { display: flex; gap: var(--s-4); padding: var(--s-5); border: 1px solid var(--c-line); border-radius: var(--radius); background: #fff; }
-.std-doc-icon { flex-shrink: 0; width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; background: var(--c-bg-soft); color: var(--c-navy-700); }
-.std-doc-body h3 { font-size: var(--fs-18); margin-top: 2px; color: var(--c-ink); }
-.std-doc-body p { font-size: var(--fs-14); margin: var(--s-2) 0 var(--s-3); }
-.std-doc-soon { display: inline-block; padding: 4px 10px; border-radius: 999px; background: var(--c-bg-soft); color: var(--c-muted); font-family: var(--ff-mono); font-size: 12px; }
 
 /* Quote form: dialling code + phone number on one line */
 .phone-field { display: flex; gap: var(--s-2); }

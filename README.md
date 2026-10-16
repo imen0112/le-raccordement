@@ -60,11 +60,6 @@ python3 tools/catalog/check_site.py        # links, titles, canonicals, JSON-LD,
 
 Product-type pages (geometry, applications…) still live in [`js/products.js`](js/products.js); their `articles` field links them to catalog references.
 
-## Standard documents
-
-Put the PDFs in `assets/docs/` as `EN-10253-1.pdf` and `ASME-B16.9.pdf`, then run `python3 tools/catalog/build_pages.py`:
-the slots on the quality page and the four family pages switch from "coming soon" to a "View the PDF" button.
-
 ## Quote requests
 
 [`js/quote.js`](js/quote.js) posts the quote list to the API set in [`js/config.js`](js/config.js) (`quoteEndpoint`).

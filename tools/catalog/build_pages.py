@@ -26,7 +26,7 @@ from urllib.parse import quote_plus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SITE = 'https://leraccordement.com'
-ASSET_V = '20261015b'
+ASSET_V = '20261016b'
 FAMILIES = ['elbows', 'tees', 'reducers', 'caps']
 LANGS = ['fr', 'en']    # French first (site root), English under en/
 LG = 'fr'               # language being generated, set in main()
@@ -819,44 +819,6 @@ def security_meta(rel, text):
     return text
 
 
-# Standard documents (PDF) shown on the quality page and the four family pages.
-# Drop the files in assets/docs/ and rebuild: each slot turns into a link; until then it says "coming soon".
-STANDARD_DOCS = [
-    ('EN-10253-1.pdf', 'EN 10253-1',
-     ('Butt-welding pipe fittings, Part 1: carbon steel for general use, without specific inspection requirements.',
-      'Raccords à souder bout à bout, partie 1 : acier au carbone pour usage général, sans exigences de contrôle spécifiques.')),
-    ('ASME-B16.9.pdf', 'ASME B16.9',
-     ('Factory-made wrought butt-welding fittings: dimensions, tolerances, marking.',
-      'Raccords à souder bout à bout forgés en usine : dimensions, tolérances, marquage.')),
-]
-DOC_ICON = ('<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'
-            '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>')
-
-
-def standard_docs(up):
-    """Two document slots (EN 10253-1, ASME B16.9). `up` = path from the page to the site root."""
-    cards = []
-    for name, std, (desc_en, desc_fr) in STANDARD_DOCS:
-        if os.path.exists(os.path.join(ROOT, 'assets', 'docs', name)):
-            action = '<a class="btn btn-dark btn-sm" href="%sassets/docs/%s" target="_blank" rel="noopener noreferrer">%s</a>' % (
-                up, name, t('View the PDF', 'Consulter le PDF'))
-        else:
-            action = '<span class="std-doc-soon">%s</span>' % t('Document coming soon', 'Document bientôt disponible')
-        cards.append(
-            '      <article class="std-doc">\n'
-            '        <div class="std-doc-icon" aria-hidden="true">%s</div>\n'
-            '        <div class="std-doc-body">\n'
-            '          <span class="num">%s</span>\n'
-            '          <h3>%s</h3>\n'
-            '          <p class="text-muted">%s</p>\n'
-            '          %s\n'
-            '        </div>\n'
-            '      </article>' % (DOC_ICON, t('Standard', 'Norme'), std, e(t(desc_en, desc_fr)), action))
-    return ('%s\n<section class="section-tight std-docs" aria-labelledby="std-docs-title">\n  <div class="container-wide">\n'
-            '    <h2 class="h-3" id="std-docs-title">%s</h2>\n    <div class="std-doc-grid">\n%s\n    </div>\n  </div>\n</section>') % (
-        GENERATED_MARK, t('Manufacturing standards', 'Normes de fabrication'), '\n'.join(cards))
-
-
 def counterpart(rel):
     """French page <-> English page (same path under en/)."""
     return rel[3:] if rel.startswith('en/') else 'en/' + rel
@@ -944,13 +906,6 @@ def main():
         write(idx_path, replace_block(idx, 'RANGE', range_table(data), idx_path))
 
     product_specs(data)
-
-    # Standard documents block: quality page + four family pages, both languages
-    for LG in LANGS:
-        base = lang_base()
-        targets = [(base + 'certifications.html', '../' if LG == 'en' else '')] +                   [('%sproducts/%s.html' % (base, fam), '../../' if LG == 'en' else '../') for fam in FAMILIES]
-        for path, up in targets:
-            write(path, replace_block(read(path), 'STANDARDDOCS', standard_docs(up), path))
 
     # FR/EN switch and hreflang on every page
     pages = 0
